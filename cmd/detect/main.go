@@ -33,13 +33,15 @@ func main() {
 }
 
 func runDetect(context detect.Detect) (int, error) {
-	exists, err := helper.FileExists(filepath.Join(context.Application.Root, "httpd.conf"))
+	//TODO: update this search to be recursive
+	matchList, err := filepath.Glob(filepath.Join(context.Application.Root, "htdocs", "*.php"))
 	if err != nil {
 		return context.Fail(), err
 	}
+	exists := len(matchList) > 0
 
 	if !exists {
-		return context.Fail(), fmt.Errorf("unable to find httpd.conf")
+		return context.Fail(), fmt.Errorf("unable to find htdocs/index.php")
 	}
 
 	buildpackYAML, configFile := BuildpackYAML{}, filepath.Join(context.Application.Root, "buildpack.yml")

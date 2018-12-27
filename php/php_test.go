@@ -64,7 +64,7 @@ func testPHP(t *testing.T, when spec.G, it spec.S) {
 			))
 		})
 
-		it("should contribute php to uild when build is true", func() {
+		it("should contribute php to build when build is true", func() {
 			f := test.NewBuildFactory(t)
 			f.AddBuildPlan(Dependency, buildplan.Dependency{
 				Metadata: buildplan.Metadata{"build": true},
