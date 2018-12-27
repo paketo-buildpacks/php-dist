@@ -1,7 +1,6 @@
 package php
 
 import (
-	"fmt"
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"path/filepath"
 	"testing"
@@ -48,20 +47,42 @@ func testPHP(t *testing.T, when spec.G, it spec.S) {
 			})
 			f.AddDependency(Dependency, stubPHPFixture)
 
-			nodeContributor, _, err := NewContributor(f.Build)
+			phpContributor, _, err := NewContributor(f.Build)
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(nodeContributor.Contribute()).To(Succeed())
+			Expect(phpContributor.Contribute()).To(Succeed())
 
 			layer := f.Build.Layers.Layer(Dependency)
 
+			//TODO: should cache be true below?
 			Expect(layer).To(test.HaveLayerMetadata(false, false, true))
-			Expect(layer).To(test.HaveOverrideLaunchEnvironment("APP_ROOT", f.Build.Application.Root))
-			Expect(layer).To(test.HaveOverrideLaunchEnvironment("SERVER_ROOT", layer.Root))
+			//TODO: check if proper php environment vars are set
 			Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 			Expect(f.Build.Layers).To(test.HaveLaunchMetadata(
-				layers.Metadata{Processes: []layers.Process{{"web", fmt.Sprintf("httpd -f %s -k start -DFOREGROUND", filepath.Join(f.Build.Application.Root, "httpd.conf"))}}},
+				//TODO: update php start command to something reasonable
+				layers.Metadata{Processes: []layers.Process{{"web", "generic php start command"}}},
 			))
 		})
+
+		it("should contribute php to uild when build is true", func() {
+			f := test.NewBuildFactory(t)
+			f.AddBuildPlan(Dependency, buildplan.Dependency{
+				Metadata: buildplan.Metadata{"build": true},
+			})
+			f.AddDependency(Dependency, stubPHPFixture)
+
+			phpContributor, _, err := NewContributor(f.Build)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(phpContributor.Contribute()).To(Succeed())
+
+			layer := f.Build.Layers.Layer(Dependency)
+			// TODO: should cache be false below???
+			Expect(layer).To(test.HaveLayerMetadata(true, false, false))
+			//TODO: check if proper php environment vars are set
+			Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
+
+		})
+
 	})
 }
