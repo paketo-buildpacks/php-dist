@@ -1,6 +1,9 @@
 package php
 
 import (
+	"fmt"
+	"path/filepath"
+
 	"github.com/buildpack/libbuildpack/application"
 	"github.com/cloudfoundry/libcfbuildpack/build"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
@@ -14,7 +17,7 @@ type Contributor struct {
 	launchContribution bool
 	buildContribution  bool
 	launchLayer        layers.Layers
-	phpLayer         layers.DependencyLayer
+	phpLayer           layers.DependencyLayer
 }
 
 func NewContributor(context build.Build) (c Contributor, willContribute bool, err error) {
@@ -36,7 +39,7 @@ func NewContributor(context build.Build) (c Contributor, willContribute bool, er
 	contributor := Contributor{
 		app:         context.Application,
 		launchLayer: context.Layers,
-		phpLayer:  context.Layers.DependencyLayer(dep),
+		phpLayer:    context.Layers.DependencyLayer(dep),
 	}
 
 	if _, ok := plan.Metadata["launch"]; ok {
@@ -57,14 +60,28 @@ func (c Contributor) Contribute() error {
 			return err
 		}
 
+		if err := layer.OverrideSharedEnv("PHPRC", filepath.Join(layer.Root, "etc")); err != nil {
+			return err
+		}
+
+		if err := layer.OverrideSharedEnv("MIBDIRS", filepath.Join(layer.Root, "mibs")); err != nil {
+			return err
+		}
+
+		if err := layer.OverrideSharedEnv("PHP_INI_SCAN_DIR", filepath.Join(c.app.Root, "etc", "php.ini.d")); err != nil {
+			return err
+		}
+
+		// TODO: How do we know when to use php-fpm or not?
+
 		return c.launchLayer.WriteMetadata(layers.Metadata{
-			Processes: []layers.Process{{"web", "generic php start command"}},
+			Processes: []layers.Process{{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", c.app.Root)}},
 		})
 	}, c.flags()...)
 }
 
 func (n Contributor) flags() []layers.Flag {
-	var flags []layers.Flag
+	flags := []layers.Flag{layers.Cache}
 
 	if n.launchContribution {
 		flags = append(flags, layers.Launch)
@@ -73,8 +90,6 @@ func (n Contributor) flags() []layers.Flag {
 	if n.buildContribution {
 		flags = append(flags, layers.Build)
 	}
-
-	//TODO: handle cache flag if that needs to be true
 
 	return flags
 }

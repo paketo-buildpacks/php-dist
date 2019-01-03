@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/buildpack/libbuildpack/detect"
 	"path/filepath"
 	"testing"
+
+	"github.com/buildpack/libbuildpack/detect"
 
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	. "github.com/onsi/gomega"
@@ -25,9 +26,8 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 	})
 
 	when("there is an php app", func() {
-
 		it("should pass with the default version of php", func() {
-			test.WriteFile(t,filepath.Join(factory.Detect.Application.Root, "htdocs", "index.php"), "")
+			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "htdocs", "index.php"), "")
 			code, err := runDetect(factory.Detect)
 			Expect(err).NotTo(HaveOccurred())
 
@@ -35,13 +35,11 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 		})
 
 		it("should pass with the default version of php", func() {
-			test.WriteFile(t,filepath.Join(factory.Detect.Application.Root, "htdocs", "my_cool_app.php"), "")
+			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "htdocs", "my_cool_app.php"), "")
 			code, err := runDetect(factory.Detect)
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(code).To(Equal(detect.PassStatusCode))
 		})
-
 	})
 }
-

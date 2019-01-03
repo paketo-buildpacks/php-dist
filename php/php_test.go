@@ -1,6 +1,7 @@
 package php
 
 import (
+	"fmt"
 	"github.com/cloudfoundry/libcfbuildpack/layers"
 	"path/filepath"
 	"testing"
@@ -53,14 +54,17 @@ func testPHP(t *testing.T, when spec.G, it spec.S) {
 			Expect(phpContributor.Contribute()).To(Succeed())
 
 			layer := f.Build.Layers.Layer(Dependency)
+			root := f.Build.Application.Root
 
-			//TODO: should cache be true below?
-			Expect(layer).To(test.HaveLayerMetadata(false, false, true))
-			//TODO: check if proper php environment vars are set
+			Expect(layer).To(test.HaveLayerMetadata(false, true, true))
+
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("PHPRC", "%s/etc", layer.Root))
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", "%s/mibs", layer.Root))
+
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_INI_SCAN_DIR", "%s/etc/php.ini.d", root))
 			Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 			Expect(f.Build.Layers).To(test.HaveLaunchMetadata(
-				//TODO: update php start command to something reasonable
-				layers.Metadata{Processes: []layers.Process{{"web", "generic php start command"}}},
+				layers.Metadata{Processes: []layers.Process{{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", root)}}},
 			))
 		})
 
@@ -77,11 +81,14 @@ func testPHP(t *testing.T, when spec.G, it spec.S) {
 			Expect(phpContributor.Contribute()).To(Succeed())
 
 			layer := f.Build.Layers.Layer(Dependency)
-			// TODO: should cache be false below???
-			Expect(layer).To(test.HaveLayerMetadata(true, false, false))
-			//TODO: check if proper php environment vars are set
-			Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 
+			Expect(layer).To(test.HaveLayerMetadata(true, true, false))
+
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("PHPRC", "%s/etc", layer.Root))
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", "%s/mibs", layer.Root))
+			Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_INI_SCAN_DIR", "%s/etc/php.ini.d", f.Build.Application.Root))
+
+			Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 		})
 
 	})
