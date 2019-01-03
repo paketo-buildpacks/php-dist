@@ -73,9 +73,30 @@ func (c Contributor) Contribute() error {
 		}
 
 		// TODO: How do we know when to use php-fpm or not?
+		isWebApp, err := helper.FileExists(filepath.Join(c.app.Root, "htdocs"))
+		if err != nil {
+			return err
+		}
+
+		var procs layers.Processes
+
+		if isWebApp {
+			procs = append(procs, layers.Process{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", c.app.Root)})
+		} else {
+			hasMain, err := helper.FileExists(filepath.Join(c.app.Root, "main.php"))
+			if err != nil {
+				return err
+			}
+
+			if !hasMain {
+				layer.Logger.Info("WARNING: main.php start script not found. App will not start unless you specify a custom start command.")
+			} else {
+				procs = append(procs, layers.Process{"web", "php main.php"})
+			}
+		}
 
 		return c.launchLayer.WriteMetadata(layers.Metadata{
-			Processes: []layers.Process{{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", c.app.Root)}},
+			Processes: procs,
 		})
 	}, c.flags()...)
 }

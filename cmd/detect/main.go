@@ -2,13 +2,15 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
 	"github.com/cloudfoundry/php-cnb/php"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 
 	"github.com/cloudfoundry/libcfbuildpack/detect"
 )
@@ -38,10 +40,42 @@ func runDetect(context detect.Detect) (int, error) {
 	if err != nil {
 		return context.Fail(), err
 	}
+
+	if len(matchList) == 0 {
+		main, err := filepath.Glob(filepath.Join(context.Application.Root, "main.php"))
+		if err != nil {
+			return context.Fail(), err
+		}
+		matchList = append(matchList, main...)
+	}
+
+	if len(matchList) == 0 {
+		err = filepath.Walk(context.Application.Root, func(path string, info os.FileInfo, err error) error {
+
+			if err != nil {
+				context.Logger.Info("failure accessing a path %q: %v\n", path, err)
+				return filepath.SkipDir
+			}
+			if len(matchList) > 0 {
+				return filepath.SkipDir
+			}
+
+			if !info.IsDir() && strings.HasSuffix(info.Name(), ".php") {
+				matchList = append(matchList, info.Name())
+			}
+
+			return nil
+		})
+
+		if err != nil {
+			return context.Fail(), err
+		}
+	}
+
 	exists := len(matchList) > 0
 
 	if !exists {
-		return context.Fail(), fmt.Errorf("unable to find htdocs/index.php")
+		return context.Fail(), fmt.Errorf("unable to detect php files")
 	}
 
 	buildpackYAML, configFile := BuildpackYAML{}, filepath.Join(context.Application.Root, "buildpack.yml")

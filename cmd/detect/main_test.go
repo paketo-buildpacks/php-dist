@@ -41,5 +41,22 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 
 			Expect(code).To(Equal(detect.PassStatusCode))
 		})
+
+		it("should pass with main.php at the root", func() {
+			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "main.php"), "")
+			code, err := runDetect(factory.Detect)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(code).To(Equal(detect.PassStatusCode))
+		})
+
+		it("should pass nested directories containing *.php files", func() {
+			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "test", "cli", "subdir", "my_cli.php"), "")
+
+			code, err := runDetect(factory.Detect)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(code).To(Equal(detect.PassStatusCode))
+		})
 	})
 }
