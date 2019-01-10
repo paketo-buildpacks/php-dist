@@ -1,8 +1,6 @@
 <?php
-echo 'SUCCESS';
-
-while (true) {
-  sleep(10);
-  echo 'CLI app'
-}
+  while (true) {
+    fwrite(STDOUT, "SUCCESS" . PHP_EOL);
+    sleep(10);
+  }
 ?>

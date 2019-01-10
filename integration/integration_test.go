@@ -99,7 +99,8 @@ func testIntegration(t *testing.T, when spec.G, it spec.S) {
 			app, err := dagger.Pack(filepath.Join("fixtures", "simple_cli_app"), builderMetadata, dagger.CFLINUXFS3)
 			Expect(err).ToNot(HaveOccurred())
 
-			app.SetHealthCheck("", "3s", "1s")
+			app.SetHealthCheck("true", "3s", "1s") // disables health check
+			// TODO add DisableHealthCheck to dagger
 
 			err = app.Start()
 			if err != nil {
