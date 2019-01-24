@@ -17,6 +17,7 @@
 package main
 
 import (
+	"github.com/buildpack/libbuildpack/buildplan"
 	"testing"
 
 	"github.com/cloudfoundry/libcfbuildpack/detect"
@@ -39,5 +40,9 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 		f := test.NewDetectFactory(t)
 
 		Expect(runDetect(f.Detect)).To(Equal(detect.PassStatusCode))
+		Expect(f.Output).To(Equal(buildplan.BuildPlan{
+			"php-binary": buildplan.Dependency{},
+		}))
+
 	})
 }

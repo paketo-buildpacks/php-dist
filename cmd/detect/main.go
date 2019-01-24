@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/cloudfoundry/php-cnb/php"
 	"os"
 
 	"github.com/buildpack/libbuildpack/buildplan"
@@ -40,5 +41,7 @@ func main() {
 }
 
 func runDetect(context detect.Detect) (int, error) {
-	return context.Pass(buildplan.BuildPlan{})
+	return context.Pass(buildplan.BuildPlan{
+		php.Dependency: buildplan.Dependency{},
+	})
 }
