@@ -45,10 +45,11 @@ func NewContributor(context build.Build) (c Contributor, willContribute bool, er
 		return Contributor{}, false, err
 	}
 
-	//TODO: Load from buildplan
-	version := ""
-
-	dep, err := deps.Best(Dependency, version, context.Stack)
+	if plan.Version == "" {
+		context.Logger.SubsequentLine("Dependency version not specified, but is required")
+		return Contributor{}, false, nil
+	}
+	dep, err := deps.Best(Dependency, plan.Version, context.Stack)
 	if err != nil {
 		return Contributor{}, false, err
 	}

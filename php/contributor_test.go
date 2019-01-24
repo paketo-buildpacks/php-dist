@@ -40,9 +40,11 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		f = test.NewBuildFactory(t)
 	})
 
-	it("returns true if build plan exists", func() {
+	it("returns true if build plan exists and version is set", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
-		f.AddBuildPlan(Dependency, buildplan.Dependency{})
+		f.AddBuildPlan(Dependency, buildplan.Dependency{
+			Version: "*",
+		})
 
 		_, ok, err := NewContributor(f.Build)
 		Expect(ok).To(BeTrue())
@@ -55,14 +57,25 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		Expect(err).NotTo(HaveOccurred())
 	})
 
+	it("returns false if build plan exists but version is not set", func() {
+		f.AddDependency(Dependency, stubPHPFixture)
+		f.AddBuildPlan(Dependency, buildplan.Dependency{})
+
+		_, ok, err := NewContributor(f.Build)
+		Expect(ok).To(BeFalse())
+		Expect(err).NotTo(HaveOccurred())
+	})
+
 	it("contributes PHP to build", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
 		f.AddBuildPlan(Dependency, buildplan.Dependency{
 			Metadata: buildplan.Metadata{"build": true},
+			Version: "*",
 		})
 
-		c, _, err := NewContributor(f.Build)
+		c, shouldContribute, err := NewContributor(f.Build)
 		Expect(err).NotTo(HaveOccurred())
+		Expect(shouldContribute).To(BeTrue())
 
 		Expect(c.Contribute()).To(Succeed())
 
@@ -77,10 +90,12 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		f.AddDependency(Dependency, stubPHPFixture)
 		f.AddBuildPlan(Dependency, buildplan.Dependency{
 			Metadata: buildplan.Metadata{"launch": true},
+			Version: "*",
 		})
 
-		c, _, err := NewContributor(f.Build)
+		c, shouldContribute, err := NewContributor(f.Build)
 		Expect(err).NotTo(HaveOccurred())
+		Expect(shouldContribute).To(BeTrue())
 
 		Expect(c.Contribute()).To(Succeed())
 
