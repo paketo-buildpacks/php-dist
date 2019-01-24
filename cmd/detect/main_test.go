@@ -1,11 +1,25 @@
+/*
+ * Copyright 2018-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package main
 
 import (
-	"path/filepath"
 	"testing"
 
-	"github.com/buildpack/libbuildpack/detect"
-
+	"github.com/cloudfoundry/libcfbuildpack/detect"
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	. "github.com/onsi/gomega"
 	"github.com/sclevine/spec"
@@ -13,50 +27,17 @@ import (
 )
 
 func TestUnitDetect(t *testing.T) {
-	RegisterTestingT(t)
 	spec.Run(t, "Detect", testDetect, spec.Report(report.Terminal{}))
 }
 
 func testDetect(t *testing.T, when spec.G, it spec.S) {
-	var factory *test.DetectFactory
-
 	it.Before(func() {
-
-		factory = test.NewDetectFactory(t)
+		RegisterTestingT(t)
 	})
 
-	when("there is an php app", func() {
-		it("should pass with the default version of php", func() {
-			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "htdocs", "index.php"), "")
-			code, err := runDetect(factory.Detect)
-			Expect(err).NotTo(HaveOccurred())
+	it("always passes", func() {
+		f := test.NewDetectFactory(t)
 
-			Expect(code).To(Equal(detect.PassStatusCode))
-		})
-
-		it("should pass with the default version of php", func() {
-			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "htdocs", "my_cool_app.php"), "")
-			code, err := runDetect(factory.Detect)
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(code).To(Equal(detect.PassStatusCode))
-		})
-
-		it("should pass with main.php at the root", func() {
-			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "main.php"), "")
-			code, err := runDetect(factory.Detect)
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(code).To(Equal(detect.PassStatusCode))
-		})
-
-		it("should pass nested directories containing *.php files", func() {
-			test.WriteFile(t, filepath.Join(factory.Detect.Application.Root, "test", "cli", "subdir", "my_cli.php"), "")
-
-			code, err := runDetect(factory.Detect)
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(code).To(Equal(detect.PassStatusCode))
-		})
+		Expect(runDetect(f.Detect)).To(Equal(detect.PassStatusCode))
 	})
 }

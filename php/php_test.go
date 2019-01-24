@@ -1,154 +1,122 @@
+/*
+ * Copyright 2018-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package php
 
 import (
-	"bytes"
-	"fmt"
 	"path/filepath"
 	"testing"
 
-	"github.com/buildpack/libbuildpack/logger"
-	"github.com/cloudfoundry/libcfbuildpack/layers"
-	cflogger "github.com/cloudfoundry/libcfbuildpack/logger"
-
+	bp "github.com/buildpack/libbuildpack/buildpack"
 	"github.com/buildpack/libbuildpack/buildplan"
-	"github.com/sclevine/spec/report"
-
-	bp "github.com/buildpack/libbuildpack/layers"
-
+	"github.com/cloudfoundry/libcfbuildpack/buildpack"
+	"github.com/cloudfoundry/libcfbuildpack/logger"
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	. "github.com/onsi/gomega"
 	"github.com/sclevine/spec"
+	"github.com/sclevine/spec/report"
 )
 
 func TestUnitPHP(t *testing.T) {
-	RegisterTestingT(t)
 	spec.Run(t, "PHP", testPHP, spec.Report(report.Terminal{}))
 }
 
 func testPHP(t *testing.T, when spec.G, it spec.S) {
-	var stubPHPFixture = filepath.Join("fixtures", "stub-php.tar.gz")
+	it.Before(func() {
+		RegisterTestingT(t)
+	})
 
-	when("NewContributor", func() {
+	when("a version is set", func() {
+		it("uses php.version from buildpack.yml, if set", func() {
+			buildpack := buildpack.NewBuildpack(bp.Buildpack{}, logger.Logger{})
+			dependency := buildplan.Dependency{}
+			buildpackYAML := BuildpackYAML{
+				Config: Config{
+					Version: "test-version",
+				},
+			}
 
-		it("returns true if a build plan exists", func() {
-			f := test.NewBuildFactory(t)
-			f.AddBuildPlan(Dependency, buildplan.Dependency{})
-			f.AddDependency(Dependency, stubPHPFixture)
-
-			_, willContribute, err := NewContributor(f.Build)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(willContribute).To(BeTrue())
+			Expect(Version(buildpackYAML, buildpack, dependency)).To(Equal("test-version"))
 		})
 
-		it("returns false if a build plan does not exist", func() {
-			f := test.NewBuildFactory(t)
+		it("uses build plan version, if set", func() {
+			buildpack := buildpack.NewBuildpack(bp.Buildpack{}, logger.Logger{})
+			dependency := buildplan.Dependency{Version: "test-version"}
 
-			_, willContribute, err := NewContributor(f.Build)
-			Expect(err).NotTo(HaveOccurred())
-			Expect(willContribute).To(BeFalse())
+			Expect(Version(BuildpackYAML{}, buildpack, dependency)).To(Equal("test-version"))
+		})
+
+		it("uses buildpack default version if set", func() {
+			buildpack := buildpack.NewBuildpack(bp.Buildpack{Metadata: buildpack.Metadata{"default_version": "test-version"}}, logger.Logger{})
+			dependency := buildplan.Dependency{}
+
+			Expect(Version(BuildpackYAML{}, buildpack, dependency)).To(Equal("test-version"))
+		})
+
+		it("return empty string if none set", func() {
+			buildpack := buildpack.NewBuildpack(bp.Buildpack{}, logger.Logger{})
+			dependency := buildplan.Dependency{}
+
+			Expect(Version(BuildpackYAML{}, buildpack, dependency)).To(Equal(""))
 		})
 	})
 
-	when("#Contribute", func() {
-		when("the app has an <app>/htdocs folder", func() {
-			it("should contribute php to launch when launch is true", func() {
-				f := test.NewBuildFactory(t)
-				f.AddBuildPlan(Dependency, buildplan.Dependency{
-					Metadata: buildplan.Metadata{"launch": true},
-				})
-				f.AddDependency(Dependency, stubPHPFixture)
+	when("buildpack.yml", func() {
+		var f *test.DetectFactory
 
-				phpContributor, _, err := NewContributor(f.Build)
-				Expect(err).NotTo(HaveOccurred())
-
-				test.TouchFile(t, filepath.Join(f.Build.Application.Root, "htdocs", "index.php"))
-				Expect(phpContributor.Contribute()).To(Succeed())
-
-				layer := f.Build.Layers.Layer(Dependency)
-				root := f.Build.Application.Root
-
-				Expect(layer).To(test.HaveLayerMetadata(false, true, true))
-
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("PHPRC", "%s/etc", layer.Root))
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", "%s/mibs", layer.Root))
-
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_INI_SCAN_DIR", "%s/etc/php.ini.d", root))
-				Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
-				Expect(f.Build.Layers).To(test.HaveLaunchMetadata(
-					layers.Metadata{Processes: []layers.Process{{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", root)}}},
-				))
-			})
-
-			it("should contribute php to build when build is true", func() {
-				f := test.NewBuildFactory(t)
-				f.AddBuildPlan(Dependency, buildplan.Dependency{
-					Metadata: buildplan.Metadata{"build": true},
-				})
-				f.AddDependency(Dependency, stubPHPFixture)
-
-				phpContributor, _, err := NewContributor(f.Build)
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(phpContributor.Contribute()).To(Succeed())
-
-				layer := f.Build.Layers.Layer(Dependency)
-
-				Expect(layer).To(test.HaveLayerMetadata(true, true, false))
-
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("PHPRC", "%s/etc", layer.Root))
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", "%s/mibs", layer.Root))
-				Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_INI_SCAN_DIR", "%s/etc/php.ini.d", f.Build.Application.Root))
-
-				Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
-			})
+		it.Before(func() {
+			f = test.NewDetectFactory(t)
 		})
 
-		when("the app has no <app>/htdocs folder", func() {
-			it("runs main.php file if it exists", func() {
-				f := test.NewBuildFactory(t)
-				f.AddBuildPlan(Dependency, buildplan.Dependency{
-					Metadata: buildplan.Metadata{"launch": true},
-				})
-				f.AddDependency(Dependency, stubPHPFixture)
+		it("can load an empty buildpack.yaml", func() {
+			test.WriteFile(t, filepath.Join(f.Detect.Application.Root, "buildpack.yml"), "")
 
-				phpContributor, _, err := NewContributor(f.Build)
-				Expect(err).NotTo(HaveOccurred())
+			loaded, err := LoadBuildpackYAML(f.Detect.Application.Root)
 
-				test.TouchFile(t, filepath.Join(f.Build.Application.Root, "main.php"))
-				Expect(phpContributor.Contribute()).To(Succeed())
+			Expect(err).To(Succeed())
+			Expect(loaded).To(Equal(BuildpackYAML{}))
+		})
 
-				Expect(f.Build.Layers).To(test.HaveLaunchMetadata(
-					layers.Metadata{Processes: []layers.Process{{"web", "php main.php"}}},
-				))
-			})
+		it("can load a version & web server", func() {
+			yaml := "{'php': {'version': 1.0.0, 'webserver': 'httpd'}}"
+			test.WriteFile(t, filepath.Join(f.Detect.Application.Root, "buildpack.yml"), yaml)
 
-			it("logs a warning when main.php does not exist", func() {
-				f := test.NewBuildFactory(t)
-				oldLayer := f.Build.Layers
-				debug := &bytes.Buffer{}
-				info := &bytes.Buffer{}
+			loaded, err := LoadBuildpackYAML(f.Detect.Application.Root)
+			actual := BuildpackYAML{
+				Config: Config{
+					Version:   "1.0.0",
+					WebServer: "httpd",
+				},
+			}
 
-				root := filepath.Dir(f.Build.Application.Root)
+			Expect(err).To(Succeed())
+			Expect(loaded).To(Equal(actual))
+		})
+	})
 
-				f.Build.Layers = layers.NewLayers(
-					oldLayer.Layers,
-					bp.Layers{Root: filepath.Join(root, "buildpack-cache")},
-					cflogger.Logger{Logger: logger.NewLogger(debug, info)})
-
-				f.AddBuildPlan(Dependency, buildplan.Dependency{
-					Metadata: buildplan.Metadata{"launch": true},
-				})
-				f.AddDependency(Dependency, stubPHPFixture)
-
-				phpContributor, _, err := NewContributor(f.Build)
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(phpContributor.Contribute()).To(Succeed())
-				Expect(info.String()).To(ContainSubstring("WARNING: main.php start script not found. App will not start unless you specify a custom start command."))
-				Expect(f.Build.Layers).To(test.HaveLaunchMetadata(
-					layers.Metadata{},
-				))
-			})
+	when("we need the api string", func() {
+		it("converts from version number", func() {
+			Expect("20151012").To(Equal(API("7.0.1")))
+			Expect("20151012").To(Equal(API("7.0")))
+			Expect("20160303").To(Equal(API("7.1.25")))
+			Expect("20160303").To(Equal(API("7.1")))
+			Expect("20170718").To(Equal(API("7.2.15")))
+			Expect("20170718").To(Equal(API("7.2")))
+			Expect("20180731").To(Equal(API("7.3.1")))
+			Expect("20180731").To(Equal(API("7.3")))
 		})
 	})
 }

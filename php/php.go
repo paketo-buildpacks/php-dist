@@ -1,116 +1,107 @@
+/*
+ * Copyright 2018-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package php
 
 import (
-	"fmt"
+	"io/ioutil"
+	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/buildpack/libbuildpack/application"
-	"github.com/cloudfoundry/libcfbuildpack/build"
+	"github.com/buildpack/libbuildpack/buildplan"
+	"github.com/cloudfoundry/libcfbuildpack/buildpack"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
-	"github.com/cloudfoundry/libcfbuildpack/layers"
+	yaml "gopkg.in/yaml.v2"
 )
 
-const Dependency = "php"
+// Dependency is a build plan dependency indicating a requirement for PHP binaries
+const Dependency = "php-binary"
 
-type Contributor struct {
-	app                application.Application
-	launchContribution bool
-	buildContribution  bool
-	launchLayer        layers.Layers
-	phpLayer           layers.DependencyLayer
+// Version returns the selected version of PHP using the following precedence:
+//
+// 1. `php.verison` from `buildpack.yml`
+// 2. Build Plan Version
+// 3. Buildpack Metadata "default_version"
+// 4. Empty string
+func Version(buildpackYAML BuildpackYAML, buildpack buildpack.Buildpack, dependency buildplan.Dependency) string {
+	if buildpackYAML.Config.Version != "" {
+		return buildpackYAML.Config.Version
+	}
+
+	if dependency.Version != "" {
+		return dependency.Version
+	}
+
+	if version, ok := buildpack.Metadata["default_version"].(string); ok {
+		return version
+	}
+
+	return ""
 }
 
-func NewContributor(context build.Build) (c Contributor, willContribute bool, err error) {
-	plan, wantDependency := context.BuildPlan[Dependency]
-	if !wantDependency {
-		return Contributor{}, false, nil
+// API returns the API string for the given PHP version
+func API(version string) string {
+	if strings.HasPrefix(version, "7.0") {
+		return "20151012"
+	} else if strings.HasPrefix(version, "7.1") {
+		return "20160303"
+	} else if strings.HasPrefix(version, "7.2") {
+		return "20170718"
+	} else if strings.HasPrefix(version, "7.3") {
+		return "20180731"
+	} else {
+		return ""
 	}
-
-	deps, err := context.Buildpack.Dependencies()
-	if err != nil {
-		return Contributor{}, false, err
-	}
-
-	dep, err := deps.Best(Dependency, plan.Version, context.Stack)
-	if err != nil {
-		return Contributor{}, false, err
-	}
-
-	contributor := Contributor{
-		app:         context.Application,
-		launchLayer: context.Layers,
-		phpLayer:    context.Layers.DependencyLayer(dep),
-	}
-
-	if _, ok := plan.Metadata["launch"]; ok {
-		contributor.launchContribution = true
-	}
-
-	if _, ok := plan.Metadata["build"]; ok {
-		contributor.buildContribution = true
-	}
-
-	return contributor, true, nil
 }
 
-func (c Contributor) Contribute() error {
-	return c.phpLayer.Contribute(func(artifact string, layer layers.DependencyLayer) error {
-		layer.Logger.SubsequentLine("Expanding to %s", layer.Root)
-		if err := helper.ExtractTarGz(artifact, layer.Root, 1); err != nil {
-			return err
-		}
+// BuildpackYAML represents user specified config options through `buildpack.yml`
+type BuildpackYAML struct {
+	Config Config `yaml:"php"`
+}
 
-		if err := layer.OverrideSharedEnv("PHPRC", filepath.Join(layer.Root, "etc")); err != nil {
-			return err
-		}
+// Config represents PHP specific configuration options for BuildpackYAML
+type Config struct {
+	Version      string `yaml:"version"`
+	WebServer    string `yaml:"webserver"`
+	WebDirectory string `yaml:"webdirectory"`
+	Script       string `yaml:"script"`
+}
 
-		if err := layer.OverrideSharedEnv("MIBDIRS", filepath.Join(layer.Root, "mibs")); err != nil {
-			return err
-		}
-
-		if err := layer.OverrideSharedEnv("PHP_INI_SCAN_DIR", filepath.Join(c.app.Root, "etc", "php.ini.d")); err != nil {
-			return err
-		}
-
-		// TODO: How do we know when to use php-fpm or not?
-		isWebApp, err := helper.FileExists(filepath.Join(c.app.Root, "htdocs"))
+// LoadBuildpackYAML reads `buildpack.yml` and PHP specific config options in it
+func LoadBuildpackYAML(appRoot string) (BuildpackYAML, error) {
+	buildpackYAML, configFile := BuildpackYAML{}, filepath.Join(appRoot, "buildpack.yml")
+	if exists, err := helper.FileExists(configFile); err != nil {
+		return BuildpackYAML{}, err
+	} else if exists {
+		file, err := os.Open(configFile)
 		if err != nil {
-			return err
+			return BuildpackYAML{}, err
+		}
+		defer file.Close()
+
+		contents, err := ioutil.ReadAll(file)
+		if err != nil {
+			return BuildpackYAML{}, err
 		}
 
-		var procs layers.Processes
-
-		if isWebApp {
-			procs = append(procs, layers.Process{"web", fmt.Sprintf("php -S 0.0.0.0:8080 -t %s/htdocs", c.app.Root)})
-		} else {
-			hasMain, err := helper.FileExists(filepath.Join(c.app.Root, "main.php"))
-			if err != nil {
-				return err
-			}
-
-			if !hasMain {
-				layer.Logger.Info("WARNING: main.php start script not found. App will not start unless you specify a custom start command.")
-			} else {
-				procs = append(procs, layers.Process{"web", "php main.php"})
-			}
+		err = yaml.Unmarshal(contents, &buildpackYAML)
+		if err != nil {
+			return BuildpackYAML{}, err
 		}
-
-		return c.launchLayer.WriteMetadata(layers.Metadata{
-			Processes: procs,
-		})
-	}, c.flags()...)
-}
-
-func (n Contributor) flags() []layers.Flag {
-	flags := []layers.Flag{layers.Cache}
-
-	if n.launchContribution {
-		flags = append(flags, layers.Launch)
 	}
-
-	if n.buildContribution {
-		flags = append(flags, layers.Build)
-	}
-
-	return flags
+	return buildpackYAML, nil
 }

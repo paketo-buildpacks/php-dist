@@ -15,6 +15,10 @@ echo -n "Copying buildpack.toml..."
 cp buildpack.toml $bp_dir/buildpack.toml
 echo "done"
 
+if [ "${BP_REWRITE_HOST:-}" != "" ]; then
+    sed -i -e "s|^uri = \"https:\/\/buildpacks\.cloudfoundry\.org\(.*\)\"$|uri = \"http://$BP_REWRITE_HOST\1\"|g" "$bp_dir/buildpack.toml"
+fi
+
 # TODO: Update list of built binaries as they are written
 for b in detect build; do
     echo -n "Building $b..."

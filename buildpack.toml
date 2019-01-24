@@ -5,26 +5,12 @@ name = "PHP Buildpack"
 version = "0.0.1"
 
 [[metadata.dependencies]]
-id = "php"
-name = "PHP Buildpack"
-sha256 = "fe179853efe050a800d1789189dc2fdbf969ae1fb872032da71045b5bf9be777"
-stacks = ["org.cloudfoundry.stacks.cflinuxfs2"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.13-linux-x64-cflinuxfs2-fe179853.tgz"
-version = "7.2.13"
-
-[[metadata.dependencies]]
-id = "php"
-name = "PHP Buildpack"
-sha256 = "fb2e6e50f30859fd275b92807fffd15eae032d8ad0a2779ce87775b9f30b2611"
+id = "php-binary"
+name = "PHP"
+sha256 = "470da461197949cdb608fb5dd9222adb6853f92af10234b1e69a419e93c7ddf3"
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.13-linux-x64-cflinuxfs3-fb2e6e50.tgz"
-version = "7.2.13"
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.14-linux-x64-cflinuxfs3-470da461.tgz"
+version = "7.2.14"
 
 [[stacks]]
 id = "org.cloudfoundry.stacks.cflinuxfs3"
-
-[[stacks]]
-id = "org.cloudfoundry.stacks.cflinuxfs2"
-
-[[stacks]]
-id = "io.buildpacks.stacks.bionic"
