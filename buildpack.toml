@@ -19,6 +19,13 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.26-linux-x6
 version = "7.1.26"
 
 [[metadata.dependencies]]
+id = "php"
+sha256 = "08ff2b0b3aa5b271913f96a1173b01293c047b45c69666076058f49d20ec1939"
+stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.1-linux-x64-cflinuxfs3-08ff2b0b.tgz"
+version = "7.3.1"
+
+[[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
 sha256 = "be434790c6c674d6753945b0f9dcddaf6cd0ddba7077db9b07ce1ee9ab0325c0"
