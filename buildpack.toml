@@ -5,6 +5,20 @@ name = "PHP Buildpack"
 version = "0.0.1"
 
 [[metadata.dependencies]]
+id = "php"
+sha256 = "f022b5bdb970522d0cce10022a31288571aa167af03fd1e5870cba9cb6afbf19"
+stacks = ["org.cloudfoundry.stacks.cflinuxfs2"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.26-linux-x64-cflinuxfs2-f022b5bd.tgz"
+version = "7.1.26"
+
+[[metadata.dependencies]]
+id = "php"
+sha256 = "26f1a5bfd498bce538bf719af852cf79192e222fa91d8a12b6809742df61eeca"
+stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.26-linux-x64-cflinuxfs3-26f1a5bf.tgz"
+version = "7.1.26"
+
+[[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
 sha256 = "470da461197949cdb608fb5dd9222adb6853f92af10234b1e69a419e93c7ddf3"
