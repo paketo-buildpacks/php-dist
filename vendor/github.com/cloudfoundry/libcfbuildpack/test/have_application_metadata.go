@@ -26,18 +26,18 @@ import (
 	"github.com/onsi/gomega/types"
 )
 
-// HaveLaunchMetadata tests that a launch metadata has expected content.
-func HaveLaunchMetadata(expected layers.Metadata) types.GomegaMatcher {
-	return &haveLaunchMetadataMatcher{
+// HaveApplicationMetadata tests that an application metadata has expected content.
+func HaveApplicationMetadata(expected layers.Metadata) types.GomegaMatcher {
+	return &haveApplicationMetadataMatcher{
 		expected: expected,
 	}
 }
 
-type haveLaunchMetadataMatcher struct {
+type haveApplicationMetadataMatcher struct {
 	expected layers.Metadata
 }
 
-func (m *haveLaunchMetadataMatcher) Match(actual interface{}) (bool, error) {
+func (m *haveApplicationMetadataMatcher) Match(actual interface{}) (bool, error) {
 	path, err := m.path(actual)
 	if err != nil {
 		return false, err
@@ -51,19 +51,19 @@ func (m *haveLaunchMetadataMatcher) Match(actual interface{}) (bool, error) {
 	return reflect.DeepEqual(metadata, m.expected), nil
 }
 
-func (m *haveLaunchMetadataMatcher) FailureMessage(actual interface{}) string {
-	return fmt.Sprintf("Expected\n\t%#v\nto have launch metadata\n\t%#v", actual, m.expected)
+func (m *haveApplicationMetadataMatcher) FailureMessage(actual interface{}) string {
+	return fmt.Sprintf("Expected\n\t%#v\nto have application metadata\n\t%#v", actual, m.expected)
 }
 
-func (m *haveLaunchMetadataMatcher) NegatedFailureMessage(actual interface{}) string {
-	return fmt.Sprintf("Expected\n\t%#v\nnot to have launch metadata\n\t%#v", actual, m.expected)
+func (m *haveApplicationMetadataMatcher) NegatedFailureMessage(actual interface{}) string {
+	return fmt.Sprintf("Expected\n\t%#v\nnot to have application metadata\n\t%#v", actual, m.expected)
 }
 
-func (m *haveLaunchMetadataMatcher) path(actual interface{}) (string, error) {
+func (m *haveApplicationMetadataMatcher) path(actual interface{}) (string, error) {
 	v := reflect.ValueOf(actual).FieldByName("Root")
 	if v == (reflect.Value{}) {
-		return "", fmt.Errorf("HaveLaunchMetadata matcher expects a layers")
+		return "", fmt.Errorf("HaveApplicationMetadata matcher expects a layers")
 	}
 
-	return filepath.Join(v.Interface().(string), "launch.toml"), nil
+	return filepath.Join(v.Interface().(string), "app.toml"), nil
 }
