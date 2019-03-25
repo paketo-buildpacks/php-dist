@@ -1,3 +1,29 @@
+v0.0.2 Mar 25, 2019
+====================
+
+* Bump libcfbuildpack
+  (https://www.pivotaltracker.com/story/show/164601296)
+
+* Add php 7.1.27, remove php 7.1.25
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs2, org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164462657)
+
+* Add php 7.2.16, remove php 7.2.14
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs2, org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164460548)
+
+* Add php 7.3.3, remove php 7.3.1
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/164459111)
+
+* Add php 7.2.15, remove php 7.2.13
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs2, org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/163787459)
+
+* Add php 7.3.2
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/163787462)
+
 v0.0.1 Jan 31, 2019
 ====================
 

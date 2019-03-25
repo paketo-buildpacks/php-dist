@@ -2,7 +2,7 @@
 [buildpack]
 id = "org.cloudfoundry.buildpacks.php"
 name = "PHP Buildpack"
-version = "0.0.1"
+version = "0.0.2"
 
 [[metadata.dependencies]]
 id = "php-binary"
