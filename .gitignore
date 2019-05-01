@@ -1,3 +1,5 @@
 .DS_Store
 .idea
 .bin
+*.tgz
+php-cnb_*
