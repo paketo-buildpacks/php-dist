@@ -1,8 +1,12 @@
 
 [buildpack]
-id = "org.cloudfoundry.buildpacks.php"
+id = "org.cloudfoundry.php"
 name = "PHP Buildpack"
 version = "0.0.2"
+
+[metadata]
+include_files = ["bin/build","bin/detect","buildpack.toml"]
+pre_package = "./scripts/build.sh"
 
 [[metadata.dependencies]]
 id = "php-binary"
