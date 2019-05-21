@@ -32,7 +32,7 @@ func TestUnitContributor(t *testing.T) {
 }
 
 func testContributor(t *testing.T, when spec.G, it spec.S) {
-	var stubPHPFixture = filepath.Join("fixtures", "stub-php.tar.gz")
+	var stubPHPFixture= filepath.Join("testdata", "stub-php.tar.gz")
 	var f *test.BuildFactory
 
 	it.Before(func() {
@@ -84,6 +84,9 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 		Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", filepath.Join(layer.Root, "mibs")))
 		Expect(layer).To(test.HaveAppendPathSharedEnvironment("PATH", filepath.Join(layer.Root, "sbin")))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_HOME", filepath.Join(layer.Root)))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_EXTENSION_DIR", filepath.Join(layer.Root, "lib/php/extensions/no-debug-non-zts-12345")))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_API", "12345"))
 	})
 
 	it("contributes PHP to launch", func() {
@@ -104,5 +107,8 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 		Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", filepath.Join(layer.Root, "mibs")))
 		Expect(layer).To(test.HaveAppendPathSharedEnvironment("PATH", filepath.Join(layer.Root, "sbin")))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_HOME", filepath.Join(layer.Root)))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_EXTENSION_DIR", filepath.Join(layer.Root, "lib/php/extensions/no-debug-non-zts-12345")))
+		Expect(layer).To(test.HaveOverrideSharedEnvironment("PHP_API", "12345"))
 	})
 }

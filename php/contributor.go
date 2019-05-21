@@ -17,7 +17,9 @@
 package php
 
 import (
+	"errors"
 	"path/filepath"
+	"strings"
 
 	"github.com/cloudfoundry/libcfbuildpack/build"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
@@ -86,6 +88,23 @@ func (c Contributor) Contribute() error {
 			return err
 		}
 
+		if err := layer.OverrideSharedEnv("PHP_HOME", layer.Root); err != nil {
+			return err
+		}
+
+		extensionsFolder, apiVersion, err := extensions(layer.Root)
+		if err != nil {
+			return err
+		}
+
+		if err := layer.OverrideSharedEnv("PHP_EXTENSION_DIR", extensionsFolder); err != nil {
+			return err
+		}
+
+		if err := layer.OverrideSharedEnv("PHP_API", apiVersion); err != nil {
+			return err
+		}
+
 		return nil
 	}, c.flags()...)
 }
@@ -102,4 +121,22 @@ func (c Contributor) flags() []layers.Flag {
 	}
 
 	return flags
+}
+
+
+func extensions(root string) (extensionsFolder, apiVersion string, err error) {
+	folders, err := filepath.Glob(filepath.Join(root, "lib/php/extensions/no-debug-non-zts*"))
+	if err != nil {
+		return "", "", err
+	}
+
+	if len(folders) == 0 {
+		return "", "", errors.New("php extensions folder not found")
+	}
+
+	extensionsFolder = folders[0]
+	extensionFolderChunks := strings.Split(extensionsFolder, "-")
+	apiVersion = extensionFolderChunks[len(extensionFolderChunks) - 1]
+
+	return extensionsFolder, apiVersion, nil
 }
