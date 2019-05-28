@@ -1,3 +1,28 @@
+v0.0.3 May 28, 2019
+====================
+
+* Export PHP_HOME, PHP_EXTENSION_DIR, and PHP_API environment variables for other buildpacks to consume
+
+* Support libcfbuildpack packager
+  - Add included_files and build.sh as pre-package script
+  - Remove buildpacks from id for consistency
+
+* Add php 7.1.29, remove php 7.1.26, php 7.1.28
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs2, org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165785258)
+  (https://www.pivotaltracker.com/story/show/165128941)
+
+* Add php 7.2.18, remove php 7.2.15, php 7.2.17
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs2, org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165763831)
+  (https://www.pivotaltracker.com/story/show/165125089)
+
+* Add php 7.3.5, remove php 7.3.2, php 7.3.4
+  for stack(s) org.cloudfoundry.stacks.cflinuxfs3
+  (https://www.pivotaltracker.com/story/show/165762914)
+  (https://www.pivotaltracker.com/story/show/165119913)
+
+
 v0.0.2 Mar 25, 2019
 ====================
 

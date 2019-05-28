@@ -2,7 +2,7 @@
 [buildpack]
 id = "org.cloudfoundry.php"
 name = "PHP Buildpack"
-version = "0.0.2"
+version = "0.0.3"
 
 [metadata]
 include_files = ["bin/build","bin/detect","buildpack.toml"]
