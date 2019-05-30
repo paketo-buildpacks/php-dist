@@ -75,18 +75,18 @@ version = "7.2.18"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
-sha256 = "57ea9a7d733f720ddfcaa6441c8edb54e6860b399865a654b2897222f2113e79"
-stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.3-linux-x64-cflinuxfs3-57ea9a7d.tgz"
-version = "7.3.3"
-
-[[metadata.dependencies]]
-id = "php-binary"
-name = "PHP"
 sha256 = "b919dac634ae2b825bf0c1f99cc617ab6de983f22c3b7bc6e07c9c713843ccec"
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
 uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.5-linux-x64-cflinuxfs3-b919dac6.tgz"
 version = "7.3.5"
+
+[[metadata.dependencies]]
+id = "php-binary"
+name = "PHP"
+sha256 = "09d2da7198e864d30c6e731f24566119f6dc4eda2e61ccd1b6a9438a8c473e41"
+stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.6-linux-x64-cflinuxfs3-09d2da71.tgz"
+version = "7.3.6"
 
 [[stacks]]
 id = "org.cloudfoundry.stacks.cflinuxfs2"
