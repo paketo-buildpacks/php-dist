@@ -18,11 +18,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/cloudfoundry/php-cnb/php"
+	"io/ioutil"
 	"os"
+	"path/filepath"
+
+	"github.com/cloudfoundry/php-cnb/php"
 
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/detect"
+	"github.com/cloudfoundry/libcfbuildpack/helper"
+	"gopkg.in/yaml.v2"
 )
 
 func main() {
@@ -39,9 +44,43 @@ func main() {
 
 	os.Exit(code)
 }
-
 func runDetect(context detect.Detect) (int, error) {
+	buildpackYAMLPath := filepath.Join(context.Application.Root, "buildpack.yml")
+	exists, err := helper.FileExists(buildpackYAMLPath)
+	if err != nil {
+		return detect.FailStatusCode, err
+	}
+
+	version := context.BuildPlan[php.Dependency].Version
+	if exists {
+		version, err = readBuildpackYamlVersion(buildpackYAMLPath)
+		if err != nil {
+			return detect.FailStatusCode, err
+		}
+	}
+
 	return context.Pass(buildplan.BuildPlan{
-		php.Dependency: buildplan.Dependency{},
+		php.Dependency: buildplan.Dependency{
+			Version:  version,
+			Metadata: buildplan.Metadata{},
+		},
 	})
+}
+
+func readBuildpackYamlVersion(buildpackYAMLPath string) (string, error) {
+	buf, err := ioutil.ReadFile(buildpackYAMLPath)
+	if err != nil {
+		return "", err
+	}
+
+	config := struct {
+		Ruby struct {
+			Version string `yaml:"version"`
+		} `yaml:"php-binary"`
+	}{}
+	if err := yaml.Unmarshal(buf, &config); err != nil {
+		return "", err
+	}
+
+	return config.Ruby.Version, nil
 }
