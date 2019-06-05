@@ -57,15 +57,6 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 		Expect(err).NotTo(HaveOccurred())
 	})
 
-	it("returns false if build plan exists but version is not set", func() {
-		f.AddDependency(Dependency, stubPHPFixture)
-		f.AddBuildPlan(Dependency, buildplan.Dependency{})
-
-		_, ok, err := NewContributor(f.Build)
-		Expect(ok).To(BeFalse())
-		Expect(err).NotTo(HaveOccurred())
-	})
-
 	it("contributes PHP to build", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
 		f.AddBuildPlan(Dependency, buildplan.Dependency{

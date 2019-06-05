@@ -42,16 +42,7 @@ func NewContributor(context build.Build) (c Contributor, willContribute bool, er
 		return Contributor{}, false, nil
 	}
 
-	deps, err := context.Buildpack.Dependencies()
-	if err != nil {
-		return Contributor{}, false, err
-	}
-
-	if plan.Version == "" {
-		context.Logger.SubsequentLine("Dependency version not specified, but is required")
-		return Contributor{}, false, nil
-	}
-	dep, err := deps.Best(Dependency, plan.Version, context.Stack)
+	dep, err := context.Buildpack.RuntimeDependency(Dependency, plan.Version, context.Stack)
 	if err != nil {
 		return Contributor{}, false, err
 	}
