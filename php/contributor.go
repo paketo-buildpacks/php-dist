@@ -52,13 +52,8 @@ func NewContributor(context build.Build) (c Contributor, willContribute bool, er
 		phpLayer: context.Layers.DependencyLayer(dep),
 	}
 
-	if _, ok := plan.Metadata["launch"]; ok {
-		contributor.launchContribution = true
-	}
-
-	if _, ok := plan.Metadata["build"]; ok {
-		contributor.buildContribution = true
-	}
+	contributor.buildContribution, _ = plan.Metadata["build"].(bool)
+	contributor.launchContribution, _ = plan.Metadata["launch"].(bool)
 
 	return contributor, true, nil
 }
