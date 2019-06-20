@@ -18,7 +18,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -27,8 +26,15 @@ import (
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/detect"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
-	"gopkg.in/yaml.v2"
 )
+
+type BuildpackYAML struct {
+	Config Config `yaml:"php"`
+}
+
+type Config struct {
+	Version string `yaml:"version"`
+}
 
 func main() {
 	detectionContext, err := detect.DefaultDetect()
@@ -44,6 +50,7 @@ func main() {
 
 	os.Exit(code)
 }
+
 func runDetect(context detect.Detect) (int, error) {
 	buildpackYAMLPath := filepath.Join(context.Application.Root, "buildpack.yml")
 	exists, err := helper.FileExists(buildpackYAMLPath)
@@ -51,11 +58,15 @@ func runDetect(context detect.Detect) (int, error) {
 		return detect.FailStatusCode, err
 	}
 
+	buildpackYAML := BuildpackYAML{}
 	version := context.BuildPlan[php.Dependency].Version
 	if exists {
-		version, err = readBuildpackYamlVersion(buildpackYAMLPath)
+		err = helper.ReadBuildpackYaml(buildpackYAMLPath, &buildpackYAML)
 		if err != nil {
 			return detect.FailStatusCode, err
+		}
+		if buildpackYAML.Config.Version != "" {
+			version = buildpackYAML.Config.Version
 		}
 	}
 
@@ -65,22 +76,5 @@ func runDetect(context detect.Detect) (int, error) {
 			Metadata: buildplan.Metadata{},
 		},
 	})
-}
 
-func readBuildpackYamlVersion(buildpackYAMLPath string) (string, error) {
-	buf, err := ioutil.ReadFile(buildpackYAMLPath)
-	if err != nil {
-		return "", err
-	}
-
-	config := struct {
-		Ruby struct {
-			Version string `yaml:"version"`
-		} `yaml:"php-binary"`
-	}{}
-	if err := yaml.Unmarshal(buf, &config); err != nil {
-		return "", err
-	}
-
-	return config.Ruby.Version, nil
 }
