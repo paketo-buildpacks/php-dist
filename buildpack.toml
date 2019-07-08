@@ -34,28 +34,10 @@ version = "7.1.30"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
-sha256 = "528d82cdbdf499fcac770e8822db7e8350bd1d050f0c5754ea2466fd0d02b247"
-stacks = ["org.cloudfoundry.stacks.cflinuxfs2"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.18-linux-x64-cflinuxfs2-528d82cd.tgz"
-version = "7.2.18"
-
-[[metadata.dependencies]]
-id = "php-binary"
-name = "PHP"
 sha256 = "1e80707ed042c92a8e7df0e263f92e0c7296f200cc04ce2b19916344b1715eaa"
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
 uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.18-linux-x64-cflinuxfs3-1e80707e.tgz"
 version = "7.2.18"
-
-[[metadata.dependencies]]
-id = "php-binary"
-name = "PHP"
-sha256 = "35edecea1520996bab60e7c29124a2175ee61bf6bb2ebb05ecb2334e73789f7f"
-source = "https://php.net/distributions/php-7.2.20.tar.gz"
-source_sha256 = "d1dbf6f299514c9aa55b2995928b798b27c21811a0447f0688993cdf36be0749"
-stacks = ["org.cloudfoundry.stacks.cflinuxfs2"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.20-linux-x64-cflinuxfs2-35edecea.tgz"
-version = "7.2.20"
 
 [[metadata.dependencies]]
 id = "php-binary"
