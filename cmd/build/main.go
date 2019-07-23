@@ -41,7 +41,7 @@ func main() {
 }
 
 func runBuild(context build.Build) (int, error) {
-	context.Logger.FirstLine(context.Logger.PrettyIdentity(context.Buildpack))
+	context.Logger.Title(context.Buildpack)
 
 	php, willContribute, err := php.NewContributor(context)
 	if err != nil {
