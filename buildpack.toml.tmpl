@@ -24,11 +24,11 @@ version = "7.1.29"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
-sha256 = "91769a94ac4142678b8134f839a257b33e24ac3ca7e6e1604d655be4cf112f25"
+sha256 = "21810a8d801b03164ca756ffcd029c89abfbe90fa528716feb6bac193490e351"
 source = "https://php.net/distributions/php-7.1.30.tar.gz"
 source_sha256 = "a604edf85d5dfc28e6ff3016dad3954c50b93db69afc42295178b4fdf42e026c"
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.30-linux-x64-cflinuxfs3-91769a94.tgz"
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.30-linux-x64-cflinuxfs3-21810a8d.tgz"
 version = "7.1.30"
 
 [[metadata.dependencies]]
@@ -66,6 +66,13 @@ source_sha256 = "4230bbc862df712b013369de94b131eddea1e5e946a8c5e286b82d441c31332
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
 uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.7-linux-x64-cflinuxfs3-5996caf2.tgz"
 version = "7.3.7"
+
+[[metadata.dependency_deprecation_dates]]
+date = 2019-12-01T00:00:00Z
+link = "http://php.net/supported-versions.php"
+match = "7.1.\\d+"
+name = "php"
+version_line = "7.1.x"
 
 [[metadata.dependency_deprecation_dates]]
 date = 2020-11-30T00:00:00Z
