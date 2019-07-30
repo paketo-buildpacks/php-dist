@@ -22,7 +22,7 @@ import (
 
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/build"
-	"github.com/cloudfoundry/php-cnb/php"
+	"github.com/cloudfoundry/php-dist-cnb/php"
 )
 
 func main() {
