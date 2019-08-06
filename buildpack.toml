@@ -1,6 +1,6 @@
 
 [buildpack]
-id = "org.cloudfoundry.php"
+id = "org.cloudfoundry.php-dist"
 name = "PHP Buildpack"
 version = "{{ .Version }}"
 
