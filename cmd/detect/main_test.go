@@ -20,6 +20,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
+
 	"github.com/cloudfoundry/php-dist-cnb/php"
 
 	"github.com/buildpack/libbuildpack/buildplan"
@@ -64,10 +66,28 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(code).To(Equal(detect.PassStatusCode))
 
-				Expect(factory.Output).To(Equal(buildplan.BuildPlan{
-					php.Dependency: buildplan.Dependency{
-						Version:  "",
-						Metadata: buildplan.Metadata{},
+				Expect(factory.Plans.Plan).To(Equal(buildplan.Plan{
+					Provides: []buildplan.Provided{
+						{Name: php.Dependency},
+					},
+				}))
+			})
+		})
+
+		when("there is a buildpack.yml without php", func() {
+			it.Before(func() {
+				buildpackYAMLString := fmt.Sprintf("nodejs:\n  version: 1.5")
+				Expect(helper.WriteFile(filepath.Join(factory.Detect.Application.Root, "buildpack.yml"), 0666, buildpackYAMLString)).To(Succeed())
+			})
+
+			it("shouldn't require php  in the buildplan", func() {
+				code, err := runDetect(factory.Detect)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(code).To(Equal(detect.PassStatusCode))
+
+				Expect(factory.Plans.Plan).To(Equal(buildplan.Plan{
+					Provides: []buildplan.Provided{
+						{Name: php.Dependency},
 					},
 				}))
 			})
@@ -86,37 +106,17 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(code).To(Equal(detect.PassStatusCode))
 
-				Expect(factory.Output).To(Equal(buildplan.BuildPlan{
-					php.Dependency: buildplan.Dependency{
-						Version:  version,
-						Metadata: buildplan.Metadata{},
+				Expect(factory.Plans.Plan).To(Equal(buildplan.Plan{
+					Requires: []buildplan.Required{
+						{
+							Name:    php.Dependency,
+							Version: version,
+							Metadata: buildplan.Metadata{"launch": true,
+								buildpackplan.VersionSource: php.BuildpackYAMLSource},
+						},
 					},
-				}))
-			})
-		})
-
-		when("there is a is an existing version from the build plan and a buildpack.yml", func() {
-			const buildpackYAMLVersion string = "1.2.3"
-			const existingVersion string = "4.5.6"
-
-			it.Before(func() {
-				factory.AddBuildPlan(php.Dependency, buildplan.Dependency{
-					Version: existingVersion,
-				})
-
-				buildpackYAMLString := fmt.Sprintf("php:\n  version: %s", buildpackYAMLVersion)
-				Expect(helper.WriteFile(filepath.Join(factory.Detect.Application.Root, "buildpack.yml"), 0666, buildpackYAMLString)).To(Succeed())
-			})
-
-			it("should pass with the requested version of php defined in buildpack.yml", func() {
-				code, err := runDetect(factory.Detect)
-				Expect(err).NotTo(HaveOccurred())
-				Expect(code).To(Equal(detect.PassStatusCode))
-
-				Expect(factory.Output).To(Equal(buildplan.BuildPlan{
-					php.Dependency: buildplan.Dependency{
-						Version:  buildpackYAMLVersion,
-						Metadata: buildplan.Metadata{},
+					Provides: []buildplan.Provided{
+						{Name: php.Dependency},
 					},
 				}))
 			})

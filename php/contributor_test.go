@@ -20,7 +20,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/buildpack/libbuildpack/buildplan"
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
+
 	"github.com/cloudfoundry/libcfbuildpack/test"
 	. "github.com/onsi/gomega"
 	"github.com/sclevine/spec"
@@ -32,7 +33,7 @@ func TestUnitContributor(t *testing.T) {
 }
 
 func testContributor(t *testing.T, when spec.G, it spec.S) {
-	var stubPHPFixture= filepath.Join("testdata", "stub-php.tar.gz")
+	var stubPHPFixture = filepath.Join("testdata", "stub-php.tar.gz")
 	var f *test.BuildFactory
 
 	it.Before(func() {
@@ -42,7 +43,8 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 
 	it("returns true if build plan exists and version is set", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
-		f.AddBuildPlan(Dependency, buildplan.Dependency{
+		f.AddPlan(buildpackplan.Plan{
+			Name:    Dependency,
 			Version: "*",
 		})
 
@@ -59,9 +61,10 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 
 	it("contributes PHP to build", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
-		f.AddBuildPlan(Dependency, buildplan.Dependency{
-			Metadata: buildplan.Metadata{"build": true},
-			Version: "*",
+		f.AddPlan(buildpackplan.Plan{
+			Name:     Dependency,
+			Version:  "*",
+			Metadata: buildpackplan.Metadata{"build": true},
 		})
 
 		c, shouldContribute, err := NewContributor(f.Build)
@@ -82,9 +85,10 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 
 	it("contributes PHP to launch", func() {
 		f.AddDependency(Dependency, stubPHPFixture)
-		f.AddBuildPlan(Dependency, buildplan.Dependency{
-			Metadata: buildplan.Metadata{"launch": true},
-			Version: "*",
+		f.AddPlan(buildpackplan.Plan{
+			Name:     Dependency,
+			Version:  "*",
+			Metadata: buildpackplan.Metadata{"launch": true},
 		})
 
 		c, shouldContribute, err := NewContributor(f.Build)

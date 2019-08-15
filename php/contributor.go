@@ -34,12 +34,24 @@ type Contributor struct {
 	appRoot            string
 }
 
+const BuildpackYAMLSource = "buildpack.yml"
+const ComposerLockSource = "composer.lock"
+const ComposerJSONSource = "composer.json"
+const DefaultVersionsSource = "default-versions"
+
+var priorities = map[interface{}]int{
+	BuildpackYAMLSource:   4,
+	ComposerLockSource:    3,
+	ComposerJSONSource:    3,
+	DefaultVersionsSource: 2,
+	"":                    -1,
+}
+
 // NewContributor creates a new Contributor instance. willContribute is true if build plan contains "php-binary" dependency, otherwise false.
 func NewContributor(context build.Build) (c Contributor, willContribute bool, err error) {
-	plan, wantDependency := context.BuildPlan[Dependency]
-	if !wantDependency {
-		context.Logger.SubsequentLine("Dependency not wanted, skipping")
-		return Contributor{}, false, nil
+	plan, wantDependency, err := context.Plans.GetPriorityMerged(Dependency, priorities)
+	if err != nil || !wantDependency {
+		return Contributor{}, false, err
 	}
 
 	dep, err := context.Buildpack.RuntimeDependency(Dependency, plan.Version, context.Stack)
@@ -109,7 +121,6 @@ func (c Contributor) flags() []layers.Flag {
 	return flags
 }
 
-
 func extensions(root string) (extensionsFolder, apiVersion string, err error) {
 	folders, err := filepath.Glob(filepath.Join(root, "lib/php/extensions/no-debug-non-zts*"))
 	if err != nil {
@@ -122,7 +133,7 @@ func extensions(root string) (extensionsFolder, apiVersion string, err error) {
 
 	extensionsFolder = folders[0]
 	extensionFolderChunks := strings.Split(extensionsFolder, "-")
-	apiVersion = extensionFolderChunks[len(extensionFolderChunks) - 1]
+	apiVersion = extensionFolderChunks[len(extensionFolderChunks)-1]
 
 	return extensionsFolder, apiVersion, nil
 }

@@ -21,6 +21,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
+
 	"github.com/cloudfoundry/php-dist-cnb/php"
 
 	"github.com/buildpack/libbuildpack/buildplan"
@@ -58,23 +60,28 @@ func runDetect(context detect.Detect) (int, error) {
 		return detect.FailStatusCode, err
 	}
 
+	plan := buildplan.Plan{
+		Provides: []buildplan.Provided{{Name: php.Dependency}},
+	}
+
 	buildpackYAML := BuildpackYAML{}
-	version := context.BuildPlan[php.Dependency].Version
 	if exists {
 		err = helper.ReadBuildpackYaml(buildpackYAMLPath, &buildpackYAML)
 		if err != nil {
 			return detect.FailStatusCode, err
 		}
-		if buildpackYAML.Config.Version != "" {
-			version = buildpackYAML.Config.Version
+
+		if buildpackYAML.Config != (Config{}) {
+			plan.Requires = []buildplan.Required{
+				{
+					Name:    php.Dependency,
+					Version: buildpackYAML.Config.Version,
+					Metadata: buildplan.Metadata{"launch": true,
+						buildpackplan.VersionSource: php.BuildpackYAMLSource},
+				},
+			}
 		}
 	}
 
-	return context.Pass(buildplan.BuildPlan{
-		php.Dependency: buildplan.Dependency{
-			Version:  version,
-			Metadata: buildplan.Metadata{},
-		},
-	})
-
+	return context.Pass(plan)
 }
