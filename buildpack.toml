@@ -55,6 +55,16 @@ version = "7.2.23"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
+sha256 = "c223039a2d20ea4d7b6b8a432c950619b93ccc64d93ade5b8f4fb9e615aa0166"
+source = "https://php.net/distributions/php-7.2.23.tar.gz"
+source_sha256 = "b32b426c84ff45154d6c11f00aff433bcac831a5c0a09bf0297075eefaea8fcc"
+stacks = ["org.cloudfoundry.stacks.tiny"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.23-linux-x64-cflinuxfs3-c223039a.tgz"
+version = "7.2.23"
+
+[[metadata.dependencies]]
+id = "php-binary"
+name = "PHP"
 sha256 = "2e2f589403ee293602c63e231004c84ad6cba541b32eb0ae0256876e9dc43107"
 source = "https://php.net/distributions/php-7.3.9.tar.gz"
 source_sha256 = "5ecc1b1ad7228ed2e99a970c45358871644fcab1d9fd079a7b129326a7bde42d"
