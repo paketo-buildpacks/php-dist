@@ -95,11 +95,11 @@ version = "7.3.10"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
-sha256 = "9996372a5e0aed8f8bef95c85a01f5e425bb10452cf5daa2cf94ceb151964b53"
+sha256 = "d9a992a53bf45981a55673978f9b6fe759b0412d531a9e8d894fd9b4a22dac25"
 source = "https://php.net/distributions/php-7.3.10.tar.gz"
 source_sha256 = "fb670723a9b8fda31c89529f27e0dda289d8af4b6ce9f152c8010876639c0fb4"
 stacks = ["org.cloudfoundry.stacks.tiny"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.10-linux-x64-cflinuxfs3-9996372a.tgz"
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.10-linux-x64-cflinuxfs3-d9a992a5.tgz"
 version = "7.3.10"
 
 [[metadata.dependency_deprecation_dates]]
