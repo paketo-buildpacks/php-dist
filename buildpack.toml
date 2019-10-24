@@ -55,22 +55,22 @@ version = "7.2.23"
 [[metadata.dependencies]]
 id = "php-binary"
 name = "PHP"
-sha256 = "2e2f589403ee293602c63e231004c84ad6cba541b32eb0ae0256876e9dc43107"
-source = "https://php.net/distributions/php-7.3.9.tar.gz"
-source_sha256 = "5ecc1b1ad7228ed2e99a970c45358871644fcab1d9fd079a7b129326a7bde42d"
-stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.9-linux-x64-cflinuxfs3-2e2f5894.tgz"
-version = "7.3.9"
-
-[[metadata.dependencies]]
-id = "php-binary"
-name = "PHP"
 sha256 = "d9a992a53bf45981a55673978f9b6fe759b0412d531a9e8d894fd9b4a22dac25"
 source = "https://php.net/distributions/php-7.3.10.tar.gz"
 source_sha256 = "fb670723a9b8fda31c89529f27e0dda289d8af4b6ce9f152c8010876639c0fb4"
 stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
 uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.10-linux-x64-cflinuxfs3-d9a992a5.tgz"
 version = "7.3.10"
+
+[[metadata.dependencies]]
+id = "php-binary"
+name = "PHP"
+sha256 = "4268e883c7c748106eb2d7dfcc2b2277ed2cfffe621afaf6241033773a3dc182"
+source = "https://php.net/distributions/php-7.3.11.tar.gz"
+source_sha256 = "8f385f5bdf9193791f6c0f6303f518f3c324b6655ac108fdb3c426da7f3cf4d4"
+stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.11-linux-x64-cflinuxfs3-4268e883.tgz"
+version = "7.3.11"
 
 [[metadata.dependency_deprecation_dates]]
 date = 2019-12-01T00:00:00Z
