@@ -10,10 +10,10 @@ include_files = ["bin/build","bin/detect","buildpack.toml"]
 pre_package = "./scripts/build.sh"
 
 [metadata.default-versions]
-php-binary = "7.2.*"
+php = "7.2.*"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "bb73cf6aff98fee621cce8623a383ed6aceca11ac5a03b099c7d0f6383100ddb"
 source = "https://php.net/distributions/php-7.1.32.tar.gz"
@@ -23,7 +23,7 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.32-linux-x6
 version = "7.1.32"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "8f3eb28c32995535c0bd43e417f5298ebf13e1c7ab9aaf12a1b240df8a5d4999"
 source = "https://php.net/distributions/php-7.1.33.tar.gz"
@@ -33,7 +33,7 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.1.33-linux-x6
 version = "7.1.33"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "bb5a5c3c9d7933b1c49309752d439a7d2fda25658bda818f82462efb4d199cc6"
 source = "https://php.net/distributions/php-7.2.23.tar.gz"
@@ -43,7 +43,7 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.23-linux-x6
 version = "7.2.23"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "7a9bcb0fd7b98bfd49b4848dd822246bc3f536c72f4ac792105d50987260e3cb"
 source = "https://php.net/distributions/php-7.2.24.tar.gz"
@@ -53,7 +53,7 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.24-linux-x6
 version = "7.2.24"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "d9a992a53bf45981a55673978f9b6fe759b0412d531a9e8d894fd9b4a22dac25"
 source = "https://php.net/distributions/php-7.3.10.tar.gz"
@@ -63,7 +63,7 @@ uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.3.10-linux-x6
 version = "7.3.10"
 
 [[metadata.dependencies]]
-id = "php-binary"
+id = "php"
 name = "PHP"
 sha256 = "4268e883c7c748106eb2d7dfcc2b2277ed2cfffe621afaf6241033773a3dc182"
 source = "https://php.net/distributions/php-7.3.11.tar.gz"

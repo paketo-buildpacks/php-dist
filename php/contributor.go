@@ -47,7 +47,7 @@ var priorities = map[interface{}]int{
 	"":                    -1,
 }
 
-// NewContributor creates a new Contributor instance. willContribute is true if build plan contains "php-binary" dependency, otherwise false.
+// NewContributor creates a new Contributor instance. willContribute is true if build plan contains "php" dependency, otherwise false.
 func NewContributor(context build.Build) (c Contributor, willContribute bool, err error) {
 	plan, wantDependency, err := context.Plans.GetPriorityMerged(Dependency, priorities)
 	if err != nil || !wantDependency {

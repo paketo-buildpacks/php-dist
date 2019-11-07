@@ -17,4 +17,4 @@
 package php
 
 // Dependency is a build plan dependency indicating a requirement for PHP binaries
-const Dependency = "php-binary"
+const Dependency = "php"

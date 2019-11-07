@@ -73,7 +73,7 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 
 		Expect(c.Contribute()).To(Succeed())
 
-		layer := f.Build.Layers.Layer("php-binary")
+		layer := f.Build.Layers.Layer("php")
 		Expect(layer).To(test.HaveLayerMetadata(true, true, false))
 		Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 		Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", filepath.Join(layer.Root, "mibs")))
@@ -97,7 +97,7 @@ func testContributor(t *testing.T, when spec.G, it spec.S) {
 
 		Expect(c.Contribute()).To(Succeed())
 
-		layer := f.Build.Layers.Layer("php-binary")
+		layer := f.Build.Layers.Layer("php")
 		Expect(layer).To(test.HaveLayerMetadata(false, false, true))
 		Expect(filepath.Join(layer.Root, "stub.txt")).To(BeARegularFile())
 		Expect(layer).To(test.HaveOverrideSharedEnvironment("MIBDIRS", filepath.Join(layer.Root, "mibs")))

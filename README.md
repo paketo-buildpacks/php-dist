@@ -12,7 +12,7 @@ The detection phase always passes and contributes nothing to the build plan, dep
 
 If the build plan contains
 
-- `php-binary`
+- `php`
   - Contributes PHP to a layer marked `build` and `cache` with all commands on `$PATH`
   - If `buildpack.yml` contains `php.verison`, configures a specific version.  This value must _exactly_ match a version available in the buildpack so typically it would configured to a wildcard such as `7.2.*`.
   - Contributes `$PHPRC` configured to the build layer
