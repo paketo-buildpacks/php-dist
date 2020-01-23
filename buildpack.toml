@@ -14,22 +14,22 @@ api = "0.2"
   [[metadata.dependencies]]
     id = "php"
     name = "PHP"
-    sha256 = "002f7fd0ab7c13cfe5a2046923ede121b9b29eae3e7feec0d58fdc8aebcbe554"
-    source = "https://php.net/distributions/php-7.2.25.tar.gz"
-    source_sha256 = "b2cb1bd46454d33b2c65c2fd559f464cd14e57dd47b953adf5caa77fdf0de52b"
-    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.25-linux-x64-cflinuxfs3-002f7fd0.tgz"
-    version = "7.2.25"
-
-  [[metadata.dependencies]]
-    id = "php"
-    name = "PHP"
     sha256 = "d7884fb84b32e12e7133108e7de27fa65ead818f908aaafc87fe7f72f106ab78"
     source = "https://php.net/distributions/php-7.2.26.tar.gz"
     source_sha256 = "e97d0636478bb519cd955a0c17b7970cf173063a840a83fc4afb75c22bc1bf08"
     stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.26-linux-x64-cflinuxfs3-d7884fb8.tgz"
     version = "7.2.26"
+
+  [[metadata.dependencies]]
+    id = "php"
+    name = "PHP"
+    sha256 = "107678e84e0275c51bfcdcadf257aa933a6ca69f547df234537050481fd2f94a"
+    source = "https://php.net/distributions/php-7.2.27.tar.gz"
+    source_sha256 = "e00ace5e89cb162cba0aebd17144541e1c4d965589155a44ca706d9f9c5a8981"
+    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.27-linux-x64-cflinuxfs3-107678e8.tgz"
+    version = "7.2.27"
 
   [[metadata.dependencies]]
     id = "php"
