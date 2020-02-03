@@ -14,11 +14,11 @@ api = "0.2"
   [[metadata.dependencies]]
     id = "php"
     name = "PHP"
-    sha256 = "d7884fb84b32e12e7133108e7de27fa65ead818f908aaafc87fe7f72f106ab78"
+    sha256 = "155b219c9ff35b173ee822429f23fdf2f4e276e036cc0e6056c41be6b8e2b19f"
     source = "https://php.net/distributions/php-7.2.26.tar.gz"
     source_sha256 = "e97d0636478bb519cd955a0c17b7970cf173063a840a83fc4afb75c22bc1bf08"
     stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.26-linux-x64-cflinuxfs3-d7884fb8.tgz"
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.26-linux-x64-cflinuxfs3-155b219c.tgz"
     version = "7.2.26"
 
   [[metadata.dependencies]]
