@@ -64,11 +64,11 @@ api = "0.2"
   [[metadata.dependencies]]
     id = "php"
     name = "PHP"
-    sha256 = "0a05296c2eb3444d9ad305a1545ad2a1bab98ff7cf9f0d2497069a63c5c30ecc"
+    sha256 = "018f2f2b30375514352f991abf2422c2ce4cba6f4eb0f7a5d3a07e2f7828fa4a"
     source = "https://php.net/distributions/php-7.4.2.tar.gz"
     source_sha256 = "e1b8dbf561ac1d871362054ff4cd62dca5e19c8c896567996525dda7c4b320f9"
     stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.4.2-linux-x64-cflinuxfs3-0a05296c.tgz"
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.4.2-linux-x64-cflinuxfs3-018f2f2b.tgz"
     version = "7.4.2"
 
   [[metadata.dependency_deprecation_dates]]
