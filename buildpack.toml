@@ -54,22 +54,22 @@ api = "0.2"
   [[metadata.dependencies]]
     id = "php"
     name = "PHP"
-    sha256 = "b33b0c0916002aa342ebb77c4abdc083f25ee85ad602e135243109f798f600f7"
-    source = "https://php.net/distributions/php-7.4.1.tar.gz"
-    source_sha256 = "67265d6bd48d828f4725964f71ca5c76c3da63b0d07bec5ec4e5acfdd3708073"
-    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.4.1-linux-x64-cflinuxfs3-b33b0c09.tgz"
-    version = "7.4.1"
-
-  [[metadata.dependencies]]
-    id = "php"
-    name = "PHP"
     sha256 = "6aa2071d16df2c94c8f4d80e00b39b347d2cf72c1420f0d1b4977645440e84e3"
     source = "https://php.net/distributions/php-7.4.2.tar.gz"
     source_sha256 = "e1b8dbf561ac1d871362054ff4cd62dca5e19c8c896567996525dda7c4b320f9"
     stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.4.2-linux-x64-cflinuxfs3-6aa2071d.tgz"
     version = "7.4.2"
+
+  [[metadata.dependencies]]
+    id = "php"
+    name = "PHP"
+    sha256 = "46ee51a57120adf9c3623cf9855f163685acc75ea6f9a7968ae4a21029bcdc4f"
+    source = "https://php.net/distributions/php-7.4.3.tar.gz"
+    source_sha256 = "58e421a1dba10da8542a014535cac77a78f0271afb901cc2bd363b881895a9ed"
+    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.4.3-linux-x64-cflinuxfs3-46ee51a5.tgz"
+    version = "7.4.3"
 
   [[metadata.dependency_deprecation_dates]]
     date = 2020-11-30T00:00:00Z
