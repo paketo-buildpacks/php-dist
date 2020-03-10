@@ -12,13 +12,14 @@ api = "0.2"
     php = "7.2.*"
 
   [[metadata.dependencies]]
+    deprecation_date = "2020-11-30T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "aa5495465604c6dad38b3e7954ee7c1118b23f9f10c267b60335720fcc8a6ba2"
+    sha256 = "a184353e48ebc16296865a3ed46baf9037211f9bfbc6c746f78a8cacc7cf5f13"
     source = "https://php.net/distributions/php-7.2.27.tar.gz"
     source_sha256 = "e00ace5e89cb162cba0aebd17144541e1c4d965589155a44ca706d9f9c5a8981"
     stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.27-linux-x64-cflinuxfs3-aa549546.tgz"
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7-7.2.27-linux-x64-cflinuxfs3-a184353e.tgz"
     version = "7.2.27"
 
   [[metadata.dependencies]]
