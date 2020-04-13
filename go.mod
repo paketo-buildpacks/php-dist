@@ -1,4 +1,4 @@
-module github.com/cloudfoundry/php-dist-cnb
+module github.com/paketo-buildpacks/php-dist
 
 go 1.12
 

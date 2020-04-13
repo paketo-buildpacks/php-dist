@@ -22,7 +22,7 @@ import (
 
 	"github.com/cloudfoundry/libcfbuildpack/buildpackplan"
 
-	"github.com/cloudfoundry/php-dist-cnb/php"
+	"github.com/paketo-buildpacks/php-dist/php"
 
 	"github.com/buildpack/libbuildpack/buildplan"
 	"github.com/cloudfoundry/libcfbuildpack/helper"
