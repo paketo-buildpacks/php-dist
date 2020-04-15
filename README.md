@@ -1,5 +1,13 @@
 # PHP Dist Cloud Native Buildpack
 
+The PHP Dist CNB provides the PHP binary distribution. The buildpack installs
+the PHP binary distribution onto the $PATH which makes it available for
+subsequent buildpacks. These buildpacks can then use that distribution to run
+PHP tooling. The PHP Web CNB is an example of a buildpack that utilizes the PHP
+binary.
+
+## Integration
+
 The PHP Dist CNB provides php as a dependency. Downstream buildpacks, like
 [PHP Composer CNB](https://github.com/paketo-buildpacks/php-composer) can require the nginx
 dependency by generating a [Build Plan
