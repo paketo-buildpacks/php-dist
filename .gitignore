@@ -3,4 +3,4 @@
 .bin
 /bin
 *.tgz
-php-cnb_*
+php-dist_*

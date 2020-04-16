@@ -21,7 +21,7 @@ import (
 	"os"
 
 	"github.com/cloudfoundry/libcfbuildpack/build"
-	"github.com/cloudfoundry/php-dist-cnb/php"
+	"github.com/paketo-buildpacks/php-dist/php"
 )
 
 func main() {
