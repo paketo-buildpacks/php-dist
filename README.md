@@ -1,28 +1,52 @@
-# PHP Cloud Native Buildpack
+# PHP Dist Cloud Native Buildpack
 
-The Paketo PHP Buildpack is a Cloud Native Buildpack V3 that provides PHP binaries to applications.
+The PHP Dist CNB provides the PHP binary distribution. The buildpack installs
+the PHP binary distribution onto the $PATH which makes it available for
+subsequent buildpacks. These buildpacks can then use that distribution to run
+PHP tooling. The PHP Web CNB is an example of a buildpack that utilizes the PHP
+binary.
 
-This buildpack is designed to work in collaboration with other buildpacks which request contributions of PHP.
+## Integration
 
-## Detection
+The PHP Dist CNB provides php as a dependency. Downstream buildpacks, like
+[PHP Composer CNB](https://github.com/paketo-buildpacks/php-composer) can require the nginx
+dependency by generating a [Build Plan
+TOML](https://github.com/buildpacks/spec/blob/master/buildpack.md#build-plan-toml)
+file that looks like the following:
 
-The detection phase always passes and contributes nothing to the build plan, depending on other buildpacks to request contributions.
+```toml
+[[requires]]
 
-## Build
+  # The name of the PHP dependency is "php". This value is considered
+  # part of the public API for the buildpack and will not change without a plan
+  # for deprecation.
+  name = "php"
 
-If the build plan contains
+  # The version of the PHP dependency is not required. In the case it
+  # is not specified, the buildpack will provide the default version, which can
+  # be seen in the buildpack.toml file.
+  # If you wish to request a specific version, the buildpack supports
+  # specifying a semver constraint in the form of "7.*", "7.4.*", or even
+  # "7.4.4".
+  version = "7.4.4"
 
-- `php`
-  - Contributes PHP to a layer marked `build` and `cache` with all commands on `$PATH`
-  - If `buildpack.yml` contains `php.verison`, configures a specific version.  This value must _exactly_ match a version available in the buildpack so typically it would configured to a wildcard such as `7.2.*`.
-  - Contributes `$PHPRC` configured to the build layer
-  - Contributes `$PHP_INI_SCAN_DIR` configured to the build layer
-  - If `metadata.build = true`
-    - Marks layer as `build` and `cache`
-  - If `metadata.launch = true`
-    - Marks layer as `launch`
+  # The PHP buildpack supports some non-required metadata options.
+  [requires.metadata]
 
-## To Package
+    # Setting the build flag to true will ensure that the PHP
+    # depdendency is available on the $PATH for subsequent buildpacks during
+    # their build phase. If you are writing a buildpack that needs to run PHP
+    # during its build process, this flag should be set to true.
+    build = true
+
+    # Setting the launch flag to true will ensure that the PHP
+    # dependency is available on the $PATH for the running application. If you are
+    # writing an application that needs to run PHP at runtime, this flag should
+    # be set to true.
+    launch = true
+```
+
+## Usage
 
 To package this buildpack for consumption:
 
