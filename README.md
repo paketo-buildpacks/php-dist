@@ -60,3 +60,14 @@ This builds the buildpack's Go source using GOOS=linux by default. You can suppl
 This buildpack is released under version 2.0 of the [Apache License][a].
 
 [a]: http://www.apache.org/licenses/LICENSE-2.0
+
+## `buildpack.yml` Configurations
+
+In order to specify a particular version of `php` you can
+provide an optional `buildpack.yml` in the root of the application directory.
+```yaml
+php:
+  # this allows you to specify a version constraint for the `php` depdendency
+  # any valid semver constaints (e.g. 7.*) are also acceptable
+  version: 7.2.*
+```
