@@ -4,6 +4,7 @@ api = "0.2"
   id = "paketo-buildpacks/php-dist"
   name = "PHP Buildpack"
   version = "{{ .Version }}"
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include_files = ["bin/build", "bin/detect", "buildpack.toml"]
