@@ -63,7 +63,7 @@ api = "0.2"
     sha256 = "c0055c537f9686a1d99344951bedb5286fbf7eee38476b8512516f2b7e8823d3"
     source = "https://php.net/distributions/php-7.4.5.tar.gz"
     source_sha256 = "1ef619411b0bd68c0fbfd2a6c622ad6bc524d0bceb8476fb9807a23a0fe9a343"
-    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.5_linux_x64_cflinuxfs3_c0055c53.tgz"
     version = "7.4.5"
 
