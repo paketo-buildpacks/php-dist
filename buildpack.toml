@@ -30,7 +30,7 @@ api = "0.2"
     sha256 = "fa66681c79297d14715afcaed7a0b7b7e11ca44651625682a802fff80c418703"
     source = "https://php.net/distributions/php-7.2.31.tar.gz"
     source_sha256 = "796837831ccebf00dc15921ed327cfbac59177da41b33044d9a6c7134cdd250c"
-    stacks = ["org.cloudfoundry.stacks.cflinuxfs3"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.2.31_linux_x64_cflinuxfs3_fa66681c.tgz"
     version = "7.2.31"
 
