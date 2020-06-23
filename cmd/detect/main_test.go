@@ -76,8 +76,7 @@ func testDetect(t *testing.T, when spec.G, it spec.S) {
 
 		when("there is a buildpack.yml without php", func() {
 			it.Before(func() {
-				buildpackYAMLString := fmt.Sprintf("nodejs:\n  version: 1.5")
-				Expect(helper.WriteFile(filepath.Join(factory.Detect.Application.Root, "buildpack.yml"), 0666, buildpackYAMLString)).To(Succeed())
+				Expect(helper.WriteFile(filepath.Join(factory.Detect.Application.Root, "buildpack.yml"), 0666, "nodejs:\n  version: 1.5")).To(Succeed())
 			})
 
 			it("shouldn't require php  in the buildplan", func() {
