@@ -73,12 +73,12 @@ func NewContributor(context build.Build) (c Contributor, willContribute bool, er
 // Contribute contributes an expanded PHP to a cache layer.
 func (c Contributor) Contribute() error {
 	return c.phpLayer.Contribute(func(artifact string, layer layers.DependencyLayer) error {
-		layer.Logger.SubsequentLine("Expanding to %s", layer.Root)
+		layer.Logger.Body("Expanding to %s", layer.Root)
 		if err := helper.ExtractTarGz(artifact, layer.Root, 0); err != nil {
 			return err
 		}
 
-		if err := layer.AppendPathSharedEnv("PATH", filepath.Join(layer.Root, "sbin")); err != nil {
+		if err := layer.PrependPathSharedEnv("PATH", filepath.Join(layer.Root, "sbin")); err != nil {
 			return err
 		}
 
