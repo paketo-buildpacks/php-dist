@@ -19,10 +19,10 @@ import (
 )
 
 var (
-	phpDistBuildpack string
+	phpDistBuildpack        string
 	offlinePhpDistBuildpack string
-	version          string
-	buildpackInfo struct {
+	version                 string
+	buildpackInfo           struct {
 		Buildpack struct {
 			ID   string
 			Name string
@@ -70,9 +70,9 @@ func Package(root, version string, cached bool) (string, error) {
 
 	bpPath := filepath.Join(root, "artifact")
 	if cached {
-		cmd = exec.Command("scripts/package.sh", "--archive", "--cached", "--version", version)
+		cmd = exec.Command(".bin/packager", "--archive", "--version", version, fmt.Sprintf("%s-cached", bpPath))
 	} else {
-		cmd = exec.Command("scripts/package.sh", "--archive", "--version", version)
+		cmd = exec.Command(".bin/packager", "--archive", "--uncached", "--version", version, bpPath)
 	}
 
 	cmd.Env = append(os.Environ(), fmt.Sprintf("PACKAGE_DIR=%s", bpPath))
@@ -84,6 +84,7 @@ func Package(root, version string, cached bool) (string, error) {
 	if cached {
 		return fmt.Sprintf("%s-cached.tgz", bpPath), err
 	}
+
 	return fmt.Sprintf("%s.tgz", bpPath), err
 }
 
