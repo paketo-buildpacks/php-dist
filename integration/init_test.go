@@ -2,15 +2,14 @@ package integration_test
 
 import (
 	"bytes"
-	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/paketo-buildpacks/occam"
 	"github.com/paketo-buildpacks/packit/pexec"
 	"github.com/sclevine/spec"
 	"github.com/sclevine/spec/report"
@@ -22,7 +21,8 @@ var (
 	phpDistBuildpack        string
 	offlinePhpDistBuildpack string
 	version                 string
-	buildpackInfo           struct {
+
+	buildpackInfo struct {
 		Buildpack struct {
 			ID   string
 			Name string
@@ -43,49 +43,28 @@ func TestIntegration(t *testing.T) {
 	_, err = toml.DecodeReader(file, &buildpackInfo)
 	Expect(err).NotTo(HaveOccurred())
 
+	buildpackStore := occam.NewBuildpackStore()
+
 	version, err = GetGitVersion()
 	Expect(err).NotTo(HaveOccurred())
 
-	phpDistBuildpack, err = Package(root, version, false)
-	Expect(err).ToNot(HaveOccurred())
+	phpDistBuildpack, err = buildpackStore.Get.
+		WithVersion(version).
+		Execute(root)
+	Expect(err).NotTo(HaveOccurred())
 
-	offlinePhpDistBuildpack, err = Package(root, version, true)
-	Expect(err).ToNot(HaveOccurred())
+	offlinePhpDistBuildpack, err = buildpackStore.Get.
+		WithOfflineDependencies().
+		WithVersion(version).
+		Execute(root)
+	Expect(err).NotTo(HaveOccurred())
 
-	defer func() {
-		Expect(os.RemoveAll(phpDistBuildpack)).To(Succeed())
-		Expect(os.RemoveAll(offlinePhpDistBuildpack)).To(Succeed())
-	}()
+	SetDefaultEventuallyTimeout(5 * time.Second)
 
-	SetDefaultEventuallyTimeout(10 * time.Second)
-
-	suite := spec.New("Integration", spec.Parallel(), spec.Report(report.Terminal{}))
-	suite("Offline", testOffline)
+	suite := spec.New("Integration", spec.Report(report.Terminal{}), spec.Parallel())
+	//suite("Offline", testOffline)
 	suite("SimpleApp", testSimpleApp)
 	suite.Run(t)
-}
-
-func Package(root, version string, cached bool) (string, error) {
-	var cmd *exec.Cmd
-
-	bpPath := filepath.Join(root, "artifact")
-	if cached {
-		cmd = exec.Command(".bin/packager", "--archive", "--version", version, fmt.Sprintf("%s-cached", bpPath))
-	} else {
-		cmd = exec.Command(".bin/packager", "--archive", "--uncached", "--version", version, bpPath)
-	}
-
-	cmd.Env = append(os.Environ(), fmt.Sprintf("PACKAGE_DIR=%s", bpPath))
-	cmd.Dir = root
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Run()
-
-	if cached {
-		return fmt.Sprintf("%s-cached.tgz", bpPath), err
-	}
-
-	return fmt.Sprintf("%s.tgz", bpPath), err
 }
 
 func GetGitVersion() (string, error) {
@@ -96,6 +75,11 @@ func GetGitVersion() (string, error) {
 		Args:   []string{"rev-list", "--tags", "--max-count=1"},
 		Stdout: revListOut,
 	})
+
+	if revListOut.String() == "" {
+		return "0.0.0", nil
+	}
+
 	if err != nil {
 		return "", err
 	}
