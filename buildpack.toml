@@ -3,11 +3,10 @@ api = "0.2"
 [buildpack]
   id = "paketo-buildpacks/php-dist"
   name = "PHP Buildpack"
-  version = "{{ .Version }}"
   homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
-  include_files = ["bin/build", "bin/detect", "buildpack.toml"]
+  include_files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
   pre_package = "./scripts/build.sh"
   [metadata.default-versions]
     php = "7.2.*"

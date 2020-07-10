@@ -6,5 +6,11 @@ import (
 )
 
 func main() {
-	packit.Run(phpdist.Detect(), phpdist.Build())
+	buildpackYMLParser := phpdist.NewBuildpackYMLParser()
+	packit.Run(
+		phpdist.Detect(
+			buildpackYMLParser,
+		),
+		phpdist.Build(),
+	)
 }
