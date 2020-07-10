@@ -1,12 +1,16 @@
 package phpdist_test
 
 import (
+	"bytes"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/paketo-buildpacks/packit"
+	"github.com/paketo-buildpacks/packit/postal"
 	phpdist "github.com/paketo-buildpacks/php-dist"
+	"github.com/paketo-buildpacks/php-dist/fakes"
 	"github.com/sclevine/spec"
 
 	. "github.com/onsi/gomega"
@@ -16,9 +20,12 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 	var (
 		Expect = NewWithT(t).Expect
 
-		layersDir  string
-		workingDir string
-		cnbDir     string
+		layersDir         string
+		workingDir        string
+		cnbDir            string
+		entryResolver     *fakes.EntryResolver
+		dependencyManager *fakes.DependencyManager
+		buffer            *bytes.Buffer
 
 		build packit.BuildFunc
 	)
@@ -31,10 +38,46 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		cnbDir, err = ioutil.TempDir("", "cnb")
 		Expect(err).NotTo(HaveOccurred())
 
+		err = ioutil.WriteFile(filepath.Join(cnbDir, "buildpack.toml"), []byte(`api = "0.2"
+[buildpack]
+  id = "org.some-org.some-buildpack"
+  name = "Some Buildpack"
+  version = "some-version"
+
+[metadata]
+  [metadata.default-versions]
+    php = "7.2.*"
+
+  [[metadata.dependencies]]
+    deprecation_date = 2021-04-01T00:00:00Z
+    id = "some-dep"
+    name = "Some Dep"
+    sha256 = "some-sha"
+    stacks = ["some-stack"]
+    uri = "some-uri"
+    version = "some-dep-version"
+`), 0644)
+		Expect(err).NotTo(HaveOccurred())
+
+		entryResolver = &fakes.EntryResolver{}
+		entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
+			Name:    "php",
+			Version: "7.2.*",
+			Metadata: map[string]interface{}{
+				"version-source": "buildpack.yml",
+			},
+		}
+
+		dependencyManager = &fakes.DependencyManager{}
+		dependencyManager.ResolveCall.Returns.Dependency = postal.Dependency{Name: "PHP"}
+
 		workingDir, err = ioutil.TempDir("", "working-dir")
 		Expect(err).NotTo(HaveOccurred())
 
-		build = phpdist.Build()
+		buffer = bytes.NewBuffer(nil)
+		logEmitter := phpdist.NewLogEmitter(buffer)
+
+		build = phpdist.Build(entryResolver, dependencyManager, logEmitter)
 	})
 
 	it.After(func() {
@@ -53,7 +96,15 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Version: "some-version",
 			},
 			Plan: packit.BuildpackPlan{
-				Entries: []packit.BuildpackPlanEntry{},
+				Entries: []packit.BuildpackPlanEntry{
+					{
+						Name:    "php",
+						Version: "7.2.*",
+						Metadata: map[string]interface{}{
+							"version-source": "buildpack.yml",
+						},
+					},
+				},
 			},
 			Layers: packit.Layers{Path: layersDir},
 		})
@@ -61,10 +112,60 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		Expect(result).To(Equal(packit.BuildResult{
 			Plan: packit.BuildpackPlan{
-				Entries: nil,
+				Entries: []packit.BuildpackPlanEntry{
+					{
+						Name:    "php",
+						Version: "7.2.*",
+						Metadata: map[string]interface{}{
+							"version-source": "buildpack.yml",
+						},
+					},
+				},
 			},
-			Layers: nil,
+			Layers: []packit.Layer{
+				{
+					Name:      "php",
+					Path:      filepath.Join(layersDir, "php"),
+					SharedEnv: packit.Environment{},
+					BuildEnv:  packit.Environment{},
+					LaunchEnv: packit.Environment{},
+					//?
+					Build:  false,
+					Launch: true,
+					Cache:  false,
+					// Metadata: map[string]interface{}{
+					// 	php.DepKey: "",
+					// 	"built_at":        timeStamp.Format(time.RFC3339Nano),
+					// },
+				},
+			},
 		}))
+
+		Expect(filepath.Join(layersDir, "php")).To(BeADirectory())
+
+		Expect(entryResolver.ResolveCall.Receives.BuildpackPlanEntrySlice).To(Equal([]packit.BuildpackPlanEntry{
+			{
+				Name:    "php",
+				Version: "7.2.*",
+				Metadata: map[string]interface{}{
+					"version-source": "buildpack.yml",
+				},
+			},
+		}))
+
+		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
+		Expect(dependencyManager.ResolveCall.Receives.Id).To(Equal("php"))
+		Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("7.2.*"))
+		Expect(dependencyManager.ResolveCall.Receives.Stack).To(Equal("some-stack"))
+
+		Expect(dependencyManager.InstallCall.Receives.Dependency).To(Equal(postal.Dependency{Name: "PHP"}))
+		Expect(dependencyManager.InstallCall.Receives.CnbPath).To(Equal(cnbDir))
+		Expect(dependencyManager.InstallCall.Receives.LayerPath).To(Equal(filepath.Join(layersDir, "php")))
+
+		Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
+		Expect(buffer.String()).To(ContainSubstring("Resolving PHP version"))
+		Expect(buffer.String()).To(ContainSubstring("Selected PHP version (using buildpack.yml): "))
+		Expect(buffer.String()).To(ContainSubstring("Executing build process"))
 
 	})
 }
