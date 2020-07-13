@@ -9,6 +9,10 @@ import (
 	"github.com/paketo-buildpacks/packit/postal"
 )
 
+const (
+	DepKey = "dependency-sha"
+)
+
 //go:generate faux --interface EntryResolver --output fakes/entry_resolver.go
 type EntryResolver interface {
 	Resolve([]packit.BuildpackPlanEntry) packit.BuildpackPlanEntry
@@ -63,7 +67,16 @@ func Build(entries EntryResolver,
 			Version: dependency.Version,
 		})
 
-		//todo check for layer reuse
+		cachedSHA, ok := phpLayer.Metadata[DepKey].(string)
+		if ok && cachedSHA == dependency.SHA256 {
+			logger.Process("Reusing cached layer %s", phpLayer.Path)
+			logger.Break()
+
+			return packit.BuildResult{
+				Plan:   bom,
+				Layers: []packit.Layer{phpLayer},
+			}, nil
+		}
 
 		logger.Process("Executing build process")
 
@@ -72,11 +85,10 @@ func Build(entries EntryResolver,
 			return packit.BuildResult{}, err
 		}
 
-		// todo add metadata
-		// phpLayer.Metadata = map[string]interface{}{
-		// 	DepKey:     dependency.SHA256,
-		// 	"built_at": clock.Now().Format(time.RFC3339Nano),
-		// }
+		phpLayer.Metadata = map[string]interface{}{
+			DepKey:     dependency.SHA256,
+			"built_at": clock.Now().Format(time.RFC3339Nano),
+		}
 
 		logger.Subprocess("Installing PHP %s", dependency.Version)
 		duration, err := clock.Measure(func() error {

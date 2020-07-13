@@ -161,10 +161,10 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Build:     false,
 					Launch:    true,
 					Cache:     false,
-					// Metadata: map[string]interface{}{
-					// 	php.DepKey: "",
-					// 	"built_at":        timeStamp.Format(time.RFC3339Nano),
-					// },
+					Metadata: map[string]interface{}{
+						phpdist.DepKey: "",
+						"built_at":     timeStamp.Format(time.RFC3339Nano),
+					},
 				},
 			},
 		}))
@@ -274,13 +274,130 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						Build:     true,
 						Launch:    true,
 						Cache:     true,
-						// Metadata: map[string]interface{}{
-						// 	phpdist.DepKey: "",
-						// 	"built_at":        timeStamp.Format(time.RFC3339Nano),
-						// },
+						Metadata: map[string]interface{}{
+							phpdist.DepKey: "",
+							"built_at":     timeStamp.Format(time.RFC3339Nano),
+						},
 					},
 				},
 			}))
 		})
 	})
+
+	context("when we refine the buildpack plan", func() {
+		it.Before(func() {
+			planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+				Entries: []packit.BuildpackPlanEntry{
+					{
+						Name:    "new-dep",
+						Version: "some-version",
+						Metadata: map[string]interface{}{
+							"some-extra-field": "an-extra-value",
+						},
+					},
+				},
+			}
+		})
+		it("refines the BuildpackPlan", func() {
+			result, err := build(packit.BuildContext{
+				CNBPath: cnbDir,
+				Stack:   "some-stack",
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name:    "php",
+							Version: "7.2.*",
+							Metadata: map[string]interface{}{
+								"version-source": "buildpack.yml",
+							},
+						},
+					},
+				},
+				Layers: packit.Layers{Path: layersDir},
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(result).To(Equal(packit.BuildResult{
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name:    "new-dep",
+							Version: "some-version",
+							Metadata: map[string]interface{}{
+								"some-extra-field": "an-extra-value",
+							},
+						},
+					},
+				},
+				Layers: []packit.Layer{
+					{
+						Name:      "php",
+						Path:      filepath.Join(layersDir, "php"),
+						SharedEnv: packit.Environment{},
+						BuildEnv:  packit.Environment{},
+						LaunchEnv: packit.Environment{},
+						Build:     false,
+						Launch:    true,
+						Cache:     false,
+						Metadata: map[string]interface{}{
+							phpdist.DepKey: "",
+							"built_at":     timeStamp.Format(time.RFC3339Nano),
+						},
+					},
+				},
+			}))
+
+		})
+	})
+
+	context("when there is a dependency cache match", func() {
+		it.Before(func() {
+			err := ioutil.WriteFile(filepath.Join(layersDir, "php.toml"), []byte("[metadata]\ndependency-sha = \"some-sha\"\n"), 0644)
+			Expect(err).NotTo(HaveOccurred())
+
+			dependencyManager.ResolveCall.Returns.Dependency = postal.Dependency{
+				Name:   "PHP",
+				SHA256: "some-sha",
+			}
+		})
+
+		it("exits build process early", func() {
+			_, err := build(packit.BuildContext{
+				CNBPath: cnbDir,
+				Stack:   "some-stack",
+				BuildpackInfo: packit.BuildpackInfo{
+					Name:    "Some Buildpack",
+					Version: "some-version",
+				},
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name:    "php",
+							Version: "7.2.*",
+							Metadata: map[string]interface{}{
+								"version-source": "buildpack.yml",
+							},
+						},
+					},
+				},
+				Layers: packit.Layers{Path: layersDir},
+			})
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(planRefinery.BillOfMaterialCall.CallCount).To(Equal(1))
+			Expect(planRefinery.BillOfMaterialCall.Receives.Dependency).To(Equal(postal.Dependency{
+				Name:   "PHP",
+				SHA256: "some-sha",
+			}))
+
+			Expect(dependencyManager.InstallCall.CallCount).To(Equal(0))
+
+			Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
+			Expect(buffer.String()).To(ContainSubstring("Resolving PHP version"))
+			Expect(buffer.String()).To(ContainSubstring("Selected PHP version (using buildpack.yml): "))
+			Expect(buffer.String()).To(ContainSubstring("Reusing cached layer"))
+			Expect(buffer.String()).ToNot(ContainSubstring("Executing build process"))
+		})
+	})
+
 }
