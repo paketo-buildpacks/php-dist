@@ -194,6 +194,93 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(buffer.String()).To(ContainSubstring("Resolving PHP version"))
 		Expect(buffer.String()).To(ContainSubstring("Selected PHP version (using buildpack.yml): "))
 		Expect(buffer.String()).To(ContainSubstring("Executing build process"))
+	})
 
+	context("when the build plan entry includes the build flag", func() {
+		var workingDir string
+
+		it.Before(func() {
+			var err error
+			workingDir, err = ioutil.TempDir("", "working-dir")
+			Expect(err).NotTo(HaveOccurred())
+
+			entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
+				Name:    "php",
+				Version: "7.2.*",
+				Metadata: map[string]interface{}{
+					"version-source": "buildpack.yml",
+					"build":          true,
+				},
+			}
+
+			planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+				Entries: []packit.BuildpackPlanEntry{
+					{
+						Name:    "php",
+						Version: "7.2.*",
+						Metadata: map[string]interface{}{
+							"version-source": "buildpack.yml",
+							"build":          true,
+						},
+					},
+				},
+			}
+		})
+
+		it.After(func() {
+			Expect(os.RemoveAll(workingDir)).To(Succeed())
+		})
+
+		it("marks the php layer as cached", func() {
+			result, err := build(packit.BuildContext{
+				CNBPath:    cnbDir,
+				Stack:      "some-stack",
+				WorkingDir: workingDir,
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name:    "php",
+							Version: "7.2.*",
+							Metadata: map[string]interface{}{
+								"version-source": "buildpack.yml",
+								"build":          true,
+							},
+						},
+					},
+				},
+				Layers: packit.Layers{Path: layersDir},
+			})
+			Expect(err).NotTo(HaveOccurred())
+			Expect(result).To(Equal(packit.BuildResult{
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name:    "php",
+							Version: "7.2.*",
+							Metadata: map[string]interface{}{
+								"version-source": "buildpack.yml",
+								"build":          true,
+							},
+						},
+					},
+				},
+				Layers: []packit.Layer{
+					{
+						Name:      "php",
+						Path:      filepath.Join(layersDir, "php"),
+						SharedEnv: packit.Environment{},
+						BuildEnv:  packit.Environment{},
+						LaunchEnv: packit.Environment{},
+						Build:     true,
+						Launch:    true,
+						Cache:     true,
+						// Metadata: map[string]interface{}{
+						// 	phpdist.DepKey: "",
+						// 	"built_at":        timeStamp.Format(time.RFC3339Nano),
+						// },
+					},
+				},
+			}))
+		})
 	})
 }

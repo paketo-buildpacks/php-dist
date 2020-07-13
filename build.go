@@ -51,7 +51,8 @@ func Build(entries EntryResolver,
 			return packit.BuildResult{}, err
 		}
 
-		//todo if build/cache flag asked, add it
+		phpLayer.Build = entry.Metadata["build"] == true
+		phpLayer.Cache = entry.Metadata["build"] == true
 
 		bom := planRefinery.BillOfMaterial(postal.Dependency{
 			ID:      dependency.ID,
