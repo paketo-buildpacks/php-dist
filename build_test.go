@@ -6,8 +6,10 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/paketo-buildpacks/packit"
+	"github.com/paketo-buildpacks/packit/chronos"
 	"github.com/paketo-buildpacks/packit/postal"
 	phpdist "github.com/paketo-buildpacks/php-dist"
 	"github.com/paketo-buildpacks/php-dist/fakes"
@@ -25,6 +27,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		cnbDir            string
 		entryResolver     *fakes.EntryResolver
 		dependencyManager *fakes.DependencyManager
+		clock             chronos.Clock
+		timeStamp         time.Time
+		planRefinery      *fakes.BuildPlanRefinery
 		buffer            *bytes.Buffer
 
 		build packit.BuildFunc
@@ -71,13 +76,37 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		dependencyManager = &fakes.DependencyManager{}
 		dependencyManager.ResolveCall.Returns.Dependency = postal.Dependency{Name: "PHP"}
 
+		timeStamp = time.Now()
+		clock = chronos.NewClock(func() time.Time {
+			return timeStamp
+		})
+
+		planRefinery = &fakes.BuildPlanRefinery{}
+
+		timeStamp = time.Now()
+		clock = chronos.NewClock(func() time.Time {
+			return timeStamp
+		})
+
+		planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+			Entries: []packit.BuildpackPlanEntry{
+				{
+					Name:    "php",
+					Version: "7.2.*",
+					Metadata: map[string]interface{}{
+						"version-source": "buildpack.yml",
+					},
+				},
+			},
+		}
+
 		workingDir, err = ioutil.TempDir("", "working-dir")
 		Expect(err).NotTo(HaveOccurred())
 
 		buffer = bytes.NewBuffer(nil)
 		logEmitter := phpdist.NewLogEmitter(buffer)
 
-		build = phpdist.Build(entryResolver, dependencyManager, logEmitter)
+		build = phpdist.Build(entryResolver, dependencyManager, planRefinery, logEmitter, clock)
 	})
 
 	it.After(func() {
@@ -129,10 +158,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					SharedEnv: packit.Environment{},
 					BuildEnv:  packit.Environment{},
 					LaunchEnv: packit.Environment{},
-					//?
-					Build:  false,
-					Launch: true,
-					Cache:  false,
+					Build:     false,
+					Launch:    true,
+					Cache:     false,
 					// Metadata: map[string]interface{}{
 					// 	php.DepKey: "",
 					// 	"built_at":        timeStamp.Format(time.RFC3339Nano),

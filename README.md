@@ -9,7 +9,7 @@ binary.
 ## Integration
 
 The PHP Dist CNB provides php as a dependency. Downstream buildpacks, like
-[PHP Composer CNB](https://github.com/paketo-buildpacks/php-composer) can require the nginx
+[PHP Composer CNB](https://github.com/paketo-buildpacks/php-composer) can require the php
 dependency by generating a [Build Plan
 TOML](https://github.com/buildpacks/spec/blob/master/buildpack.md#build-plan-toml)
 file that looks like the following:
