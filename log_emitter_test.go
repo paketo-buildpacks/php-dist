@@ -58,7 +58,7 @@ func testLogEmitter(t *testing.T, context spec.G, it spec.S) {
 			emitter.SelectedDependency(packit.BuildpackPlanEntry{
 				Metadata: map[string]interface{}{"version-source": "some-source"},
 			}, "some-version")
-			Expect(buffer.String()).To(Equal("    Selected PHP version (using some-source): some-version\n"))
+			Expect(buffer.String()).To(Equal("    Selected PHP version (using some-source): some-version\n\n"))
 		})
 	})
 
@@ -67,7 +67,7 @@ func testLogEmitter(t *testing.T, context spec.G, it spec.S) {
 			emitter.Environment(packit.Environment{
 				"SOME_VAR.override": "some-value",
 			})
-			Expect(buffer.String()).To(Equal("    SOME_VAR -> \"some-value\"\n"))
+			Expect(buffer.String()).To(Equal("  Configuring environment\n    SOME_VAR -> \"some-value\"\n\n"))
 		})
 	})
 }

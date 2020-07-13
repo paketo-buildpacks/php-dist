@@ -57,8 +57,11 @@ func (e LogEmitter) SelectedDependency(entry packit.BuildpackPlanEntry, version 
 	}
 
 	e.Logger.Subprocess("Selected PHP version (using %s): %s", source, version)
+	e.Logger.Break()
 }
 
 func (e LogEmitter) Environment(environment packit.Environment) {
+	e.Logger.Process("Configuring environment")
 	e.Logger.Subprocess("%s", scribe.NewFormattedMapFromEnvironment(environment))
+	e.Logger.Break()
 }

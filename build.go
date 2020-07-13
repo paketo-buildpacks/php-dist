@@ -24,6 +24,11 @@ type DependencyManager interface {
 	Install(dependency postal.Dependency, cnbPath, layerPath string) error
 }
 
+//go:generate faux --interface EnvironmentConfiguration --output fakes/environment_configuration.go
+type EnvironmentConfiguration interface {
+	Configure(layer packit.Layer) error
+}
+
 //go:generate faux --interface BuildPlanRefinery --output fakes/build_plan_refinery.go
 type BuildPlanRefinery interface {
 	BillOfMaterial(dependency postal.Dependency) packit.BuildpackPlan
@@ -31,18 +36,19 @@ type BuildPlanRefinery interface {
 
 func Build(entries EntryResolver,
 	dependencies DependencyManager,
+	environment EnvironmentConfiguration,
 	planRefinery BuildPlanRefinery,
 	logger LogEmitter,
 	clock chronos.Clock) packit.BuildFunc {
 	return func(context packit.BuildContext) (packit.BuildResult, error) {
+		var err error
+
 		logger.Title(context.BuildpackInfo)
 		logger.Process("Resolving PHP version")
 
 		entry := entries.Resolve(context.Plan.Entries)
 
-		var dependency postal.Dependency
-		var err error
-		dependency, err = dependencies.Resolve(filepath.Join(context.CNBPath, "buildpack.toml"), entry.Name, entry.Version, context.Stack)
+		dependency, err := dependencies.Resolve(filepath.Join(context.CNBPath, "buildpack.toml"), entry.Name, entry.Version, context.Stack)
 
 		if err != nil {
 			return packit.BuildResult{}, err
@@ -101,10 +107,14 @@ func Build(entries EntryResolver,
 		logger.Action("Completed in %s", duration.Round(time.Millisecond))
 		logger.Break()
 
+		err = environment.Configure(phpLayer)
+		if err != nil {
+			return packit.BuildResult{}, err
+		}
+
 		return packit.BuildResult{
 			Plan:   bom,
 			Layers: []packit.Layer{phpLayer},
 		}, nil
-
 	}
 }

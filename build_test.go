@@ -29,6 +29,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		dependencyManager *fakes.DependencyManager
 		clock             chronos.Clock
 		timeStamp         time.Time
+		environment       *fakes.EnvironmentConfiguration
 		planRefinery      *fakes.BuildPlanRefinery
 		buffer            *bytes.Buffer
 
@@ -81,6 +82,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			return timeStamp
 		})
 
+		environment = &fakes.EnvironmentConfiguration{}
 		planRefinery = &fakes.BuildPlanRefinery{}
 
 		timeStamp = time.Now()
@@ -106,7 +108,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		buffer = bytes.NewBuffer(nil)
 		logEmitter := phpdist.NewLogEmitter(buffer)
 
-		build = phpdist.Build(entryResolver, dependencyManager, planRefinery, logEmitter, clock)
+		build = phpdist.Build(entryResolver, dependencyManager, environment, planRefinery, logEmitter, clock)
 	})
 
 	it.After(func() {
@@ -189,6 +191,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(dependencyManager.InstallCall.Receives.Dependency).To(Equal(postal.Dependency{Name: "PHP"}))
 		Expect(dependencyManager.InstallCall.Receives.CnbPath).To(Equal(cnbDir))
 		Expect(dependencyManager.InstallCall.Receives.LayerPath).To(Equal(filepath.Join(layersDir, "php")))
+
+		Expect(environment.ConfigureCall.CallCount).To(Equal(1))
+		Expect(environment.ConfigureCall.Receives.Layer.Path).To(Equal(filepath.Join(layersDir, "php")))
 
 		Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
 		Expect(buffer.String()).To(ContainSubstring("Resolving PHP version"))
@@ -400,4 +405,5 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		})
 	})
 
+	// todo failure cases
 }

@@ -15,6 +15,7 @@ func main() {
 	logEmitter := phpdist.NewLogEmitter(os.Stdout)
 	entryResolver := phpdist.NewPlanEntryResolver(logEmitter)
 	dependencyManager := postal.NewService(cargo.NewTransport())
+	environment := phpdist.NewEnvironment(logEmitter)
 	planRefinery := phpdist.NewPlanRefinery()
 
 	packit.Run(
@@ -24,6 +25,7 @@ func main() {
 		phpdist.Build(
 			entryResolver,
 			dependencyManager,
+			environment,
 			planRefinery,
 			logEmitter,
 			chronos.DefaultClock,

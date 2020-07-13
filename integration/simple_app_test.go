@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/sclevine/spec"
 
 	. "github.com/onsi/gomega"
-	//. "github.com/paketo-buildpacks/occam/matchers"
+	. "github.com/paketo-buildpacks/occam/matchers"
 )
 
 func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
@@ -59,29 +60,37 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
-			// Expect(logs).To(ContainLines(
-			// 	fmt.Sprintf("%s %s", buildpackInfo.Buildpack.Name, version),
-			// 	"  Resolving PHP version",
-			// 	"    Candidate version sources (in priority order):",
-			// 	"      buildpack.yml -> \"7.2.*\"",
-			// 	"",
-			// 	MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 7\.2\.\d+`),
-			// 	"",
-			// 	"  Executing build process",
-			// 	MatchRegexp(`    Installing PHP 7\.2\.\d+`),
-			// 	MatchRegexp(`      Completed in \d+\.\d+`),
-			// 	"",
-			// 	// TODO match more configuration things
-			// ))
+			Expect(logs).To(ContainLines(
+				fmt.Sprintf("%s %s", buildpackInfo.Buildpack.Name, version),
+				"  Resolving PHP version",
+				"    Candidate version sources (in priority order):",
+				"      buildpack.yml -> \"7.2.*\"",
+				"",
+				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 7\.2\.\d+`),
+				"",
+				"  Executing build process",
+				MatchRegexp(`    Installing PHP 7\.2\.\d+`),
+				MatchRegexp(`      Completed in \d+\.\d+`),
+				"",
+				"  Configuring environment",
+				fmt.Sprintf(`    MIBDIRS           -> "/layers/%s/php/mibs"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				fmt.Sprintf(`    PATH              -> "/layers/%s/php/sbin:$PATH"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				MatchRegexp(`    PHP_API           -> "\d+"`),
+				MatchRegexp(fmt.Sprintf(`    PHP_EXTENSION_DIR -> "/layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))),
+				fmt.Sprintf(`    PHP_HOME          -> "/layers/%s/php"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+			))
 
-			container, err = docker.Container.Run.WithCommand("php -v && sleep infinity").Execute(image.ID)
+			container, err = docker.Container.Run.WithCommand("php -i && sleep infinity").Execute(image.ID)
 			Expect(err).NotTo(HaveOccurred())
 
 			time.Sleep(5 * time.Second)
 			out, err := docker.Container.Logs.Execute(container.ID)
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(out.String()).To(MatchRegexp(`PHP 7\.2\.\d+`))
+			Expect(out.String()).To(MatchRegexp(`PHP Version => 7\.2\.\d+`))
+			Expect(out.String()).To(ContainSubstring(fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
+			Expect(out.String()).To(ContainSubstring(fmt.Sprintf("MIBDIRS => /layers/%s/php/mibs", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
+			Expect(out.String()).To(MatchRegexp(fmt.Sprintf(`PHP_EXTENSION_DIR => /layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
 		})
 	})
 }
