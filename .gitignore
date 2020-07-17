@@ -2,5 +2,6 @@
 .idea
 .bin
 /bin
+/build
 *.tgz
 php-dist_*

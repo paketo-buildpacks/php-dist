@@ -161,7 +161,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					BuildEnv:  packit.Environment{},
 					LaunchEnv: packit.Environment{},
 					Build:     false,
-					Launch:    true,
+					Launch:    false,
 					Cache:     false,
 					Metadata: map[string]interface{}{
 						phpdist.DepKey: "",
@@ -201,7 +201,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(buffer.String()).To(ContainSubstring("Executing build process"))
 	})
 
-	context("when the build plan entry includes the build flag", func() {
+	context("when the build plan entry includes the build, launch flags", func() {
 		var workingDir string
 
 		it.Before(func() {
@@ -214,6 +214,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Version: "7.2.*",
 				Metadata: map[string]interface{}{
 					"version-source": "buildpack.yml",
+					"launch":         true,
 					"build":          true,
 				},
 			}
@@ -225,6 +226,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						Version: "7.2.*",
 						Metadata: map[string]interface{}{
 							"version-source": "buildpack.yml",
+							"launch":         true,
 							"build":          true,
 						},
 					},
@@ -236,7 +238,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(os.RemoveAll(workingDir)).To(Succeed())
 		})
 
-		it("marks the php layer as cached", func() {
+		it("marks the php layer as build, cache and launch", func() {
 			result, err := build(packit.BuildContext{
 				CNBPath:    cnbDir,
 				Stack:      "some-stack",
@@ -248,6 +250,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							Version: "7.2.*",
 							Metadata: map[string]interface{}{
 								"version-source": "buildpack.yml",
+								"launch":         true,
 								"build":          true,
 							},
 						},
@@ -264,6 +267,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							Version: "7.2.*",
 							Metadata: map[string]interface{}{
 								"version-source": "buildpack.yml",
+								"launch":         true,
 								"build":          true,
 							},
 						},
@@ -342,7 +346,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						BuildEnv:  packit.Environment{},
 						LaunchEnv: packit.Environment{},
 						Build:     false,
-						Launch:    true,
+						Launch:    false,
 						Cache:     false,
 						Metadata: map[string]interface{}{
 							phpdist.DepKey: "",

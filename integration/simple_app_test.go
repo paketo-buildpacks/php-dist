@@ -56,7 +56,10 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			var logs fmt.Stringer
 			image, logs, err = pack.WithNoColor().Build.
 				WithNoPull().
-				WithBuildpacks(phpDistBuildpack).
+				WithBuildpacks(
+					phpDistBuildpack,
+					buildPlanBuildpack,
+				).
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
@@ -65,6 +68,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				"  Resolving PHP version",
 				"    Candidate version sources (in priority order):",
 				"      buildpack.yml -> \"7.2.*\"",
+				"      <unknown>     -> \"\"",
 				"",
 				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 7\.2\.\d+`),
 				"",

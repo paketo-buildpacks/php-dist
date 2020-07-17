@@ -1,0 +1,5 @@
+[[requires]]
+  name = "php"
+
+  [requires.metadata]
+    launch = true

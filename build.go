@@ -56,11 +56,12 @@ func Build(entries EntryResolver,
 
 		logger.SelectedDependency(entry, dependency.Version)
 
-		phpLayer, err := context.Layers.Get("php", packit.LaunchLayer)
+		phpLayer, err := context.Layers.Get("php")
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
 
+		phpLayer.Launch = entry.Metadata["launch"] == true
 		phpLayer.Build = entry.Metadata["build"] == true
 		phpLayer.Cache = entry.Metadata["build"] == true
 

@@ -19,11 +19,11 @@ func NewPlanEntryResolver(logger LogEmitter) PlanEntryResolver {
 func (r PlanEntryResolver) Resolve(entries []packit.BuildpackPlanEntry) packit.BuildpackPlanEntry {
 	var (
 		priorities = map[string]int{
-			"buildpack.yml":		3,
-			"composer.lock":		2,
-			"composer.json":		2,
+			"buildpack.yml":    3,
+			"composer.lock":    2,
+			"composer.json":    2,
 			"default-versions": 1,
-			"":									-1,
+			"":                 -1,
 		}
 	)
 
@@ -46,6 +46,10 @@ func (r PlanEntryResolver) Resolve(entries []packit.BuildpackPlanEntry) packit.B
 	for _, entry := range entries {
 		if entry.Metadata["build"] == true {
 			chosenEntry.Metadata["build"] = true
+		}
+
+		if entry.Metadata["launch"] == true {
+			chosenEntry.Metadata["launch"] = true
 		}
 	}
 
