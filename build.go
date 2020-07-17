@@ -9,10 +9,6 @@ import (
 	"github.com/paketo-buildpacks/packit/postal"
 )
 
-const (
-	DepKey = "dependency-sha"
-)
-
 //go:generate faux --interface EntryResolver --output fakes/entry_resolver.go
 type EntryResolver interface {
 	Resolve([]packit.BuildpackPlanEntry) packit.BuildpackPlanEntry

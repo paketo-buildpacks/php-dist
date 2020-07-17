@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	phpdist "github.com/paketo-buildpacks/php-dist"
 	"github.com/paketo-buildpacks/packit"
+	phpdist "github.com/paketo-buildpacks/php-dist"
 	"github.com/sclevine/spec"
 
 	. "github.com/onsi/gomega"
@@ -217,6 +217,7 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 						Metadata: map[string]interface{}{
 							"version-source": "default-versions",
 							"build":          true,
+							"launch":         true,
 						},
 					},
 				})
@@ -226,6 +227,7 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 					Metadata: map[string]interface{}{
 						"version-source": "composer.lock",
 						"build":          true,
+						"launch":         true,
 					},
 				}))
 			})

@@ -2,6 +2,7 @@ package phpdist_test
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -355,7 +356,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					},
 				},
 			}))
-
 		})
 	})
 
@@ -409,5 +409,84 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		})
 	})
 
-	// todo failure cases
+	context("failure cases", func() {
+		context("when a dependency cannot be resolved", func() {
+			it.Before(func() {
+				dependencyManager.ResolveCall.Returns.Error = errors.New("failed to resolve dependency")
+			})
+
+			it("returns an error", func() {
+				_, err := build(packit.BuildContext{
+					CNBPath: cnbDir,
+					Plan: packit.BuildpackPlan{
+						Entries: []packit.BuildpackPlanEntry{
+							{
+								Name:    "php",
+								Version: "7.2.*",
+								Metadata: map[string]interface{}{
+									"version-source": "buildpack.yml",
+								},
+							},
+						},
+					},
+					Layers: packit.Layers{Path: layersDir},
+				})
+				Expect(err).To(MatchError("failed to resolve dependency"))
+			})
+		})
+
+		context("when a dependency cannot be installed", func() {
+			it.Before(func() {
+				dependencyManager.InstallCall.Returns.Error = errors.New("failed to install dependency")
+			})
+
+			it("returns an error", func() {
+				_, err := build(packit.BuildContext{
+					CNBPath: cnbDir,
+					Plan: packit.BuildpackPlan{
+						Entries: []packit.BuildpackPlanEntry{
+							{
+								Name:    "php",
+								Version: "7.2.*",
+								Metadata: map[string]interface{}{
+									"version-source": "buildpack.yml",
+								},
+							},
+						},
+					},
+					Layers: packit.Layers{Path: layersDir},
+				})
+				Expect(err).To(MatchError("failed to install dependency"))
+			})
+		})
+
+		context("when the layers directory cannot be written to", func() {
+			it.Before(func() {
+				Expect(os.Chmod(layersDir, 0000)).To(Succeed())
+			})
+
+			it.After(func() {
+				Expect(os.Chmod(layersDir, os.ModePerm)).To(Succeed())
+			})
+
+			it("returns an error", func() {
+				_, err := build(packit.BuildContext{
+					CNBPath: cnbDir,
+					Plan: packit.BuildpackPlan{
+						Entries: []packit.BuildpackPlanEntry{
+							{
+								Name:    "php",
+								Version: "7.2.*",
+								Metadata: map[string]interface{}{
+									"version-source": "buildpack.yml",
+								},
+							},
+						},
+					},
+					Layers: packit.Layers{Path: layersDir},
+				})
+				Expect(err).To(MatchError(ContainSubstring("permission denied")))
+			})
+		})
+	})
 }

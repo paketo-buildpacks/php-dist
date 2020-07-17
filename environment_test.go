@@ -69,11 +69,6 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 		})
 
-		it.After(func() {
-			err = os.MkdirAll(filepath.Join(layer.Path, "lib/php/extensions/no-debug-non-zts-20200717"), os.ModePerm)
-			Expect(err).NotTo(HaveOccurred())
-		})
-
 		it("throws a descriptive error", func() {
 			err := environment.Configure(layer)
 			Expect(err).To(MatchError(ContainSubstring("php extensions dir not found")))
