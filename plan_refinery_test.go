@@ -21,9 +21,9 @@ func testPlanRefinery(t *testing.T, context spec.G, it spec.S) {
 		planRefinery = phpdist.NewPlanRefinery()
 	})
 
-	context("BillOfMaterial", func() {
+	context("BillOfMaterials", func() {
 		it("creates a buildpack plan entry from the given dependency", func() {
-			refinedBuildPlan := planRefinery.BillOfMaterial(postal.Dependency{
+			refinedBuildPlan := planRefinery.BillOfMaterials(postal.Dependency{
 				ID:      "some-id",
 				Name:    "some-name",
 				Stacks:  []string{"some-stack"},

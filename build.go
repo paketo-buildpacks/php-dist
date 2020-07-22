@@ -27,7 +27,7 @@ type EnvironmentConfiguration interface {
 
 //go:generate faux --interface BuildPlanRefinery --output fakes/build_plan_refinery.go
 type BuildPlanRefinery interface {
-	BillOfMaterial(dependency postal.Dependency) packit.BuildpackPlan
+	BillOfMaterials(dependency postal.Dependency) packit.BuildpackPlan
 }
 
 func Build(entries EntryResolver,
@@ -61,7 +61,7 @@ func Build(entries EntryResolver,
 		phpLayer.Build = entry.Metadata["build"] == true
 		phpLayer.Cache = entry.Metadata["build"] == true
 
-		bom := planRefinery.BillOfMaterial(postal.Dependency{
+		bom := planRefinery.BillOfMaterials(postal.Dependency{
 			ID:      dependency.ID,
 			Name:    dependency.Name,
 			SHA256:  dependency.SHA256,

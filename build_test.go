@@ -45,27 +45,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		cnbDir, err = ioutil.TempDir("", "cnb")
 		Expect(err).NotTo(HaveOccurred())
 
-		err = ioutil.WriteFile(filepath.Join(cnbDir, "buildpack.toml"), []byte(`api = "0.2"
-[buildpack]
-  id = "org.some-org.some-buildpack"
-  name = "Some Buildpack"
-  version = "some-version"
-
-[metadata]
-  [metadata.default-versions]
-    php = "7.2.*"
-
-  [[metadata.dependencies]]
-    deprecation_date = 2021-04-01T00:00:00Z
-    id = "some-dep"
-    name = "Some Dep"
-    sha256 = "some-sha"
-    stacks = ["some-stack"]
-    uri = "some-uri"
-    version = "some-dep-version"
-`), 0644)
-		Expect(err).NotTo(HaveOccurred())
-
 		entryResolver = &fakes.EntryResolver{}
 		entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
 			Name:    "php",
@@ -91,13 +70,16 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			return timeStamp
 		})
 
-		planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+		planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 			Entries: []packit.BuildpackPlanEntry{
 				{
 					Name:    "php",
 					Version: "7.2.*",
 					Metadata: map[string]interface{}{
-						"version-source": "buildpack.yml",
+						"name":   "php-dependency-name",
+						"sha256": "php-dependency-sha",
+						"stacks": []string{"some-stack"},
+						"uri":    "php-dependency-uri",
 					},
 				},
 			},
@@ -149,7 +131,10 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						Name:    "php",
 						Version: "7.2.*",
 						Metadata: map[string]interface{}{
-							"version-source": "buildpack.yml",
+							"name":   "php-dependency-name",
+							"sha256": "php-dependency-sha",
+							"stacks": []string{"some-stack"},
+							"uri":    "php-dependency-uri",
 						},
 					},
 				},
@@ -220,15 +205,16 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				},
 			}
 
-			planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+			planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
 						Name:    "php",
 						Version: "7.2.*",
 						Metadata: map[string]interface{}{
-							"version-source": "buildpack.yml",
-							"launch":         true,
-							"build":          true,
+							"name":   "php-dependency-name",
+							"sha256": "php-dependency-sha",
+							"stacks": []string{"some-stack"},
+							"uri":    "php-dependency-uri",
 						},
 					},
 				},
@@ -267,9 +253,10 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							Name:    "php",
 							Version: "7.2.*",
 							Metadata: map[string]interface{}{
-								"version-source": "buildpack.yml",
-								"launch":         true,
-								"build":          true,
+								"name":   "php-dependency-name",
+								"sha256": "php-dependency-sha",
+								"stacks": []string{"some-stack"},
+								"uri":    "php-dependency-uri",
 							},
 						},
 					},
@@ -296,7 +283,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 	context("when we refine the buildpack plan", func() {
 		it.Before(func() {
-			planRefinery.BillOfMaterialCall.Returns.BuildpackPlan = packit.BuildpackPlan{
+			planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
 						Name:    "new-dep",
@@ -393,8 +380,8 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			Expect(planRefinery.BillOfMaterialCall.CallCount).To(Equal(1))
-			Expect(planRefinery.BillOfMaterialCall.Receives.Dependency).To(Equal(postal.Dependency{
+			Expect(planRefinery.BillOfMaterialsCall.CallCount).To(Equal(1))
+			Expect(planRefinery.BillOfMaterialsCall.Receives.Dependency).To(Equal(postal.Dependency{
 				Name:   "PHP",
 				SHA256: "some-sha",
 			}))
