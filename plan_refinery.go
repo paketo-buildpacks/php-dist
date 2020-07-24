@@ -11,7 +11,7 @@ func NewPlanRefinery() PlanRefinery {
 	return PlanRefinery{}
 }
 
-func (pf PlanRefinery) BillOfMaterial(dependency postal.Dependency) packit.BuildpackPlan {
+func (r PlanRefinery) BillOfMaterials(dependency postal.Dependency) packit.BuildpackPlan {
 	return packit.BuildpackPlan{
 		Entries: []packit.BuildpackPlanEntry{
 			{

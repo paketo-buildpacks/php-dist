@@ -8,7 +8,7 @@ import (
 )
 
 type BuildPlanRefinery struct {
-	BillOfMaterialCall struct {
+	BillOfMaterialsCall struct {
 		sync.Mutex
 		CallCount int
 		Receives  struct {
@@ -21,13 +21,13 @@ type BuildPlanRefinery struct {
 	}
 }
 
-func (f *BuildPlanRefinery) BillOfMaterial(param1 postal.Dependency) packit.BuildpackPlan {
-	f.BillOfMaterialCall.Lock()
-	defer f.BillOfMaterialCall.Unlock()
-	f.BillOfMaterialCall.CallCount++
-	f.BillOfMaterialCall.Receives.Dependency = param1
-	if f.BillOfMaterialCall.Stub != nil {
-		return f.BillOfMaterialCall.Stub(param1)
+func (f *BuildPlanRefinery) BillOfMaterials(param1 postal.Dependency) packit.BuildpackPlan {
+	f.BillOfMaterialsCall.Lock()
+	defer f.BillOfMaterialsCall.Unlock()
+	f.BillOfMaterialsCall.CallCount++
+	f.BillOfMaterialsCall.Receives.Dependency = param1
+	if f.BillOfMaterialsCall.Stub != nil {
+		return f.BillOfMaterialsCall.Stub(param1)
 	}
-	return f.BillOfMaterialCall.Returns.BuildpackPlan
+	return f.BillOfMaterialsCall.Returns.BuildpackPlan
 }
