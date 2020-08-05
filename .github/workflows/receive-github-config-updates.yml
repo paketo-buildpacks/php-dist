@@ -1,4 +1,4 @@
-name: Sync
+name: Handle dispatch from github-config
 
 on:
   repository_dispatch:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Sync
+    name: Create PR to update shared files
     runs-on: ubuntu-latest
     steps:
 
@@ -24,7 +24,7 @@ jobs:
         path: current-repo
 
     - name: Run the sync action
-      uses: paketo-buildpacks/github-config/actions/sync@master
+      uses: paketo-buildpacks/github-config/actions/sync@main
       env:
         GITHUB_TOKEN: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
       with:
