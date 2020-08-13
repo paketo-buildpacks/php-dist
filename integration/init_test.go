@@ -19,11 +19,10 @@ import (
 )
 
 var (
-	phpDistBuildpack          string
-	offlinePhpDistBuildpack   string
-	buildPlanBuildpack        string
-	offlineBuildPlanBuildpack string
-	version                   string
+	phpDistBuildpack        string
+	offlinePhpDistBuildpack string
+	buildPlanBuildpack      string
+	version                 string
 
 	buildpackInfo struct {
 		Buildpack struct {
@@ -73,11 +72,6 @@ func TestIntegration(t *testing.T) {
 	Expect(err).NotTo(HaveOccurred())
 
 	buildPlanBuildpack, err = buildpackStore.Get.
-		Execute(config.BuildPlan)
-	Expect(err).ToNot(HaveOccurred())
-
-	offlineBuildPlanBuildpack, err = buildpackStore.Get.
-		WithOfflineDependencies().
 		Execute(config.BuildPlan)
 	Expect(err).ToNot(HaveOccurred())
 

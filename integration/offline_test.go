@@ -57,7 +57,7 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 				WithNoPull().
 				WithBuildpacks(
 					offlinePhpDistBuildpack,
-					offlineBuildPlanBuildpack,
+					buildPlanBuildpack,
 				).
 				WithNetwork("none").
 				Execute(name, source)
