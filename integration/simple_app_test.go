@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/paketo-buildpacks/occam"
 	"github.com/sclevine/spec"
@@ -17,9 +16,10 @@ import (
 
 func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 	var (
-		Expect = NewWithT(t).Expect
-		pack   occam.Pack
-		docker occam.Docker
+		Expect     = NewWithT(t).Expect
+		Eventually = NewWithT(t).Eventually
+		pack       occam.Pack
+		docker     occam.Docker
 	)
 
 	it.Before(func() {
@@ -87,14 +87,24 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			container, err = docker.Container.Run.WithCommand("php -i && sleep infinity").Execute(image.ID)
 			Expect(err).NotTo(HaveOccurred())
 
-			time.Sleep(5 * time.Second)
-			out, err := docker.Container.Logs.Execute(container.ID)
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(out.String()).To(MatchRegexp(`PHP Version => 7\.2\.\d+`))
-			Expect(out.String()).To(ContainSubstring(fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
-			Expect(out.String()).To(ContainSubstring(fmt.Sprintf("MIBDIRS => /layers/%s/php/mibs", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
-			Expect(out.String()).To(MatchRegexp(fmt.Sprintf(`PHP_EXTENSION_DIR => /layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
+			Eventually(func() string {
+				cLogs, err := docker.Container.Logs.Execute(container.ID)
+				Expect(err).NotTo(HaveOccurred())
+				return cLogs.String()
+			}).Should(
+				And(
+					MatchRegexp(`PHP Version => 7\.2\.\d+`),
+					ContainSubstring(
+						fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+					ContainSubstring(
+						fmt.Sprintf("MIBDIRS => /layers/%s/php/mibs", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+					MatchRegexp(
+						fmt.Sprintf(`PHP_EXTENSION_DIR => /layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+				),
+			)
 		})
 	})
 }
