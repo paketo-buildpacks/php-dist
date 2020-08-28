@@ -66,9 +66,9 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 				},
 				Requires: []packit.BuildPlanRequirement{
 					{
-						Name:    "php",
-						Version: "0.2.4",
+						Name: "php",
 						Metadata: phpdist.BuildPlanMetadata{
+							Version:       "0.2.4",
 							VersionSource: "buildpack.yml",
 						},
 					},

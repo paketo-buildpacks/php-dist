@@ -28,42 +28,44 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves the best plan entry", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "composer-lock-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-lock-version",
 						"version-source": "composer.lock",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "composer-json-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-json-version",
 						"version-source": "composer.json",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 				{
-					Name:    "php",
-					Version: "buildpack-yml-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "buildpack-yml-version",
 						"version-source": "buildpack.yml",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "default-versions-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "default-versions-version",
 						"version-source": "default-versions",
 					},
 				},
 			})
 			Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-				Name:    "php",
-				Version: "buildpack-yml-version",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "buildpack-yml-version",
 					"version-source": "buildpack.yml",
 				},
 			}))
@@ -81,28 +83,30 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves the best plan entry", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 				{
-					Name:    "php",
-					Version: "default-versions-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "default-versions-version",
 						"version-source": "default-versions",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "composer-lock-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-lock-version",
 						"version-source": "composer.lock",
 					},
 				},
 			})
 			Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-				Name:    "php",
-				Version: "composer-lock-version",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "composer-lock-version",
 					"version-source": "composer.lock",
 				},
 			}))
@@ -113,28 +117,30 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves the best plan entry", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 				{
-					Name:    "php",
-					Version: "default-versions-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "default-versions-version",
 						"version-source": "default-versions",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "composer-json-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-json-version",
 						"version-source": "composer.json",
 					},
 				},
 			})
 			Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-				Name:    "php",
-				Version: "composer-json-version",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "composer-json-version",
 					"version-source": "composer.json",
 				},
 			}))
@@ -145,32 +151,34 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves to either of them", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 				{
-					Name:    "php",
-					Version: "default-versions-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "default-versions-version",
 						"version-source": "default-versions",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "composer-json-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-json-version",
 						"version-source": "composer.json",
 					},
 				},
 				{
-					Name:    "php",
-					Version: "composer-lock-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-lock-version",
 						"version-source": "composer.lock",
 					},
 				},
 			})
-			Expect(entry.Version).To(ContainSubstring("composer-"))
+			Expect(entry.Metadata["version"]).To(ContainSubstring("composer-"))
 			Expect(entry.Metadata["version-source"]).To(ContainSubstring("composer."))
 		})
 	})
@@ -179,21 +187,23 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves the best plan entry", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 				{
-					Name:    "php",
-					Version: "default-versions-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "default-versions-version",
 						"version-source": "default-versions",
 					},
 				},
 			})
 			Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-				Name:    "php",
-				Version: "default-versions-version",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "default-versions-version",
 					"version-source": "default-versions",
 				},
 			}))
@@ -205,16 +215,16 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 			it("has all flags", func() {
 				entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 					{
-						Name:    "php",
-						Version: "composer-lock-version",
+						Name: "php",
 						Metadata: map[string]interface{}{
+							"version":        "composer-lock-version",
 							"version-source": "composer.lock",
 						},
 					},
 					{
-						Name:    "php",
-						Version: "default-versions-version",
+						Name: "php",
 						Metadata: map[string]interface{}{
+							"version":        "default-versions-version",
 							"version-source": "default-versions",
 							"build":          true,
 							"launch":         true,
@@ -222,9 +232,9 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 					},
 				})
 				Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-					Name:    "php",
-					Version: "composer-lock-version",
+					Name: "php",
 					Metadata: map[string]interface{}{
+						"version":        "composer-lock-version",
 						"version-source": "composer.lock",
 						"build":          true,
 						"launch":         true,
@@ -238,14 +248,17 @@ func testPlanEntryResolver(t *testing.T, context spec.G, it spec.S) {
 		it("resolves the best plan entry", func() {
 			entry := resolver.Resolve([]packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "other-version",
+					Name: "php",
+					Metadata: map[string]interface{}{
+						"version": "other-version",
+					},
 				},
 			})
 			Expect(entry).To(Equal(packit.BuildpackPlanEntry{
-				Name:     "php",
-				Version:  "other-version",
-				Metadata: map[string]interface{}{},
+				Name: "php",
+				Metadata: map[string]interface{}{
+					"version": "other-version",
+				},
 			}))
 		})
 	})
