@@ -47,9 +47,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		entryResolver = &fakes.EntryResolver{}
 		entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
-			Name:    "php",
-			Version: "7.2.*",
+			Name: "php",
 			Metadata: map[string]interface{}{
+				"version":        "7.2.*",
 				"version-source": "buildpack.yml",
 			},
 		}
@@ -73,13 +73,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 			Entries: []packit.BuildpackPlanEntry{
 				{
-					Name:    "php",
-					Version: "7.2.*",
+					Name: "php",
 					Metadata: map[string]interface{}{
-						"name":   "php-dependency-name",
-						"sha256": "php-dependency-sha",
-						"stacks": []string{"some-stack"},
-						"uri":    "php-dependency-uri",
+						"version": "7.2.*",
+						"name":    "php-dependency-name",
+						"sha256":  "php-dependency-sha",
+						"stacks":  []string{"some-stack"},
+						"uri":     "php-dependency-uri",
 					},
 				},
 			},
@@ -112,9 +112,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Plan: packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
-						Name:    "php",
-						Version: "7.2.*",
+						Name: "php",
 						Metadata: map[string]interface{}{
+							"version":        "7.2.*",
 							"version-source": "buildpack.yml",
 						},
 					},
@@ -128,13 +128,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Plan: packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
-						Name:    "php",
-						Version: "7.2.*",
+						Name: "php",
 						Metadata: map[string]interface{}{
-							"name":   "php-dependency-name",
-							"sha256": "php-dependency-sha",
-							"stacks": []string{"some-stack"},
-							"uri":    "php-dependency-uri",
+							"version": "7.2.*",
+							"name":    "php-dependency-name",
+							"sha256":  "php-dependency-sha",
+							"stacks":  []string{"some-stack"},
+							"uri":     "php-dependency-uri",
 						},
 					},
 				},
@@ -161,9 +161,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		Expect(entryResolver.ResolveCall.Receives.BuildpackPlanEntrySlice).To(Equal([]packit.BuildpackPlanEntry{
 			{
-				Name:    "php",
-				Version: "7.2.*",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "7.2.*",
 					"version-source": "buildpack.yml",
 				},
 			},
@@ -196,9 +196,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 
 			entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
-				Name:    "php",
-				Version: "7.2.*",
+				Name: "php",
 				Metadata: map[string]interface{}{
+					"version":        "7.2.*",
 					"version-source": "buildpack.yml",
 					"launch":         true,
 					"build":          true,
@@ -208,13 +208,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
-						Name:    "php",
-						Version: "7.2.*",
+						Name: "php",
 						Metadata: map[string]interface{}{
-							"name":   "php-dependency-name",
-							"sha256": "php-dependency-sha",
-							"stacks": []string{"some-stack"},
-							"uri":    "php-dependency-uri",
+							"version": "7.2.*",
+							"name":    "php-dependency-name",
+							"sha256":  "php-dependency-sha",
+							"stacks":  []string{"some-stack"},
+							"uri":     "php-dependency-uri",
 						},
 					},
 				},
@@ -233,9 +233,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Plan: packit.BuildpackPlan{
 					Entries: []packit.BuildpackPlanEntry{
 						{
-							Name:    "php",
-							Version: "7.2.*",
+							Name: "php",
 							Metadata: map[string]interface{}{
+								"version":        "7.2.*",
 								"version-source": "buildpack.yml",
 								"launch":         true,
 								"build":          true,
@@ -250,13 +250,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Plan: packit.BuildpackPlan{
 					Entries: []packit.BuildpackPlanEntry{
 						{
-							Name:    "php",
-							Version: "7.2.*",
+							Name: "php",
 							Metadata: map[string]interface{}{
-								"name":   "php-dependency-name",
-								"sha256": "php-dependency-sha",
-								"stacks": []string{"some-stack"},
-								"uri":    "php-dependency-uri",
+								"version": "7.2.*",
+								"name":    "php-dependency-name",
+								"sha256":  "php-dependency-sha",
+								"stacks":  []string{"some-stack"},
+								"uri":     "php-dependency-uri",
 							},
 						},
 					},
@@ -286,9 +286,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			planRefinery.BillOfMaterialsCall.Returns.BuildpackPlan = packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
 					{
-						Name:    "new-dep",
-						Version: "some-version",
+						Name: "new-dep",
 						Metadata: map[string]interface{}{
+							"version":          "some-version",
 							"some-extra-field": "an-extra-value",
 						},
 					},
@@ -302,9 +302,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Plan: packit.BuildpackPlan{
 					Entries: []packit.BuildpackPlanEntry{
 						{
-							Name:    "php",
-							Version: "7.2.*",
+							Name: "php",
 							Metadata: map[string]interface{}{
+								"version":        "7.2.*",
 								"version-source": "buildpack.yml",
 							},
 						},
@@ -318,9 +318,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Plan: packit.BuildpackPlan{
 					Entries: []packit.BuildpackPlanEntry{
 						{
-							Name:    "new-dep",
-							Version: "some-version",
+							Name: "new-dep",
 							Metadata: map[string]interface{}{
+								"version":          "some-version",
 								"some-extra-field": "an-extra-value",
 							},
 						},
@@ -368,9 +368,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Plan: packit.BuildpackPlan{
 					Entries: []packit.BuildpackPlanEntry{
 						{
-							Name:    "php",
-							Version: "7.2.*",
+							Name: "php",
 							Metadata: map[string]interface{}{
+								"version":        "7.2.*",
 								"version-source": "buildpack.yml",
 							},
 						},
@@ -408,9 +408,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Plan: packit.BuildpackPlan{
 						Entries: []packit.BuildpackPlanEntry{
 							{
-								Name:    "php",
-								Version: "7.2.*",
+								Name: "php",
 								Metadata: map[string]interface{}{
+									"version":        "7.2.*",
 									"version-source": "buildpack.yml",
 								},
 							},
@@ -433,9 +433,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Plan: packit.BuildpackPlan{
 						Entries: []packit.BuildpackPlanEntry{
 							{
-								Name:    "php",
-								Version: "7.2.*",
+								Name: "php",
 								Metadata: map[string]interface{}{
+									"version":        "7.2.*",
 									"version-source": "buildpack.yml",
 								},
 							},
@@ -462,9 +462,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Plan: packit.BuildpackPlan{
 						Entries: []packit.BuildpackPlanEntry{
 							{
-								Name:    "php",
-								Version: "7.2.*",
+								Name: "php",
 								Metadata: map[string]interface{}{
+									"version":        "7.2.*",
 									"version-source": "buildpack.yml",
 								},
 							},

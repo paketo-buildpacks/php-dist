@@ -44,7 +44,8 @@ func Build(entries EntryResolver,
 
 		entry := entries.Resolve(context.Plan.Entries)
 
-		dependency, err := dependencies.Resolve(filepath.Join(context.CNBPath, "buildpack.toml"), entry.Name, entry.Version, context.Stack)
+		version, _ := entry.Metadata["version"].(string)
+		dependency, err := dependencies.Resolve(filepath.Join(context.CNBPath, "buildpack.toml"), entry.Name, version, context.Stack)
 
 		if err != nil {
 			return packit.BuildResult{}, err
