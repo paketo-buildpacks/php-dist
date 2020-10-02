@@ -70,11 +70,11 @@ api = "0.2"
     deprecation_date = "2022-11-08T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "38c846a0c887110819e9776040b3017df67bd20efa4a2697865e06cafec310ae"
+    sha256 = "c2e40486961c60c054436a777925cb2b6b11dfe433201a50ec5aae13fa9b4697"
     source = "https://php.net/distributions/php-7.4.11.tar.gz"
     source_sha256 = "b4fae5c39ca1eedf5597071996d9c85d0674b83f5003126c39b7b44bbfbcd821"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.11_linux_x64_cflinuxfs3_38c846a0.tgz"
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.11_linux_x64_cflinuxfs3_c2e40486.tgz"
     version = "7.4.11"
 
   [[metadata.dependency_deprecation_dates]]
