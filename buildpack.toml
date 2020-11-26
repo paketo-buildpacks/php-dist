@@ -59,23 +59,23 @@ api = "0.2"
     deprecation_date = "2022-11-08T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "5ee92dc1e28a9c2ce8e3137e7f08c35756cb0a16c361ecf09fa60766056bf2b0"
-    source = "https://php.net/distributions/php-7.4.11.tar.gz"
-    source_sha256 = "b4fae5c39ca1eedf5597071996d9c85d0674b83f5003126c39b7b44bbfbcd821"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.11_linux_x64_cflinuxfs3_5ee92dc1.tgz"
-    version = "7.4.11"
-
-  [[metadata.dependencies]]
-    deprecation_date = "2022-11-08T00:00:00Z"
-    id = "php"
-    name = "PHP"
     sha256 = "5864dddb62a3b12cad89deb8a9b1558fc55c8535f2d891c8080eb1eb96efc8a2"
     source = "https://php.net/distributions/php-7.4.12.tar.gz"
     source_sha256 = "f056d74409a71f17218f76538c6a2d7b59ee99db9db7685fa0ab9cd0d4c0f286"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.12_linux_x64_cflinuxfs3_5864dddb.tgz"
     version = "7.4.12"
+
+  [[metadata.dependencies]]
+    deprecation_date = "2022-11-08T00:00:00Z"
+    id = "php"
+    name = "PHP"
+    sha256 = "86b5e4fc2c316fc1f8a8898585322c7021453fc62b55f088ba9a74cba390a246"
+    source = "https://php.net/distributions/php-7.4.13.tar.gz"
+    source_sha256 = "0865cff41e7210de2537bcd5750377cfe09a9312b9b44c1a166cf372d5204b8f"
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php7_7.4.13_linux_x64_cflinuxfs3_86b5e4fc.tgz"
+    version = "7.4.13"
 
   [[metadata.dependency_deprecation_dates]]
     date = 2020-11-30T00:00:00Z
