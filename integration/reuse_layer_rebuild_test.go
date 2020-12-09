@@ -136,7 +136,7 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 
 			err = ioutil.WriteFile(filepath.Join(source, "buildpack.yml"),
-				[]byte(strings.ReplaceAll(string(contents), "7.2.*", "7.3.*")), 0644)
+				[]byte(strings.ReplaceAll(string(contents), "7.4.*", "7.3.*")), 0644)
 			Expect(err).NotTo(HaveOccurred())
 
 			// Second pack build
