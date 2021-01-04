@@ -58,10 +58,6 @@ func Build(entries EntryResolver,
 			return packit.BuildResult{}, err
 		}
 
-		phpLayer.Launch = entry.Metadata["launch"] == true
-		phpLayer.Build = entry.Metadata["build"] == true
-		phpLayer.Cache = entry.Metadata["build"] == true
-
 		bom := planRefinery.BillOfMaterials(postal.Dependency{
 			ID:      dependency.ID,
 			Name:    dependency.Name,
@@ -84,10 +80,14 @@ func Build(entries EntryResolver,
 
 		logger.Process("Executing build process")
 
-		err = phpLayer.Reset()
+		phpLayer, err = phpLayer.Reset()
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
+
+		phpLayer.Launch = entry.Metadata["launch"] == true
+		phpLayer.Build = entry.Metadata["build"] == true
+		phpLayer.Cache = entry.Metadata["build"] == true
 
 		phpLayer.Metadata = map[string]interface{}{
 			DepKey:     dependency.SHA256,
