@@ -31,7 +31,7 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 
 		layer = packit.Layer{Path: path}
 
-		err = layer.Reset()
+		layer, err = layer.Reset()
 		Expect(err).NotTo(HaveOccurred())
 
 		err = os.MkdirAll(filepath.Join(layer.Path, "lib/php/extensions/no-debug-non-zts-20200717"), os.ModePerm)
