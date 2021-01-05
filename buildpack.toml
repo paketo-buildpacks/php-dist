@@ -15,11 +15,11 @@ api = "0.2"
     deprecation_date = "2021-12-06T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "b9652d34e7d2e98e6778ac6776634a77c30568d03023090ff7755a505fc2e6f6"
+    sha256 = "76bd97b377e68ba036b1e35d97a3f971c401a7f02bdf45b4ceb74d0e888b3a5e"
     source = "https://php.net/distributions/php-7.3.24.tar.gz"
     source_sha256 = "ac06577e2aeb69d4bed3c1532ed84a548f01399e5481c144c3e61d146be8ced6"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.3.24_linux_x64_cflinuxfs3_b9652d34.tgz"
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.3.24_linux_x64_cflinuxfs3_76bd97b3.tgz"
     version = "7.3.24"
 
   [[metadata.dependencies]]
