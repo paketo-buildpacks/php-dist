@@ -1,9 +1,9 @@
 api = "0.4"
 
 [buildpack]
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   name = "Paketo PHP Distribution Buildpack"
-  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
@@ -78,14 +78,14 @@ api = "0.4"
     version = "8.0.6"
 
   [[metadata.dependency_deprecation_dates]]
-    date = 2021-12-06T00:00:00Z
+    date = "2021-12-06T00:00:00Z"
     link = "http://php.net/supported-versions.php"
     match = "7.3.\\d+"
     name = "php"
     version_line = "7.3.x"
 
   [[metadata.dependency_deprecation_dates]]
-    date = 2022-11-08T00:00:00Z
+    date = "2022-11-08T00:00:00Z"
     link = "http://php.net/supported-versions.php"
     match = "7.4.\\d+"
     name = "php"
