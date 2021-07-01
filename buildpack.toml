@@ -1,9 +1,9 @@
 api = "0.4"
 
 [buildpack]
-  homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   name = "Paketo PHP Distribution Buildpack"
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
@@ -59,23 +59,23 @@ api = "0.4"
     deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "46ff1a72131a78aa5800abe9c1f8ba675590ebfc330e915fffbffd60e9f3ce64"
-    source = "https://php.net/distributions/php-8.0.6.tar.gz"
-    source_sha256 = "51a3dcea6deb8ab82ad035d15baa7f5398980f576ac1968313ef149f7cf20100"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.6_linux_x64_cflinuxfs3_46ff1a72.tgz"
-    version = "8.0.6"
-
-  [[metadata.dependencies]]
-    deprecation_date = "2023-11-26T00:00:00Z"
-    id = "php"
-    name = "PHP"
     sha256 = "aec0e3e3ecc82c5e916814bc478ccc8b3011e0f59b3102513b8ec8db05fc84e6"
     source = "https://php.net/distributions/php-8.0.7.tar.gz"
     source_sha256 = "1e7462455bec8062ef3fc7c74f1f496417cb80aa374ce11edb35015de248c3c1"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.7_linux_x64_cflinuxfs3_aec0e3e3.tgz"
     version = "8.0.7"
+
+  [[metadata.dependencies]]
+    deprecation_date = "2023-11-26T00:00:00Z"
+    id = "php"
+    name = "PHP"
+    sha256 = "33e1444396e2678851332c5b721be757bc04192cc48760aee53c3a4e08fb46a8"
+    source = "https://php.net/distributions/php-8.0.8.tar.gz"
+    source_sha256 = "e6092620eb3da03644b7b4fe5dc0a16e7e9d04de383e3858124afb3a8cb3fe3c"
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.8_linux_x64_cflinuxfs3_33e14443.tgz"
+    version = "8.0.8"
 
   [[metadata.dependency_deprecation_dates]]
     date = "2021-12-06T00:00:00Z"
