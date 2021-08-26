@@ -1,9 +1,9 @@
 api = "0.4"
 
 [buildpack]
-  homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   name = "Paketo PHP Distribution Buildpack"
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
@@ -37,23 +37,23 @@ api = "0.4"
     deprecation_date = "2022-11-28T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "f519a82faea9b31b50c4575c694cce87850192cd3c9dd9e5cfabb323a9fdf0e4"
-    source = "https://php.net/distributions/php-7.4.21.tar.gz"
-    source_sha256 = "4b9623accbe4b8923a801212f371f784069535009185e7bf7e4dec66bbea61db"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.4.21_linux_x64_cflinuxfs3_f519a82f.tgz"
-    version = "7.4.21"
-
-  [[metadata.dependencies]]
-    deprecation_date = "2022-11-28T00:00:00Z"
-    id = "php"
-    name = "PHP"
     sha256 = "edd1bf09d7d1e7087a4e8593aad386baf890c79b91c7cde149258e119ca46a15"
     source = "https://php.net/distributions/php-7.4.22.tar.gz"
     source_sha256 = "4ca2642b99a822237d7f84dc19682be702ad0e2d5d282f7646d84b746d454e34"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.4.22_linux_x64_cflinuxfs3_edd1bf09.tgz"
     version = "7.4.22"
+
+  [[metadata.dependencies]]
+    deprecation_date = "2022-11-28T00:00:00Z"
+    id = "php"
+    name = "PHP"
+    sha256 = "f80a3d01bb357756dd3317d5a439f73d2367fde041e24e8aa12ae71cb3ee8f19"
+    source = "https://php.net/distributions/php-7.4.23.tar.gz"
+    source_sha256 = "2aaa481678ad4d2992e7bcf161e0e98c7268f4979f7ca8b3d97dd6de19c205d6"
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.4.23_linux_x64_cflinuxfs3_f80a3d01.tgz"
+    version = "7.4.23"
 
   [[metadata.dependencies]]
     deprecation_date = "2023-11-26T00:00:00Z"
