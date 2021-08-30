@@ -1,4 +1,4 @@
 {
   "build-plan": "github.com/ForestEckhardt/build-plan",
-  "builder": "index.docker.io/paketobuildpacks/builder:full-cf"
+  "builder": "index.docker.io/paketobuildpacks/builder:buildpackless-full"
 }
