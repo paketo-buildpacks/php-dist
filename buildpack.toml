@@ -1,9 +1,9 @@
 api = "0.4"
 
 [buildpack]
-  homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   name = "Paketo PHP Distribution Buildpack"
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
@@ -59,23 +59,23 @@ api = "0.4"
     deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
     name = "PHP"
-    sha256 = "1e7e7dfbca5277dbc859b57377a809b1ca1b13900d40e37af336f94272a99f52"
-    source = "https://php.net/distributions/php-8.0.9.tar.gz"
-    source_sha256 = "1f0d72e90ab6ad0ae13329a96b281f71bc592563ce4e3a4c816b8da4b5854fb4"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.9_linux_x64_cflinuxfs3_1e7e7dfb.tgz"
-    version = "8.0.9"
-
-  [[metadata.dependencies]]
-    deprecation_date = "2023-11-26T00:00:00Z"
-    id = "php"
-    name = "PHP"
     sha256 = "cadbdf0fb155560628aedc426227632c74f108f420a6ab9e4f8c1d61ddc721c6"
     source = "https://php.net/distributions/php-8.0.10.tar.gz"
     source_sha256 = "4612dca9afe8148801648839175ab588097ace66658c6859e9f283ecdeaf84b3"
     stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.10_linux_x64_cflinuxfs3_cadbdf0f.tgz"
     version = "8.0.10"
+
+  [[metadata.dependencies]]
+    deprecation_date = "2023-11-26T00:00:00Z"
+    id = "php"
+    name = "PHP"
+    sha256 = "683d1602819e8ff9f427bd8e07b325e5a4c56ac40fdd47731955163e5635adfc"
+    source = "https://php.net/distributions/php-8.0.11.tar.gz"
+    source_sha256 = "c6a461f57b4bcb46cd4dec443253b1e2e8e981466f1280093322b7864afe8be7"
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.11_linux_x64_cflinuxfs3_683d1602.tgz"
+    version = "8.0.11"
 
   [[metadata.dependency_deprecation_dates]]
     date = "2021-12-06T00:00:00Z"
