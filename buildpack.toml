@@ -12,84 +12,103 @@ api = "0.4"
     php = "7.4.*"
 
   [[metadata.dependencies]]
-    deprecation_date = "2021-12-06T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:7.3.30:*:*:*:*:*:*:*"
+    deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "4f86e0cf7fac9dbb30e818d1448af36d49fd7cf9f3140b3383f0d2ce6884955f"
-    source = "https://php.net/distributions/php-7.3.30.tar.gz"
+    purl = "pkg:generic/php@7.3.30?checksum=3810a9b631eb7f236ecf02b9a78bab8d957b6cfdb1646a29e3b34e01d36c0510&download_url=https://www.php.net/distributions/php-7.3.30.tar.gz"
+    sha256 = "2804b3eaad5ce829641eda38e7753ecc9956a3cb7d95190f46fba06b32e37227"
+    source = "https://www.php.net/distributions/php-7.3.30.tar.gz"
     source_sha256 = "3810a9b631eb7f236ecf02b9a78bab8d957b6cfdb1646a29e3b34e01d36c0510"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.3.30_linux_x64_cflinuxfs3_4f86e0cf.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.3.30_linux_x64_bionic_2804b3ea.tgz"
     version = "7.3.30"
 
   [[metadata.dependencies]]
-    deprecation_date = "2021-12-06T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:7.3.31:*:*:*:*:*:*:*"
+    deprecation_date = "2024-09-23T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "989f5f7f901c7aa5d317ecd2dfc47fcfe56856bcd8d6086d4ff46bb41ec9fd50"
-    source = "https://php.net/distributions/php-7.3.31.tar.gz"
+    purl = "pkg:generic/php@7.3.31?checksum=57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f&download_url=https://www.php.net/distributions/php-7.3.31.tar.gz"
+    sha256 = "f0073a1c513e31fbb469d81b5d51a02a0fc332fd2d423cd5e1362e92e8d0d6f3"
+    source = "https://www.php.net/distributions/php-7.3.31.tar.gz"
     source_sha256 = "57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.3.31_linux_x64_cflinuxfs3_989f5f7f.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.3.31_linux_x64_bionic_f0073a1c.tgz"
     version = "7.3.31"
 
   [[metadata.dependencies]]
-    deprecation_date = "2022-11-28T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:7.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "f80a3d01bb357756dd3317d5a439f73d2367fde041e24e8aa12ae71cb3ee8f19"
-    source = "https://php.net/distributions/php-7.4.23.tar.gz"
+    purl = "pkg:generic/php@7.4.23?checksum=2aaa481678ad4d2992e7bcf161e0e98c7268f4979f7ca8b3d97dd6de19c205d6&download_url=https://www.php.net/distributions/php-7.4.23.tar.gz"
+    sha256 = "a648df590c0f8e5e7ec3d7fe40960967b94399ef55009fe456e4e55511d5cbfb"
+    source = "https://www.php.net/distributions/php-7.4.23.tar.gz"
     source_sha256 = "2aaa481678ad4d2992e7bcf161e0e98c7268f4979f7ca8b3d97dd6de19c205d6"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.4.23_linux_x64_cflinuxfs3_f80a3d01.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.4.23_linux_x64_bionic_a648df59.tgz"
     version = "7.4.23"
 
   [[metadata.dependencies]]
-    deprecation_date = "2022-11-28T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:7.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2024-09-23T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "f2d5671a485ee02520b3b150b7560da142697d34a5c9e287eafdb49f97d0a90a"
-    source = "https://php.net/distributions/php-7.4.24.tar.gz"
+    purl = "pkg:generic/php@7.4.24?checksum=8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333&download_url=https://www.php.net/distributions/php-7.4.24.tar.gz"
+    sha256 = "61618aa5384c1c4a9af3c3246701342de8c5f985976d907fd4af577f5c025c62"
+    source = "https://www.php.net/distributions/php-7.4.24.tar.gz"
     source_sha256 = "8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_7.4.24_linux_x64_cflinuxfs3_f2d5671a.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.4.24_linux_x64_bionic_61618aa5.tgz"
     version = "7.4.24"
 
   [[metadata.dependencies]]
-    deprecation_date = "2023-11-26T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:8.0.10:*:*:*:*:*:*:*"
+    deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "cadbdf0fb155560628aedc426227632c74f108f420a6ab9e4f8c1d61ddc721c6"
-    source = "https://php.net/distributions/php-8.0.10.tar.gz"
+    purl = "pkg:generic/php@8.0.10?checksum=4612dca9afe8148801648839175ab588097ace66658c6859e9f283ecdeaf84b3&download_url=https://www.php.net/distributions/php-8.0.10.tar.gz"
+    sha256 = "635820bd69a53d70150a4f8ca5dd9ac81090d266912984b53faf6f355ca70c6b"
+    source = "https://www.php.net/distributions/php-8.0.10.tar.gz"
     source_sha256 = "4612dca9afe8148801648839175ab588097ace66658c6859e9f283ecdeaf84b3"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.10_linux_x64_cflinuxfs3_cadbdf0f.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.0.10_linux_x64_bionic_635820bd.tgz"
     version = "8.0.10"
 
   [[metadata.dependencies]]
-    deprecation_date = "2023-11-26T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:8.0.11:*:*:*:*:*:*:*"
+    deprecation_date = "2024-09-23T00:00:00Z"
     id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    sha256 = "683d1602819e8ff9f427bd8e07b325e5a4c56ac40fdd47731955163e5635adfc"
-    source = "https://php.net/distributions/php-8.0.11.tar.gz"
+    purl = "pkg:generic/php@8.0.11?checksum=c6a461f57b4bcb46cd4dec443253b1e2e8e981466f1280093322b7864afe8be7&download_url=https://www.php.net/distributions/php-8.0.11.tar.gz"
+    sha256 = "c3b52cdb849dbae6b16fa690ad55aabf31de86c752b6cacbbed289a84aa48713"
+    source = "https://www.php.net/distributions/php-8.0.11.tar.gz"
     source_sha256 = "c6a461f57b4bcb46cd4dec443253b1e2e8e981466f1280093322b7864afe8be7"
-    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
-    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.11_linux_x64_cflinuxfs3_683d1602.tgz"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.0.11_linux_x64_bionic_c3b52cdb.tgz"
     version = "8.0.11"
 
-  [[metadata.dependency_deprecation_dates]]
-    date = "2021-12-06T00:00:00Z"
-    link = "http://php.net/supported-versions.php"
-    match = "7.3.\\d+"
-    name = "php"
-    version_line = "7.3.x"
+  [[metadata.dependency-constraints]]
+    constraint = "7.3.*"
+    id = "php"
+    patches = 2
 
-  [[metadata.dependency_deprecation_dates]]
-    date = "2022-11-08T00:00:00Z"
-    link = "http://php.net/supported-versions.php"
-    match = "7.4.\\d+"
-    name = "php"
-    version_line = "7.4.x"
+  [[metadata.dependency-constraints]]
+    constraint = "7.4.*"
+    id = "php"
+    patches = 2
+
+  [[metadata.dependency-constraints]]
+    constraint = "8.0.*"
+    id = "php"
+    patches = 2
 
 [[stacks]]
   id = "io.buildpacks.stacks.bionic"
