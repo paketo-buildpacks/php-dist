@@ -1,9 +1,9 @@
 api = "0.4"
 
 [buildpack]
-  homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   name = "Paketo PHP Distribution Buildpack"
+  homepage = "https://github.com/paketo-buildpacks/php-dist"
 
 [metadata]
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
@@ -12,12 +12,9 @@ api = "0.4"
     php = "7.4.*"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.3.30:*:*:*:*:*:*:*"
     deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@7.3.30?checksum=3810a9b631eb7f236ecf02b9a78bab8d957b6cfdb1646a29e3b34e01d36c0510&download_url=https://www.php.net/distributions/php-7.3.30.tar.gz"
     sha256 = "2804b3eaad5ce829641eda38e7753ecc9956a3cb7d95190f46fba06b32e37227"
     source = "https://www.php.net/distributions/php-7.3.30.tar.gz"
     source_sha256 = "3810a9b631eb7f236ecf02b9a78bab8d957b6cfdb1646a29e3b34e01d36c0510"
@@ -26,12 +23,9 @@ api = "0.4"
     version = "7.3.30"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.3.31:*:*:*:*:*:*:*"
     deprecation_date = "2024-09-23T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@7.3.31?checksum=57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f&download_url=https://www.php.net/distributions/php-7.3.31.tar.gz"
     sha256 = "f0073a1c513e31fbb469d81b5d51a02a0fc332fd2d423cd5e1362e92e8d0d6f3"
     source = "https://www.php.net/distributions/php-7.3.31.tar.gz"
     source_sha256 = "57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f"
@@ -40,12 +34,9 @@ api = "0.4"
     version = "7.3.31"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.4.23:*:*:*:*:*:*:*"
     deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@7.4.23?checksum=2aaa481678ad4d2992e7bcf161e0e98c7268f4979f7ca8b3d97dd6de19c205d6&download_url=https://www.php.net/distributions/php-7.4.23.tar.gz"
     sha256 = "a648df590c0f8e5e7ec3d7fe40960967b94399ef55009fe456e4e55511d5cbfb"
     source = "https://www.php.net/distributions/php-7.4.23.tar.gz"
     source_sha256 = "2aaa481678ad4d2992e7bcf161e0e98c7268f4979f7ca8b3d97dd6de19c205d6"
@@ -54,12 +45,9 @@ api = "0.4"
     version = "7.4.23"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.4.24:*:*:*:*:*:*:*"
     deprecation_date = "2024-09-23T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@7.4.24?checksum=8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333&download_url=https://www.php.net/distributions/php-7.4.24.tar.gz"
     sha256 = "61618aa5384c1c4a9af3c3246701342de8c5f985976d907fd4af577f5c025c62"
     source = "https://www.php.net/distributions/php-7.4.24.tar.gz"
     source_sha256 = "8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333"
@@ -68,12 +56,9 @@ api = "0.4"
     version = "7.4.24"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.0.10:*:*:*:*:*:*:*"
     deprecation_date = "2024-08-26T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@8.0.10?checksum=4612dca9afe8148801648839175ab588097ace66658c6859e9f283ecdeaf84b3&download_url=https://www.php.net/distributions/php-8.0.10.tar.gz"
     sha256 = "635820bd69a53d70150a4f8ca5dd9ac81090d266912984b53faf6f355ca70c6b"
     source = "https://www.php.net/distributions/php-8.0.10.tar.gz"
     source_sha256 = "4612dca9afe8148801648839175ab588097ace66658c6859e9f283ecdeaf84b3"
@@ -82,17 +67,14 @@ api = "0.4"
     version = "8.0.10"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.0.11:*:*:*:*:*:*:*"
-    deprecation_date = "2024-09-23T00:00:00Z"
+    deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@8.0.11?checksum=c6a461f57b4bcb46cd4dec443253b1e2e8e981466f1280093322b7864afe8be7&download_url=https://www.php.net/distributions/php-8.0.11.tar.gz"
-    sha256 = "c3b52cdb849dbae6b16fa690ad55aabf31de86c752b6cacbbed289a84aa48713"
-    source = "https://www.php.net/distributions/php-8.0.11.tar.gz"
+    sha256 = "adb250d864114fdb868ca0d70caed2de906d2bb10d75ec7bff4881fd054ac686"
+    source = "https://php.net/distributions/php-8.0.11.tar.gz"
     source_sha256 = "c6a461f57b4bcb46cd4dec443253b1e2e8e981466f1280093322b7864afe8be7"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.0.11_linux_x64_bionic_c3b52cdb.tgz"
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
+    uri = "https://buildpacks.cloudfoundry.org/dependencies/php/php_8.0.11_linux_x64_cflinuxfs3_adb250d8.tgz"
     version = "8.0.11"
 
   [[metadata.dependency-constraints]]
