@@ -60,11 +60,11 @@ api = "0.4"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
     purl = "pkg:generic/php@7.4.24?checksum=8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333&download_url=https://www.php.net/distributions/php-7.4.24.tar.gz"
-    sha256 = "61618aa5384c1c4a9af3c3246701342de8c5f985976d907fd4af577f5c025c62"
+    sha256 = "f76157a966f4a995c7d8233ad485043cf5bf28e8cc80c3a90e4e1002909faacf"
     source = "https://www.php.net/distributions/php-7.4.24.tar.gz"
     source_sha256 = "8cc1758cf7ff45428c17641b1be84cd917a2909ba40c770f06a814d8b7f36333"
     stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_7.4.24_linux_x64_bionic_61618aa5.tgz"
+    uri = "https://deps.paketo.io/php/php_7.4.24_linux_x64_bionic_f76157a9.tgz"
     version = "7.4.24"
 
   [[metadata.dependencies]]
