@@ -32,11 +32,11 @@ api = "0.4"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
     purl = "pkg:generic/php@7.3.31?checksum=57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f&download_url=https://www.php.net/distributions/php-7.3.31.tar.gz"
-    sha256 = "f0073a1c513e31fbb469d81b5d51a02a0fc332fd2d423cd5e1362e92e8d0d6f3"
+    sha256 = "e2f31814a9301e05495cc30b22fe3375adb44ea30d967fd4f29a5b6577a97046"
     source = "https://www.php.net/distributions/php-7.3.31.tar.gz"
     source_sha256 = "57ca37b08d3eed4cadc3976e78b0f51d0305bb6e60333f6e8c76e8aee07c3f0f"
     stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_7.3.31_linux_x64_bionic_f0073a1c.tgz"
+    uri = "https://deps.paketo.io/php/php_7.3.31_linux_x64_bionic_e2f31814.tgz"
     version = "7.3.31"
 
   [[metadata.dependencies]]
