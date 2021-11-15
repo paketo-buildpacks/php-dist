@@ -64,7 +64,7 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
 			Expect(logs.String()).To(ContainSubstring(buildpackInfo.Buildpack.Name))
-			Expect(logs.String()).To(MatchRegexp(`PHP 7\.4\.\d+`))
+			Expect(logs.String()).To(MatchRegexp(`PHP 8\.0\.\d+`))
 			Expect(logs.String()).NotTo(ContainSubstring("Downloading"))
 
 			container, err = docker.Container.Run.WithCommand("php -i && sleep infinity").Execute(image.ID)
@@ -76,7 +76,7 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 				return cLogs.String()
 			}).Should(
 				And(
-					MatchRegexp(`PHP Version => 7\.4\.\d+`),
+					MatchRegexp(`PHP Version => 8\.0\.\d+`),
 					ContainSubstring(
 						fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 					),
