@@ -26,9 +26,9 @@ file that looks like the following:
   # is not specified, the buildpack will provide the default version, which can
   # be seen in the buildpack.toml file.
   # If you wish to request a specific version, the buildpack supports
-  # specifying a semver constraint in the form of "7.*", "7.4.*", or even
-  # "7.4.4".
-  version = "7.4.4"
+  # specifying a semver constraint in the form of "8.*", "8.0.*", or even
+  # "8.0.4".
+  version = "8.0.4"
 
   # The PHP buildpack supports some non-required metadata options.
   [requires.metadata]
