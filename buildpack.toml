@@ -9,7 +9,7 @@ api = "0.4"
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
   pre-package = "./scripts/build.sh"
   [metadata.default-versions]
-    php = "7.4.*"
+    php = "8.0.*"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:7.3.31:*:*:*:*:*:*:*"
@@ -113,6 +113,3 @@ api = "0.4"
 [[stacks]]
   id = "io.buildpacks.stacks.bionic"
   mixins = ["libargon2-0", "libcurl4", "libedit2", "libgd3", "libmagickwand-6.q16-3", "libonig4", "libxml2", "libyaml-0-2"]
-
-[[stacks]]
-  id = "org.cloudfoundry.stacks.cflinuxfs3"

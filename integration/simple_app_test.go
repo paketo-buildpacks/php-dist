@@ -67,13 +67,13 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				fmt.Sprintf("%s %s", buildpackInfo.Buildpack.Name, version),
 				"  Resolving PHP version",
 				"    Candidate version sources (in priority order):",
-				"      buildpack.yml -> \"7.4.*\"",
+				"      buildpack.yml -> \"8.0.*\"",
 				"      <unknown>     -> \"\"",
 				"",
-				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 7\.4\.\d+`),
+				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 8\.0\.\d+`),
 				"",
 				"  Executing build process",
-				MatchRegexp(`    Installing PHP 7\.4\.\d+`),
+				MatchRegexp(`    Installing PHP 8\.0\.\d+`),
 				MatchRegexp(`      Completed in \d+\.\d+`),
 				"",
 				"  Configuring environment",
@@ -93,7 +93,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				return cLogs.String()
 			}).Should(
 				And(
-					MatchRegexp(`PHP Version => 7\.4\.\d+`),
+					MatchRegexp(`PHP Version => 8\.0\.\d+`),
 					ContainSubstring(
 						fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 					),
