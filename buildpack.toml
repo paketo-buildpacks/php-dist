@@ -13,7 +13,7 @@ api = "0.4"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:7.3.32:*:*:*:*:*:*:*"
-    deprecation_date = "2024-10-28T00:00:00Z"
+    deprecation_date = "2021-12-06T00:00:00Z"
     id = "php"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
@@ -27,7 +27,7 @@ api = "0.4"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:7.3.33:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-18T00:00:00Z"
+    deprecation_date = "2021-12-06T00:00:00Z"
     id = "php"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
