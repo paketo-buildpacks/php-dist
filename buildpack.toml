@@ -83,7 +83,7 @@ api = "0.4"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.0.15:*:*:*:*:*:*:*"
-    deprecation_date = "2025-01-20T00:00:00Z"
+    deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
