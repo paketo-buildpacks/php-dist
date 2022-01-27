@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/Masterminds/semver"
 	"github.com/paketo-buildpacks/packit"
 	"github.com/paketo-buildpacks/packit/chronos"
 	"github.com/paketo-buildpacks/packit/postal"
@@ -52,6 +53,14 @@ func Build(entries EntryResolver,
 		}
 
 		logger.SelectedDependency(entry, dependency.Version)
+
+		source, _ := entry.Metadata["version-source"].(string)
+		if source == "buildpack.yml" {
+			nextMajorVersion := semver.MustParse(context.BuildpackInfo.Version).IncMajor()
+			logger.Subprocess("WARNING: Setting the PHP version through buildpack.yml will be deprecated in %s v%s.", context.BuildpackInfo.Name, nextMajorVersion.String())
+			logger.Subprocess("In versions >= v%s, use the $BP_PHP_VERSION environment variable to specify a version.", nextMajorVersion.String())
+			logger.Break()
+		}
 
 		phpLayer, err := context.Layers.Get("php")
 		if err != nil {
