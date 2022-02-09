@@ -65,8 +65,6 @@ func testExtensionsLoadable(t *testing.T, context spec.G, it spec.S) {
 
 			container, err = docker.Container.Run.
 				WithCommand("php app.php").
-				// tells php to use the ini config file in the app
-				WithEnv(map[string]string{"PHP_INI_SCAN_DIR": "/workspace/some-dir"}).
 				Execute(image.ID)
 			Expect(err).NotTo(HaveOccurred())
 

@@ -1,13 +1,11 @@
 package phpdist_test
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/paketo-buildpacks/packit"
+	"github.com/paketo-buildpacks/packit/v2"
 	phpdist "github.com/paketo-buildpacks/php-dist"
 	"github.com/sclevine/spec"
 
@@ -20,13 +18,12 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 
 		path        string
 		layer       packit.Layer
-		buffer      *bytes.Buffer
 		environment phpdist.Environment
 	)
 
 	it.Before(func() {
 		var err error
-		path, err = ioutil.TempDir("", "layer-dir")
+		path, err = os.MkdirTemp("", "layer-dir")
 		Expect(err).NotTo(HaveOccurred())
 
 		layer = packit.Layer{Path: path}
@@ -37,8 +34,7 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 		err = os.MkdirAll(filepath.Join(layer.Path, "lib/php/extensions/no-debug-non-zts-20200717"), os.ModePerm)
 		Expect(err).NotTo(HaveOccurred())
 
-		buffer = bytes.NewBuffer(nil)
-		environment = phpdist.NewEnvironment(phpdist.NewLogEmitter(buffer))
+		environment = phpdist.NewEnvironment()
 	})
 
 	it.After(func() {
@@ -47,31 +43,45 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 
 	context("Configure", func() {
 		it("configures the environment variables", func() {
-			err := environment.Configure(layer)
+			err := environment.Configure(layer, "directory/extensions/no-debug-non-zts-20200717", "some/directory/php.ini", []string{"app-root-dir/php.ini.d", "other/directory"})
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(layer.SharedEnv).To(Equal(packit.Environment{
-				"MIBDIRS.override":           filepath.Join(layer.Path, "mibs"),
-				"PATH.delim":                 ":",
-				"PATH.prepend":               filepath.Join(layer.Path, "sbin"),
-				"PHP_API.override":           "20200717",
-				"PHP_EXTENSION_DIR.override": filepath.Join(layer.Path, "lib/php/extensions/no-debug-non-zts-20200717"),
-				"PHP_HOME.override":          layer.Path,
+				"MIBDIRS.default":           filepath.Join(layer.Path, "mibs"),
+				"PATH.delim":                ":",
+				"PATH.prepend":              filepath.Join(layer.Path, "sbin"),
+				"PHP_API.default":           "20200717",
+				"PHP_EXTENSION_DIR.default": "directory/extensions/no-debug-non-zts-20200717",
+				"PHP_HOME.default":          layer.Path,
+				"PHPRC.default":             "some/directory",
+				"PHP_INI_SCAN_DIR.append":   "app-root-dir/php.ini.d:other/directory",
+				"PHP_INI_SCAN_DIR.delim":    ":",
 			}))
 		})
-	})
 
-	context("extensions dir does not exist", func() {
-		var err error
+		context("the PHP_INI_SCAN_DIR is set by the user", func() {
+			it.Before(func() {
+				Expect(os.Setenv("PHP_INI_SCAN_DIR", "user-scan-dir")).To(Succeed())
+			})
+			it.After(func() {
+				Expect(os.Unsetenv("PHP_INI_SCAN_DIR")).To(Succeed())
+			})
 
-		it.Before(func() {
-			err = os.RemoveAll(filepath.Join(layer.Path, "lib/php/extensions/no-debug-non-zts-20200717"))
-			Expect(err).NotTo(HaveOccurred())
-		})
+			it("configures the environment variables", func() {
+				err := environment.Configure(layer, "directory/extensions/no-debug-non-zts-20200717", "some/directory/php.ini", []string{})
+				Expect(err).NotTo(HaveOccurred())
 
-		it("throws a descriptive error", func() {
-			err := environment.Configure(layer)
-			Expect(err).To(MatchError(ContainSubstring("php extensions dir not found")))
+				Expect(layer.SharedEnv).To(Equal(packit.Environment{
+					"MIBDIRS.default":           filepath.Join(layer.Path, "mibs"),
+					"PATH.delim":                ":",
+					"PATH.prepend":              filepath.Join(layer.Path, "sbin"),
+					"PHP_API.default":           "20200717",
+					"PHP_EXTENSION_DIR.default": "directory/extensions/no-debug-non-zts-20200717",
+					"PHP_HOME.default":          layer.Path,
+					"PHPRC.default":             "some/directory",
+					"PHP_INI_SCAN_DIR.default":  "user-scan-dir",
+				}))
+			})
 		})
 	})
 }
