@@ -170,7 +170,7 @@ func Build(entryResolver EntryResolver,
 		}
 		logger.Debug.Break()
 
-		libDir := filepath.Join("lib")
+		libDir := "lib"
 		if userLibDir := os.Getenv("BP_PHP_LIB_DIR"); userLibDir != "" {
 			libDir = userLibDir
 			logger.Debug.Subprocess("$BP_PHP_LIB_DIR = %s", libDir)
