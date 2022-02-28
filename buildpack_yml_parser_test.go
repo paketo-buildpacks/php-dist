@@ -1,7 +1,6 @@
 package phpdist_test
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -20,7 +19,7 @@ func testBuildpackYMLParser(t *testing.T, context spec.G, it spec.S) {
 	)
 
 	it.Before(func() {
-		file, err := ioutil.TempFile("", "buildpack.yml")
+		file, err := os.CreateTemp("", "buildpack.yml")
 		Expect(err).NotTo(HaveOccurred())
 		defer file.Close()
 
@@ -76,7 +75,7 @@ php:
 
 			context("when the contents of the buildpack.yml file are malformed", func() {
 				it.Before(func() {
-					err := ioutil.WriteFile(path, []byte("%%%"), 0644)
+					err := os.WriteFile(path, []byte("%%%"), 0644)
 					Expect(err).NotTo(HaveOccurred())
 				})
 

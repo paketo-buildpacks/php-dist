@@ -13,6 +13,7 @@ import (
 	"github.com/sclevine/spec/report"
 
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/format"
 )
 
 var (
@@ -35,6 +36,8 @@ var (
 
 func TestIntegration(t *testing.T) {
 	Expect := NewWithT(t).Expect
+
+	format.MaxLength = 0
 
 	root, err := filepath.Abs("./..")
 	Expect(err).ToNot(HaveOccurred())
