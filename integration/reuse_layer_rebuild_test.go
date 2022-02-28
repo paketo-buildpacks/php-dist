@@ -2,7 +2,6 @@ package integration_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -132,15 +131,8 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 
 			Expect(logs.String()).To(ContainSubstring("  Executing build process"))
 
-			contents, err := ioutil.ReadFile(filepath.Join(source, "buildpack.yml"))
-			Expect(err).NotTo(HaveOccurred())
-
-			err = ioutil.WriteFile(filepath.Join(source, "buildpack.yml"),
-				[]byte(strings.ReplaceAll(string(contents), "8.0.*", "7.4.*")), 0644)
-			Expect(err).NotTo(HaveOccurred())
-
 			// Second pack build
-			secondImage, logs, err = build.Execute(name, source)
+			secondImage, logs, err = build.WithEnv(map[string]string{"BP_PHP_VERSION": "7.4.*"}).Execute(name, source)
 			Expect(err).NotTo(HaveOccurred())
 
 			imageIDs[secondImage.ID] = struct{}{}

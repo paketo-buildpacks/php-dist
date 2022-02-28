@@ -1,54 +1,48 @@
 package phpdist
 
 import (
-	"errors"
+	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/paketo-buildpacks/packit"
+	"github.com/paketo-buildpacks/packit/v2"
 )
 
+// Environment sets build- and launch-time environment variables to
+// properly install and configure PHP.
 type Environment struct {
-	logger LogEmitter
 }
 
-func NewEnvironment(logger LogEmitter) Environment {
-	return Environment{
-		logger: logger,
-	}
+func NewEnvironment() Environment {
+	return Environment{}
 }
 
-func (e Environment) Configure(layer packit.Layer) error {
-	layer.SharedEnv.Prepend("PATH", filepath.Join(layer.Path, "sbin"), ":")
-	layer.SharedEnv.Override("MIBDIRS", filepath.Join(layer.Path, "mibs"))
-	layer.SharedEnv.Override("PHP_HOME", layer.Path)
+// Configure sets build- and launch-time environment variables on the layer
+// passed as input. Proper values for the environment variables are determined
+// by the layer path, and the other paths provided as inputs. See PHP documentation
+// for an explanation of the environment variables' significance.
+func (e Environment) Configure(layer packit.Layer, extensionsDir string, defaultIniPath string, iniScanDirs []string) error {
+	layer.SharedEnv.Prepend("PATH", filepath.Join(layer.Path, "sbin"), string(os.PathListSeparator))
+	layer.SharedEnv.Default("MIBDIRS", filepath.Join(layer.Path, "mibs"))
 
-	extensionsDir, apiVersion, err := parseExtensions(layer.Path)
-	if err != nil {
-		return err
+	layer.SharedEnv.Default("PHP_HOME", layer.Path)
+	layer.SharedEnv.Default("PHPRC", filepath.Dir(defaultIniPath))
+
+	if scanDir, ok := os.LookupEnv("PHP_INI_SCAN_DIR"); ok {
+		layer.SharedEnv.Default("PHP_INI_SCAN_DIR", scanDir)
+	} else {
+		layer.SharedEnv.Append("PHP_INI_SCAN_DIR",
+			strings.Join(iniScanDirs, string(os.PathListSeparator)),
+			string(os.PathListSeparator),
+		)
 	}
 
-	layer.SharedEnv.Override("PHP_EXTENSION_DIR", extensionsDir)
-	layer.SharedEnv.Override("PHP_API", apiVersion)
-
-	e.logger.Environment(layer.SharedEnv)
-
-	return nil
-}
-
-func parseExtensions(root string) (string, string, error) {
-	folders, err := filepath.Glob(filepath.Join(root, "lib/php/extensions/no-debug-non-zts*"))
-	if err != nil {
-		return "", "", err
-	}
-
-	if len(folders) == 0 {
-		return "", "", errors.New("php extensions dir not found")
-	}
-
-	extDir := folders[0]
-	extDirChunks := strings.Split(extDir, "-")
+	extDirChunks := strings.Split(extensionsDir, "-")
 	apiVersion := extDirChunks[len(extDirChunks)-1]
 
-	return extDir, apiVersion, nil
+	// TODO: Are these actually necessary? May be able to remove after restructure
+	layer.SharedEnv.Default("PHP_EXTENSION_DIR", extensionsDir)
+	layer.SharedEnv.Default("PHP_API", apiVersion)
+
+	return nil
 }

@@ -11,10 +11,8 @@ func TestUnitPhpDist(t *testing.T) {
 	suite := spec.New("php-dist", spec.Report(report.Terminal{}), spec.Parallel())
 	suite("Build", testBuild)
 	suite("BuildpackYMLParser", testBuildpackYMLParser)
-	suite("Detect", testDetect)
-	suite("Environment", testEnvironment)
-	suite("LogEmitter", testLogEmitter)
-	suite("PlanEntryResolver", testPlanEntryResolver)
-	suite("PlanRefinery", testPlanRefinery)
+	suite("Detect", testDetect, spec.Sequential())
+	suite("Environment", testEnvironment, spec.Sequential())
+	suite("PHPFileManager", testPHPFileManager)
 	suite.Run(t)
 }

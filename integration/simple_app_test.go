@@ -35,6 +35,8 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			source    string
 		)
 
+		containerIDs := map[string]interface{}{}
+
 		it.Before(func() {
 			var err error
 			name, err = occam.RandomName()
@@ -42,7 +44,9 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 		})
 
 		it.After(func() {
-			Expect(docker.Container.Remove.Execute(container.ID)).To(Succeed())
+			for id := range containerIDs {
+				Expect(docker.Container.Remove.Execute(id)).To(Succeed())
+			}
 			Expect(docker.Image.Remove.Execute(image.ID)).To(Succeed())
 			Expect(docker.Volume.Remove.Execute(occam.CacheVolumeNames(name))).To(Succeed())
 			Expect(os.RemoveAll(source)).To(Succeed())
@@ -60,6 +64,9 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 					phpDistBuildpack,
 					buildPlanBuildpack,
 				).
+				WithEnv(map[string]string{
+					"BP_LOG_LEVEL": "DEBUG",
+				}).
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
@@ -75,20 +82,30 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				MatchRegexp(fmt.Sprintf(`    WARNING: Setting the PHP version through buildpack.yml will be deprecated in %s v\d+\.\d+\.\d+\.`, buildpackInfo.Buildpack.Name)),
 				MatchRegexp(`    In versions >= v\d+\.\d+\.\d+, use the \$BP_PHP_VERSION environment variable to specify a version\.`),
 				"",
+				"  Getting the layer associated with PHP:",
+				fmt.Sprintf("    /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				"",
+				"  Generating the SBOM",
+				"",
 				"  Executing build process",
 				MatchRegexp(`    Installing PHP 8\.0\.\d+`),
+				fmt.Sprintf("    Installation path: /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				MatchRegexp(`    Dependency URI: https:\/\/deps\.paketo.io\/php\/.*\.tgz`),
 				MatchRegexp(`      Completed in \d+\.\d+`),
 				"",
-				"  Configuring environment",
-				fmt.Sprintf(`    MIBDIRS           -> "/layers/%s/php/mibs"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
-				fmt.Sprintf(`    PATH              -> "/layers/%s/php/sbin:$PATH"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
-				MatchRegexp(`    PHP_API           -> "\d+"`),
-				MatchRegexp(fmt.Sprintf(`    PHP_EXTENSION_DIR -> "/layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))),
-				fmt.Sprintf(`    PHP_HOME          -> "/layers/%s/php"`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				"    Finding PHP extensions directory",
+				"",
+				"    Generating default PHP configuration",
+				fmt.Sprintf("      Generated /layers/%[1]s/php/etc/php.ini and /layers/%[1]s/php/etc/buildpack.ini", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				"",
 			))
+			Expect(logs).To(ContainLines("  Configuring build environment"))
+			Expect(logs).To(ContainLines("  Configuring launch environment"))
+			Expect(logs).To(ContainLines("  PHP layer will be available at runtime"))
 
 			container, err = docker.Container.Run.WithCommand("php -i && sleep infinity").Execute(image.ID)
 			Expect(err).NotTo(HaveOccurred())
+			containerIDs[container.ID] = struct{}{}
 
 			Eventually(func() string {
 				cLogs, err := docker.Container.Logs.Execute(container.ID)
@@ -105,6 +122,50 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 					),
 					MatchRegexp(
 						fmt.Sprintf(`PHP_EXTENSION_DIR => /layers/%s/php/lib/php/extensions/no-debug-non-zts-\d+`, strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+					ContainSubstring(
+						fmt.Sprintf("PHPRC => /layers/%s/php/etc", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+					ContainSubstring(
+						fmt.Sprintf("PHP_INI_SCAN_DIR => /layers/%s/php/etc", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+					),
+				),
+			)
+
+			container, err = docker.Container.Run.WithCommand("php --ini && sleep infinity").Execute(image.ID)
+			Expect(err).NotTo(HaveOccurred())
+			containerIDs[container.ID] = struct{}{}
+
+			Eventually(func() string {
+				cLogs, err := docker.Container.Logs.Execute(container.ID)
+				Expect(err).NotTo(HaveOccurred())
+				return cLogs.String()
+			}).Should(
+				And(
+					MatchRegexp(
+						fmt.Sprintf(`Loaded Configuration File:\s+%s`, filepath.Join("/layers", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "etc", "php.ini")),
+					),
+					MatchRegexp(
+						fmt.Sprintf(`Scan for additional .ini files in:\s+%s`, filepath.Join("/layers", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "etc")),
+					),
+					MatchRegexp(
+						fmt.Sprintf(`Additional .ini files parsed:\s+%s`, filepath.Join("/layers", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "etc", "buildpack.ini")),
+					),
+				),
+			)
+
+			container, err = docker.Container.Run.WithCommand(fmt.Sprintf("cat %s", filepath.Join("/layers", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "etc", "buildpack.ini"))).Execute(image.ID)
+			Expect(err).NotTo(HaveOccurred())
+			containerIDs[container.ID] = struct{}{}
+
+			Eventually(func() string {
+				cLogs, err := docker.Container.Logs.Execute(container.ID)
+				Expect(err).NotTo(HaveOccurred())
+				return cLogs.String()
+			}).Should(
+				And(
+					ContainSubstring(
+						fmt.Sprintf(`include_path = "%s:/workspace/lib"`, filepath.Join("/layers", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "lib", "php")),
 					),
 				),
 			)
