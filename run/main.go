@@ -3,20 +3,21 @@ package main
 import (
 	"os"
 
-	"github.com/paketo-buildpacks/packit"
-	"github.com/paketo-buildpacks/packit/cargo"
-	"github.com/paketo-buildpacks/packit/chronos"
-	"github.com/paketo-buildpacks/packit/postal"
+	"github.com/paketo-buildpacks/packit/v2"
+	"github.com/paketo-buildpacks/packit/v2/cargo"
+	"github.com/paketo-buildpacks/packit/v2/chronos"
+	"github.com/paketo-buildpacks/packit/v2/draft"
+	"github.com/paketo-buildpacks/packit/v2/postal"
+	"github.com/paketo-buildpacks/packit/v2/scribe"
 	phpdist "github.com/paketo-buildpacks/php-dist"
 )
 
 func main() {
 	buildpackYMLParser := phpdist.NewBuildpackYMLParser()
-	logEmitter := phpdist.NewLogEmitter(os.Stdout)
-	entryResolver := phpdist.NewPlanEntryResolver(logEmitter)
+	logEmitter := scribe.NewEmitter(os.Stdout).WithLevel(os.Getenv("BP_LOG_LEVEL"))
+	entryResolver := draft.NewPlanner()
 	dependencyManager := postal.NewService(cargo.NewTransport())
-	environment := phpdist.NewEnvironment(logEmitter)
-	planRefinery := phpdist.NewPlanRefinery()
+	environment := phpdist.NewEnvironment()
 
 	packit.Run(
 		phpdist.Detect(
@@ -25,8 +26,8 @@ func main() {
 		phpdist.Build(
 			entryResolver,
 			dependencyManager,
+			phpdist.NewPHPFileManager(),
 			environment,
-			planRefinery,
 			logEmitter,
 			chronos.DefaultClock,
 		),

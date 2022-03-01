@@ -1,12 +1,18 @@
-api = "0.4"
+api = "0.7"
 
 [buildpack]
+  description = "A buildpack for installing and configuring PHP"
   homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
+  keywords = ["php"]
   name = "Paketo PHP Distribution Buildpack"
 
+  [[buildpack.licenses]]
+    type = "Apache-2.0"
+    uri = "https://github.com/paketo-buildpacks/php-dist/blob/main/LICENSE"
+
 [metadata]
-  include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml"]
+  include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml", "config/default.ini", "config/buildpack.ini" ]
   pre-package = "./scripts/build.sh"
   [metadata.default-versions]
     php = "8.0.*"
