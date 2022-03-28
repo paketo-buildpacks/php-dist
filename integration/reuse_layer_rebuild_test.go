@@ -96,7 +96,7 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(logs.String()).NotTo(ContainSubstring("  Executing build process"))
 			Expect(logs.String()).To(ContainSubstring(fmt.Sprintf("  Reusing cached layer /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"))))
 
-			Expect(secondImage.Buildpacks[0].Layers["php"].Metadata["built_at"]).To(Equal(firstImage.Buildpacks[0].Layers["php"].Metadata["built_at"]))
+			Expect(secondImage.Buildpacks[0].Layers["php"].SHA).To(Equal(firstImage.Buildpacks[0].Layers["php"].SHA))
 		})
 	})
 
@@ -145,7 +145,7 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(logs.String()).To(ContainSubstring("  Executing build process"))
 			Expect(logs.String()).NotTo(ContainSubstring("Reusing cached layer"))
 
-			Expect(secondImage.Buildpacks[0].Layers["php"].Metadata["built_at"]).NotTo(Equal(firstImage.Buildpacks[0].Layers["php"].Metadata["built_at"]))
+			Expect(secondImage.Buildpacks[0].Layers["php"].SHA).NotTo(Equal(firstImage.Buildpacks[0].Layers["php"].SHA))
 		})
 	})
 }

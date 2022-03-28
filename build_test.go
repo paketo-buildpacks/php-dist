@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
@@ -35,7 +34,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		dependencyManager *fakes.DependencyManager
 		files             *fakes.FileManager
 		clock             chronos.Clock
-		timeStamp         time.Time
 		environment       *fakes.EnvironmentConfiguration
 		buffer            *bytes.Buffer
 
@@ -83,17 +81,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		files.WriteConfigCall.Returns.DefaultConfig = "some/ini/path/php.ini"
 		files.WriteConfigCall.Returns.BuildpackConfig = "some/other/path/buildpack.ini"
 
-		timeStamp = time.Now()
-		clock = chronos.NewClock(func() time.Time {
-			return timeStamp
-		})
+		clock = chronos.DefaultClock
 
 		environment = &fakes.EnvironmentConfiguration{}
-
-		timeStamp = time.Now()
-		clock = chronos.NewClock(func() time.Time {
-			return timeStamp
-		})
 
 		workingDir, err = os.MkdirTemp("", "working-dir")
 		Expect(err).NotTo(HaveOccurred())
@@ -139,7 +129,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.Layers[0].Name).To(Equal("php"))
 		Expect(result.Layers[0].Path).To(Equal(filepath.Join(layersDir, "php")))
 		Expect(result.Layers[0].Metadata[phpdist.DepKey]).To(Equal(""))
-		Expect(result.Layers[0].Metadata["built_at"]).To(Equal(timeStamp.Format(time.RFC3339Nano)))
 
 		Expect(filepath.Join(layersDir, "php")).To(BeADirectory())
 
@@ -288,7 +277,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(result.Layers[0].Name).To(Equal("php"))
 			Expect(result.Layers[0].Path).To(Equal(filepath.Join(layersDir, "php")))
 			Expect(result.Layers[0].Metadata[phpdist.DepKey]).To(Equal(""))
-			Expect(result.Layers[0].Metadata["built_at"]).To(Equal(timeStamp.Format(time.RFC3339Nano)))
 
 			Expect(result.Layers[0].Build).To(BeTrue())
 			Expect(result.Layers[0].Cache).To(BeTrue())
