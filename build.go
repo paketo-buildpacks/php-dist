@@ -146,8 +146,7 @@ func Build(entryResolver EntryResolver,
 		phpLayer.Launch, phpLayer.Build, phpLayer.Cache = launch, build, build
 
 		phpLayer.Metadata = map[string]interface{}{
-			DepKey:     dependency.SHA256,
-			"built_at": clock.Now().Format(time.RFC3339Nano),
+			DepKey: dependency.SHA256,
 		}
 
 		logger.Subprocess("Installing PHP %s", dependency.Version)
