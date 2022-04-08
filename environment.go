@@ -40,7 +40,6 @@ func (e Environment) Configure(layer packit.Layer, extensionsDir string, default
 	extDirChunks := strings.Split(extensionsDir, "-")
 	apiVersion := extDirChunks[len(extDirChunks)-1]
 
-	// TODO: Are these actually necessary? May be able to remove after restructure
 	layer.SharedEnv.Default("PHP_EXTENSION_DIR", extensionsDir)
 	layer.SharedEnv.Default("PHP_API", apiVersion)
 
