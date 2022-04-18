@@ -10,6 +10,7 @@ import (
 
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
+	"github.com/paketo-buildpacks/packit/v2/sbom"
 
 	//nolint Ignore SA1019, informed usage of deprecated package
 	"github.com/paketo-buildpacks/packit/v2/paketosbom"
@@ -32,6 +33,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		cnbDir            string
 		entryResolver     *fakes.EntryResolver
 		dependencyManager *fakes.DependencyManager
+		sbomGenerator     *fakes.SBOMGenerator
 		files             *fakes.FileManager
 		clock             chronos.Clock
 		environment       *fakes.EnvironmentConfiguration
@@ -75,6 +77,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				},
 			},
 		}
+		// Syft SBOM
+		sbomGenerator = &fakes.SBOMGenerator{}
+		sbomGenerator.GenerateFromDependencyCall.Returns.SBOM = sbom.SBOM{}
 
 		files = &fakes.FileManager{}
 		files.FindExtensionsCall.Returns.String = "no-debug-non-zts-12345"
@@ -91,7 +96,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		buffer = bytes.NewBuffer(nil)
 		logEmitter := scribe.NewEmitter(buffer)
 
-		build = phpdist.Build(entryResolver, dependencyManager, files, environment, logEmitter, clock)
+		build = phpdist.Build(entryResolver, dependencyManager, files, environment, sbomGenerator, logEmitter, clock)
 	})
 
 	it.After(func() {
@@ -106,8 +111,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			CNBPath:    cnbDir,
 			Stack:      "some-stack",
 			BuildpackInfo: packit.BuildpackInfo{
-				Name:    "Some Buildpack",
-				Version: "some-version",
+				Name:        "Some Buildpack",
+				Version:     "some-version",
+				SBOMFormats: []string{sbom.CycloneDXFormat, sbom.SPDXFormat},
 			},
 			Plan: packit.BuildpackPlan{
 				Entries: []packit.BuildpackPlanEntry{
@@ -131,6 +137,16 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(result.Layers[0].Metadata[phpdist.DepKey]).To(Equal(""))
 
 		Expect(filepath.Join(layersDir, "php")).To(BeADirectory())
+		Expect(result.Layers[0].SBOM.Formats()).To(Equal([]packit.SBOMFormat{
+			{
+				Extension: sbom.Format(sbom.CycloneDXFormat).Extension(),
+				Content:   sbom.NewFormattedReader(sbom.SBOM{}, sbom.CycloneDXFormat),
+			},
+			{
+				Extension: sbom.Format(sbom.SPDXFormat).Extension(),
+				Content:   sbom.NewFormattedReader(sbom.SBOM{}, sbom.SPDXFormat),
+			},
+		}))
 
 		Expect(entryResolver.ResolveCall.Receives.Name).To(Equal(phpdist.PHPDependency))
 		Expect(entryResolver.ResolveCall.Receives.Entries).To(Equal([]packit.BuildpackPlanEntry{
@@ -171,6 +187,10 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			}, ":"),
 			ExtensionDir: "no-debug-non-zts-12345",
 		}))
+
+		Expect(dependencyManager.GenerateBillOfMaterialsCall.Receives.Dependencies).To(Equal([]postal.Dependency{{Name: "PHP"}}))
+		Expect(sbomGenerator.GenerateFromDependencyCall.Receives.Dependency).To(Equal(postal.Dependency{Name: "PHP"}))
+		Expect(sbomGenerator.GenerateFromDependencyCall.Receives.Dir).To(Equal(filepath.Join(layersDir, "php")))
 
 		Expect(environment.ConfigureCall.CallCount).To(Equal(1))
 		Expect(environment.ConfigureCall.Receives.Layer.Path).To(Equal(filepath.Join(layersDir, "php")))
@@ -383,6 +403,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				},
 				Layers: packit.Layers{Path: layersDir},
 			})
+			Expect(dependencyManager.GenerateBillOfMaterialsCall.CallCount).To(Equal(1))
+			Expect(dependencyManager.GenerateBillOfMaterialsCall.Receives.Dependencies).To(Equal([]postal.Dependency{
+				{
+					Name:   "PHP",
+					SHA256: "some-sha",
+				},
+			}))
 
 			Expect(err).NotTo(HaveOccurred())
 			Expect(result.Launch.BOM).To(Equal(
@@ -418,6 +445,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			))
 
 			Expect(dependencyManager.DeliverCall.CallCount).To(Equal(0))
+			Expect(sbomGenerator.GenerateFromDependencyCall.CallCount).To(Equal(0))
 
 			Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
 			Expect(buffer.String()).To(ContainSubstring("Resolving PHP version"))
@@ -506,7 +534,60 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Expect(err).To(MatchError(ContainSubstring("permission denied")))
 			})
 		})
-		context("NEW when finding PHP extensions fails", func() {
+
+		context("when generating the SBOM returns an error", func() {
+			it("returns an error", func() {
+				_, err := build(packit.BuildContext{
+					CNBPath: cnbDir,
+					BuildpackInfo: packit.BuildpackInfo{
+						SBOMFormats: []string{"random-format"},
+					},
+					Plan: packit.BuildpackPlan{
+						Entries: []packit.BuildpackPlanEntry{
+							{
+								Name: "php",
+								Metadata: map[string]interface{}{
+									"version":        "7.2.*",
+									"version-source": "some-source",
+								},
+							},
+						},
+					},
+				})
+				Expect(err).To(MatchError("unsupported SBOM format: 'random-format'"))
+			})
+		})
+
+		context("when formatting the SBOM returns an error", func() {
+			it.Before(func() {
+				sbomGenerator.GenerateFromDependencyCall.Returns.Error = errors.New("failed to generate SBOM")
+			})
+
+			it("returns an error", func() {
+				_, err := build(packit.BuildContext{
+					CNBPath: cnbDir,
+					BuildpackInfo: packit.BuildpackInfo{
+						Name:        "Some Buildpack",
+						Version:     "1.2.3",
+						SBOMFormats: []string{sbom.CycloneDXFormat, sbom.SPDXFormat},
+					},
+					Plan: packit.BuildpackPlan{
+						Entries: []packit.BuildpackPlanEntry{
+							{
+								Name: "php",
+								Metadata: map[string]interface{}{
+									"version":        "7.2.*",
+									"version-source": "some-source",
+								},
+							},
+						},
+					},
+				})
+				Expect(err).To(MatchError(ContainSubstring("failed to generate SBOM")))
+			})
+		})
+
+		context("when finding PHP extensions fails", func() {
 			it.Before(func() {
 				files.FindExtensionsCall.Returns.Error = errors.New("cannot find extensions")
 			})
@@ -529,8 +610,8 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Expect(err).To(MatchError(ContainSubstring("cannot find extensions")))
 			})
 		})
-		// TODO: Remove NEW from tests
-		context("NEW when writing default php.ini fails", func() {
+
+		context("when writing default php.ini fails", func() {
 			it.Before(func() {
 				files.WriteConfigCall.Returns.Err = errors.New("some config writing error")
 			})

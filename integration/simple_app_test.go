@@ -33,6 +33,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			container occam.Container
 			name      string
 			source    string
+			sbomDir   string
 		)
 
 		containerIDs := map[string]interface{}{}
@@ -41,6 +42,9 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			var err error
 			name, err = occam.RandomName()
 			Expect(err).NotTo(HaveOccurred())
+			sbomDir, err = os.MkdirTemp("", "sbom")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(os.Chmod(sbomDir, os.ModePerm)).To(Succeed())
 		})
 
 		it.After(func() {
@@ -50,6 +54,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			Expect(docker.Image.Remove.Execute(image.ID)).To(Succeed())
 			Expect(docker.Volume.Remove.Execute(occam.CacheVolumeNames(name))).To(Succeed())
 			Expect(os.RemoveAll(source)).To(Succeed())
+			Expect(os.RemoveAll(sbomDir)).To(Succeed())
 		})
 
 		it("creates a working OCI image with specified version of php on PATH", func() {
@@ -67,6 +72,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				WithEnv(map[string]string{
 					"BP_LOG_LEVEL": "DEBUG",
 				}).
+				WithSBOMOutputDir(sbomDir).
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
@@ -76,28 +82,40 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				"    Candidate version sources (in priority order):",
 				"      buildpack.yml -> \"8.0.*\"",
 				"      <unknown>     -> \"\"",
-				"",
+			))
+			Expect(logs).To(ContainLines(
 				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 8\.0\.\d+`),
-				"",
+			))
+			Expect(logs).To(ContainLines(
 				MatchRegexp(fmt.Sprintf(`    WARNING: Setting the PHP version through buildpack.yml will be deprecated in %s v\d+\.\d+\.\d+\.`, buildpackInfo.Buildpack.Name)),
 				MatchRegexp(`    In versions >= v\d+\.\d+\.\d+, use the \$BP_PHP_VERSION environment variable to specify a version\.`),
-				"",
+			))
+			Expect(logs).To(ContainLines(
 				"  Getting the layer associated with PHP:",
 				fmt.Sprintf("    /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
-				"",
-				"  Generating the SBOM",
-				"",
+			))
+			Expect(logs).To(ContainLines(
 				"  Executing build process",
 				MatchRegexp(`    Installing PHP 8\.0\.\d+`),
 				fmt.Sprintf("    Installation path: /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 				MatchRegexp(`    Dependency URI: https:\/\/deps\.paketo.io\/php\/.*\.tgz`),
 				MatchRegexp(`      Completed in \d+\.\d+`),
+			))
+			Expect(logs).To(ContainLines(
+				fmt.Sprintf("  Generating SBOM for /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
+				MatchRegexp(`      Completed in \d+(\.?\d+)*`),
 				"",
+				"  Writing SBOM in the following format(s):",
+				"    application/vnd.cyclonedx+json",
+				"    application/spdx+json",
+				"    application/vnd.syft+json",
+			))
+			Expect(logs).To(ContainLines(
 				"    Finding PHP extensions directory",
-				"",
+			))
+			Expect(logs).To(ContainLines(
 				"    Generating default PHP configuration",
 				fmt.Sprintf("      Generated /layers/%[1]s/php/etc/php.ini and /layers/%[1]s/php/etc/buildpack.ini", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
-				"",
 			))
 			Expect(logs).To(ContainLines("  Configuring build environment"))
 			Expect(logs).To(ContainLines("  Configuring launch environment"))
@@ -169,6 +187,33 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 					),
 				),
 			)
+
+			// check that legacy SBOM is included via metadata
+			container, err = docker.Container.Run.
+				WithCommand("cat /layers/config/metadata.toml").
+				Execute(image.ID)
+			Expect(err).NotTo(HaveOccurred())
+			containerIDs[container.ID] = struct{}{}
+
+			Eventually(func() string {
+				cLogs, err := docker.Container.Logs.Execute(container.ID)
+				Expect(err).NotTo(HaveOccurred())
+				return cLogs.String()
+			}).Should(And(
+				ContainSubstring("[[bom]]"),
+				ContainSubstring(`name = "PHP"`),
+				ContainSubstring("[bom.metadata]"),
+			))
+
+			// check that all required SBOM files are present
+			Expect(filepath.Join(sbomDir, "sbom", "launch", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "sbom.cdx.json")).To(BeARegularFile())
+			Expect(filepath.Join(sbomDir, "sbom", "launch", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "sbom.spdx.json")).To(BeARegularFile())
+			Expect(filepath.Join(sbomDir, "sbom", "launch", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "sbom.syft.json")).To(BeARegularFile())
+
+			// check an SBOM file to make sure it has an entry for php
+			contents, err := os.ReadFile(filepath.Join(sbomDir, "sbom", "launch", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "sbom.cdx.json"))
+			Expect(err).NotTo(HaveOccurred())
+			Expect(string(contents)).To(ContainSubstring(`"name": "PHP"`))
 		})
 	})
 }
