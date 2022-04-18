@@ -10,6 +10,7 @@ import (
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
 	"github.com/paketo-buildpacks/packit/v2/postal"
+	"github.com/paketo-buildpacks/packit/v2/sbom"
 	"github.com/paketo-buildpacks/packit/v2/scribe"
 )
 
@@ -49,6 +50,11 @@ type EnvironmentConfiguration interface {
 	Configure(layer packit.Layer, extensionsDir, defaultIni string, scanDirs []string) error
 }
 
+//go:generate faux --interface SBOMGenerator --output fakes/sbom_generator.go
+type SBOMGenerator interface {
+	GenerateFromDependency(dependency postal.Dependency, dir string) (sbom.SBOM, error)
+}
+
 // Build will return a packit.BuildFunc that will be invoked during the build
 // phase of the buildpack lifecycle.
 //
@@ -60,6 +66,7 @@ func Build(entryResolver EntryResolver,
 	dependencies DependencyManager,
 	files FileManager,
 	environment EnvironmentConfiguration,
+	sbomGenerator SBOMGenerator,
 	logger scribe.Emitter,
 	clock chronos.Clock) packit.BuildFunc {
 	return func(context packit.BuildContext) (packit.BuildResult, error) {
@@ -96,21 +103,19 @@ func Build(entryResolver EntryResolver,
 		logger.Debug.Subprocess(phpLayer.Path)
 		logger.Debug.Break()
 
-		logger.Debug.Process("Generating the SBOM")
-		logger.Debug.Break()
-		bom := dependencies.GenerateBillOfMaterials(dependency)
+		legacyBOM := dependencies.GenerateBillOfMaterials(dependency)
 		launch, build := entryResolver.MergeLayerTypes(PHPDependency, context.Plan.Entries)
 
 		phpLayer.Launch, phpLayer.Build, phpLayer.Cache = launch, build, build
 
 		var buildMetadata packit.BuildMetadata
 		if build {
-			buildMetadata.BOM = bom
+			buildMetadata.BOM = legacyBOM
 		}
 
 		var launchMetadata packit.LaunchMetadata
 		if launch {
-			launchMetadata.BOM = bom
+			launchMetadata.BOM = legacyBOM
 		}
 
 		cachedSHA, ok := phpLayer.Metadata[DepKey].(string)
@@ -161,6 +166,25 @@ func Build(entryResolver EntryResolver,
 
 		logger.Action("Completed in %s", duration.Round(time.Millisecond))
 		logger.Break()
+
+		logger.GeneratingSBOM(phpLayer.Path)
+		var sbomContent sbom.SBOM
+		duration, err = clock.Measure(func() error {
+			sbomContent, err = sbomGenerator.GenerateFromDependency(dependency, phpLayer.Path)
+			return err
+		})
+		if err != nil {
+			return packit.BuildResult{}, err
+		}
+
+		logger.Action("Completed in %s", duration.Round(time.Millisecond))
+		logger.Break()
+
+		logger.FormattingSBOM(context.BuildpackInfo.SBOMFormats...)
+		phpLayer.SBOM, err = sbomContent.InFormats(context.BuildpackInfo.SBOMFormats...)
+		if err != nil {
+			return packit.BuildResult{}, err
+		}
 
 		logger.Debug.Subprocess("Finding PHP extensions directory")
 		extensionsDir, err := files.FindExtensions(phpLayer.Path)
