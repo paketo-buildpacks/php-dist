@@ -14,7 +14,7 @@ require (
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.5.0 // indirect
-	github.com/ForestEckhardt/freezer v0.0.10 // indirect
+	github.com/ForestEckhardt/freezer v0.0.11 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
 	github.com/Microsoft/go-winio v0.5.1 // indirect
 	github.com/acobaugh/osrelease v0.1.0 // indirect
