@@ -61,8 +61,21 @@ This buildpack is released under version 2.0 of the [Apache License][a].
 
 [a]: http://www.apache.org/licenses/LICENSE-2.0
 
+## Run Tests
+
+To run all unit tests, run:
+```
+./scripts/unit.sh
+```
+
+To run all integration tests, run:
+```
+./scripts/integration.sh
+```
+
 ## Buildpack Configurations
 
+### PHP Version
 Specifying the PHP Dist version through buildpack.yml configuration is deprecated.
 
 To migrate from using `buildpack.yml` please set the `$BP_PHP_VERSION`
@@ -75,3 +88,22 @@ file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor
 # any valid semver constaints (e.g. 7.*) are also acceptable
 $BP_PHP_VERSION="7.3.*"
 ```
+### PHP library directory
+The PHP library directory is available to PHP via an include path in the PHP
+configuration. By default it is set to `/workspace/lib` and can be overriden by
+setting the `BP_PHP_LIB_DIR` environment variable at build-time.
+```shell
+$BP_PHP_LIB_DIR="some-directory"
+```
+
+### Provide custom `.ini` files
+Custom `.ini` files can be provided from users to amend the default `php.ini`
+file. This can be done by placing an `ini`-type configuration file inside
+`<application directory>/.php.ini.d/`. It's path will be made avaialble via the
+`PHP_INI_SCAN_DIR`.
+
+## Debug Logs
+For extra debug logs from the image build process, set the `$BP_LOG_LEVEL`
+environment variable to `DEBUG` at build-time (ex. `pack build my-app --env
+BP_LOG_LEVEL=DEBUG` or through a  [`project.toml`
+file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md).
