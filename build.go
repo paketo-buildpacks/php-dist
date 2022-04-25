@@ -210,7 +210,7 @@ func Build(entryResolver EntryResolver,
 		err = environment.Configure(phpLayer, extensionsDir, defaultConfig, []string{
 			filepath.Dir(defaultConfig),
 			filepath.Dir(buildpackConfig),
-			filepath.Join(context.WorkingDir, "php.ini.d"),
+			filepath.Join(context.WorkingDir, UserProvidedPath),
 		})
 		if err != nil {
 			return packit.BuildResult{}, err

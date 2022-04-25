@@ -197,7 +197,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(environment.ConfigureCall.Receives.ScanDirs).To(Equal([]string{
 			"some/ini/path",
 			"some/other/path",
-			filepath.Join(workingDir, "php.ini.d"),
+			filepath.Join(workingDir, ".php.ini.d"),
 		}))
 
 		Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
