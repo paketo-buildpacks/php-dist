@@ -1,8 +1,9 @@
 package phpdist
 
 const (
-	DepKey        = "dependency-sha"
-	PHPDependency = "php"
+	DepKey           = "dependency-sha"
+	PHPDependency    = "php"
+	UserProvidedPath = ".php.ini.d"
 )
 
 var EntryPriorities = []interface{}{
