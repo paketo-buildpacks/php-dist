@@ -21,7 +21,6 @@ import (
 	"github.com/sclevine/spec"
 
 	. "github.com/onsi/gomega"
-	. "github.com/paketo-buildpacks/occam/matchers"
 )
 
 func testBuild(t *testing.T, context spec.G, it spec.S) {
@@ -160,7 +159,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		}))
 		Expect(entryResolver.ResolveCall.Receives.Priorities).To(Equal([]interface{}{
 			"BP_PHP_VERSION",
-			"buildpack.yml",
 			"composer.lock",
 			"composer.json",
 			"default-versions",
@@ -328,42 +326,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					},
 				},
 			}))
-		})
-	})
-
-	context("when the version source of the resolved Buildpack Plan entry is buildpack.yml", func() {
-		it.Before(func() {
-			entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
-				Name: "php",
-				Metadata: map[string]interface{}{
-					"version":        "7.2.*",
-					"version-source": "buildpack.yml",
-				},
-			}
-		})
-
-		it("logs a warning to switch to env var configuration", func() {
-			_, err := build(packit.BuildContext{
-				WorkingDir: workingDir,
-				CNBPath:    cnbDir,
-				Stack:      "some-stack",
-				BuildpackInfo: packit.BuildpackInfo{
-					Name:    "Some PHP Buildpack",
-					Version: "9.9.9",
-				},
-				Plan: packit.BuildpackPlan{
-					Entries: []packit.BuildpackPlanEntry{},
-				},
-				Layers: packit.Layers{Path: layersDir},
-			})
-			Expect(err).NotTo(HaveOccurred())
-
-			Expect(buffer).To(ContainLines(
-				"    Selected PHP version (using buildpack.yml): ",
-				"",
-				"    WARNING: Setting the PHP version through buildpack.yml will be deprecated in Some PHP Buildpack v10.0.0.",
-				"    In versions >= v10.0.0, use the $BP_PHP_VERSION environment variable to specify a version.",
-			))
 		})
 	})
 

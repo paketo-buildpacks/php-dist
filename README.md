@@ -61,13 +61,17 @@ This buildpack is released under version 2.0 of the [Apache License][a].
 
 [a]: http://www.apache.org/licenses/LICENSE-2.0
 
-## `buildpack.yml` Configurations
+## Buildpack Configurations
 
-In order to specify a particular version of `php` you can
-provide an optional `buildpack.yml` in the root of the application directory.
-```yaml
-php:
-  # this allows you to specify a version constraint for the `php` depdendency
-  # any valid semver constaints (e.g. 7.*) are also acceptable
-  version: 7.2.*
+Specifying the PHP Dist version through buildpack.yml configuration is deprecated.
+
+To migrate from using `buildpack.yml` please set the `$BP_PHP_VERSION`
+environment variable at build time either directly (ex. `pack build my-app
+--env BP_PHP_VERSION=7.3.*`) or through a [`project.toml`
+file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md)
+
+```shell
+# this allows you to specify a version constraint for the `php` depdendency
+# any valid semver constaints (e.g. 7.*) are also acceptable
+$BP_PHP_VERSION="7.3.*"
 ```

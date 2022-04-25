@@ -10,7 +10,6 @@ import (
 func TestUnitPhpDist(t *testing.T) {
 	suite := spec.New("php-dist", spec.Report(report.Terminal{}), spec.Parallel())
 	suite("Build", testBuild)
-	suite("BuildpackYMLParser", testBuildpackYMLParser)
 	suite("Detect", testDetect, spec.Sequential())
 	suite("Environment", testEnvironment, spec.Sequential())
 	suite("PHPFileManager", testPHPFileManager)
