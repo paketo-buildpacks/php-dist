@@ -70,7 +70,8 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 					buildPlanBuildpack,
 				).
 				WithEnv(map[string]string{
-					"BP_LOG_LEVEL": "DEBUG",
+					"BP_LOG_LEVEL":   "DEBUG",
+					"BP_PHP_VERSION": "8.0.*",
 				}).
 				WithSBOMOutputDir(sbomDir).
 				Execute(name, source)
@@ -80,15 +81,11 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				fmt.Sprintf("%s %s", buildpackInfo.Buildpack.Name, version),
 				"  Resolving PHP version",
 				"    Candidate version sources (in priority order):",
-				"      buildpack.yml -> \"8.0.*\"",
-				"      <unknown>     -> \"\"",
+				"      BP_PHP_VERSION -> \"8.0.*\"",
+				"      <unknown>      -> \"\"",
 			))
 			Expect(logs).To(ContainLines(
-				MatchRegexp(`    Selected PHP version \(using buildpack\.yml\): 8\.0\.\d+`),
-			))
-			Expect(logs).To(ContainLines(
-				MatchRegexp(fmt.Sprintf(`    WARNING: Setting the PHP version through buildpack.yml will be deprecated in %s v\d+\.\d+\.\d+\.`, buildpackInfo.Buildpack.Name)),
-				MatchRegexp(`    In versions >= v\d+\.\d+\.\d+, use the \$BP_PHP_VERSION environment variable to specify a version\.`),
+				MatchRegexp(`    Selected PHP version \(using BP_PHP_VERSION\): 8\.0\.\d+`),
 			))
 			Expect(logs).To(ContainLines(
 				"  Getting the layer associated with PHP:",

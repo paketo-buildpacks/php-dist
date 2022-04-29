@@ -159,7 +159,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		}))
 		Expect(entryResolver.ResolveCall.Receives.Priorities).To(Equal([]interface{}{
 			"BP_PHP_VERSION",
-			"buildpack.yml",
 			"composer.lock",
 			"composer.json",
 			"default-versions",

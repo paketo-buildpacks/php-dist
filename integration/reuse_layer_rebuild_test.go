@@ -117,7 +117,8 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 				WithBuildpacks(
 					phpDistBuildpack,
 					buildPlanBuildpack,
-				)
+				).
+				WithEnv(map[string]string{"BP_PHP_VERSION": "8.0.*"})
 
 			firstImage, logs, err = build.Execute(name, source)
 			Expect(err).NotTo(HaveOccurred())

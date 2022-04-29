@@ -20,7 +20,6 @@ func (f Generator) GenerateFromDependency(dependency postal.Dependency, path str
 }
 
 func main() {
-	buildpackYMLParser := phpdist.NewBuildpackYMLParser()
 	logEmitter := scribe.NewEmitter(os.Stdout).WithLevel(os.Getenv("BP_LOG_LEVEL"))
 	entryResolver := draft.NewPlanner()
 	dependencyManager := postal.NewService(cargo.NewTransport())
@@ -28,9 +27,7 @@ func main() {
 	sbomGenerator := Generator{}
 
 	packit.Run(
-		phpdist.Detect(
-			buildpackYMLParser,
-		),
+		phpdist.Detect(),
 		phpdist.Build(
 			entryResolver,
 			dependencyManager,

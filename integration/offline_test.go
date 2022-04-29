@@ -59,6 +59,7 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 					offlinePhpDistBuildpack,
 					buildPlanBuildpack,
 				).
+				WithEnv(map[string]string{"BP_PHP_VERSION": "8.0.*"}).
 				WithNetwork("none").
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
