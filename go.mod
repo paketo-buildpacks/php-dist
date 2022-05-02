@@ -4,12 +4,10 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.1.0
-	github.com/Masterminds/semver v1.5.0
 	github.com/onsi/gomega v1.19.0
 	github.com/paketo-buildpacks/occam v0.8.0
-	github.com/paketo-buildpacks/packit/v2 v2.2.0
+	github.com/paketo-buildpacks/packit/v2 v2.3.0
 	github.com/sclevine/spec v1.4.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -23,7 +21,7 @@ require (
 	github.com/anchore/go-version v1.2.2-0.20200701162849-18adb9c92b9b // indirect
 	github.com/anchore/packageurl-go v0.1.1-0.20220314153042-1bcd40e5206b // indirect
 	github.com/anchore/stereoscope v0.0.0-20220406160859-c03a18a6b270 // indirect
-	github.com/anchore/syft v0.43.2 // indirect
+	github.com/anchore/syft v0.44.1 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.0.2 // indirect
 	github.com/containerd/containerd v1.5.10 // indirect
@@ -42,7 +40,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/go-containerregistry v0.8.1-0.20220209165246-a44adc326839 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -60,7 +58,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.3-0.20220114050600-8b9d41f48198 // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pierrec/lz4/v4 v4.1.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
@@ -84,4 +82,5 @@ require (
 	google.golang.org/genproto v0.0.0-20220218161850-94dd64e39d7c // indirect
 	google.golang.org/grpc v1.44.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
