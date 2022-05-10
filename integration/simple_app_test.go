@@ -187,7 +187,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 
 			// check that legacy SBOM is included via metadata
 			container, err = docker.Container.Run.
-				WithCommand("cat /layers/config/metadata.toml").
+				WithCommand("cat /layers/sbom/launch/sbom.legacy.json").
 				Execute(image.ID)
 			Expect(err).NotTo(HaveOccurred())
 			containerIDs[container.ID] = struct{}{}
@@ -196,11 +196,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				cLogs, err := docker.Container.Logs.Execute(container.ID)
 				Expect(err).NotTo(HaveOccurred())
 				return cLogs.String()
-			}).Should(And(
-				ContainSubstring("[[bom]]"),
-				ContainSubstring(`name = "PHP"`),
-				ContainSubstring("[bom.metadata]"),
-			))
+			}).Should(ContainSubstring(`"name":"PHP"`))
 
 			// check that all required SBOM files are present
 			Expect(filepath.Join(sbomDir, "sbom", "launch", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_"), "php", "sbom.cdx.json")).To(BeARegularFile())
