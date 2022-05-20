@@ -8,6 +8,7 @@ import (
 
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
+	"github.com/paketo-buildpacks/packit/v2/draft"
 	"github.com/paketo-buildpacks/packit/v2/postal"
 	"github.com/paketo-buildpacks/packit/v2/sbom"
 	"github.com/paketo-buildpacks/packit/v2/scribe"
@@ -20,15 +21,6 @@ import (
 type FileManager interface {
 	FindExtensions(layerRoot string) (string, error)
 	WriteConfig(layerRoot, cnbPath string, data PhpIniConfig) (defaultConfig string, buildpackConfig string, err error)
-}
-
-//go:generate faux --interface EntryResolver --output fakes/entry_resolver.go
-
-// EntryResolver defines the interface for picking the most relevant entry from
-// the Buildpack Plan entries.
-type EntryResolver interface {
-	Resolve(name string, entries []packit.BuildpackPlanEntry, priorities []interface{}) (packit.BuildpackPlanEntry, []packit.BuildpackPlanEntry)
-	MergeLayerTypes(name string, entries []packit.BuildpackPlanEntry) (launch, build bool)
 }
 
 //go:generate faux --interface DependencyManager --output fakes/dependency_manager.go
@@ -61,8 +53,7 @@ type SBOMGenerator interface {
 // and generate a Bill-of-Materials. On rebuilds, it reuses the cached
 // dependency if the SHA256 of the requested version matches the SHA256 of the
 // cached version. Build also sets up a default php.ini configuration.
-func Build(entryResolver EntryResolver,
-	dependencies DependencyManager,
+func Build(dependencies DependencyManager,
 	files FileManager,
 	environment EnvironmentConfiguration,
 	sbomGenerator SBOMGenerator,
@@ -74,7 +65,8 @@ func Build(entryResolver EntryResolver,
 		logger.Title("%s %s", context.BuildpackInfo.Name, context.BuildpackInfo.Version)
 		logger.Process("Resolving PHP version")
 
-		entry, entries := entryResolver.Resolve(PHPDependency, context.Plan.Entries, EntryPriorities)
+		planner := draft.NewPlanner()
+		entry, entries := planner.Resolve(PHPDependency, context.Plan.Entries, EntryPriorities)
 		logger.Candidates(entries)
 
 		version, _ := entry.Metadata["version"].(string)
@@ -95,7 +87,7 @@ func Build(entryResolver EntryResolver,
 		logger.Debug.Break()
 
 		legacyBOM := dependencies.GenerateBillOfMaterials(dependency)
-		launch, build := entryResolver.MergeLayerTypes(PHPDependency, context.Plan.Entries)
+		launch, build := planner.MergeLayerTypes(PHPDependency, context.Plan.Entries)
 
 		phpLayer.Launch, phpLayer.Build, phpLayer.Cache = launch, build, build
 

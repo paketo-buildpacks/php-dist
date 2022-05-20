@@ -30,7 +30,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		layersDir         string
 		workingDir        string
 		cnbDir            string
-		entryResolver     *fakes.EntryResolver
 		dependencyManager *fakes.DependencyManager
 		sbomGenerator     *fakes.SBOMGenerator
 		files             *fakes.FileManager
@@ -48,18 +47,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		cnbDir, err = os.MkdirTemp("", "cnb")
 		Expect(err).NotTo(HaveOccurred())
-
-		entryResolver = &fakes.EntryResolver{}
-		entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
-			Name: "php",
-			Metadata: map[string]interface{}{
-				"version":        "7.2.*",
-				"version-source": "some-source",
-			},
-		}
-
-		entryResolver.MergeLayerTypesCall.Returns.Launch = false
-		entryResolver.MergeLayerTypesCall.Returns.Build = false
 
 		dependencyManager = &fakes.DependencyManager{}
 		dependencyManager.ResolveCall.Returns.Dependency = postal.Dependency{Name: "PHP"}
@@ -95,7 +82,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		buffer = bytes.NewBuffer(nil)
 		logEmitter := scribe.NewEmitter(buffer)
 
-		build = phpdist.Build(entryResolver, dependencyManager, files, environment, sbomGenerator, logEmitter, clock)
+		build = phpdist.Build(dependencyManager, files, environment, sbomGenerator, logEmitter, clock)
 	})
 
 	it.After(func() {
@@ -145,23 +132,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Extension: sbom.Format(sbom.SPDXFormat).Extension(),
 				Content:   sbom.NewFormattedReader(sbom.SBOM{}, sbom.SPDXFormat),
 			},
-		}))
-
-		Expect(entryResolver.ResolveCall.Receives.Name).To(Equal(phpdist.PHPDependency))
-		Expect(entryResolver.ResolveCall.Receives.Entries).To(Equal([]packit.BuildpackPlanEntry{
-			{
-				Name: "php",
-				Metadata: map[string]interface{}{
-					"version":        "7.2.*",
-					"version-source": "some-source",
-				},
-			},
-		}))
-		Expect(entryResolver.ResolveCall.Receives.Priorities).To(Equal([]interface{}{
-			"BP_PHP_VERSION",
-			"composer.lock",
-			"composer.json",
-			"default-versions",
 		}))
 
 		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
@@ -246,30 +216,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 	})
 
 	context("when the build plan entry includes the build, launch flags", func() {
-		var workingDir string
-
-		it.Before(func() {
-			var err error
-			workingDir, err = os.MkdirTemp("", "working-dir")
-			Expect(err).NotTo(HaveOccurred())
-
-			entryResolver.ResolveCall.Returns.BuildpackPlanEntry = packit.BuildpackPlanEntry{
-				Name: "php",
-				Metadata: map[string]interface{}{
-					"version":        "7.2.*",
-					"version-source": "some-source",
-					"launch":         true,
-					"build":          true,
-				},
-			}
-			entryResolver.MergeLayerTypesCall.Returns.Launch = true
-			entryResolver.MergeLayerTypesCall.Returns.Build = true
-		})
-
-		it.After(func() {
-			Expect(os.RemoveAll(workingDir)).To(Succeed())
-		})
-
 		it("marks the php layer as build, cache and launch", func() {
 			result, err := build(packit.BuildContext{
 				CNBPath:    cnbDir,
@@ -329,6 +275,53 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		})
 	})
 
+	context("when the build plan entry includes multiples version-sources", func() {
+		it("has a priority list", func() {
+			Expect(phpdist.EntryPriorities).To(Equal([]interface{}{
+				"BP_PHP_VERSION",
+				"composer.lock",
+				"composer.json",
+				"default-versions",
+			}))
+		})
+
+		it("prioritizes BP_PHP_VERSION", func() {
+			_, err := build(packit.BuildContext{
+				CNBPath:    cnbDir,
+				Stack:      "some-stack",
+				WorkingDir: workingDir,
+				Plan: packit.BuildpackPlan{
+					Entries: []packit.BuildpackPlanEntry{
+						{
+							Name: "php",
+							Metadata: map[string]interface{}{
+								"version":        "version-from-composer.lock",
+								"version-source": "composer.lock",
+							},
+						},
+						{
+							Name: "php",
+							Metadata: map[string]interface{}{
+								"version":        "version-from-BP_PHP_VERSION",
+								"version-source": "BP_PHP_VERSION",
+							},
+						},
+						{
+							Name: "php",
+							Metadata: map[string]interface{}{
+								"version":        "version-from-something-else",
+								"version-source": "something-else",
+							},
+						},
+					},
+				},
+				Layers: packit.Layers{Path: layersDir},
+			})
+			Expect(err).NotTo(HaveOccurred())
+			Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("version-from-BP_PHP_VERSION"))
+		})
+	})
+
 	context("when there is a dependency cache match", func() {
 		it.Before(func() {
 			err := os.WriteFile(filepath.Join(layersDir, "php.toml"), []byte("[metadata]\ndependency-sha = \"some-sha\"\n"), 0644)
@@ -338,8 +331,6 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				Name:   "PHP",
 				SHA256: "some-sha",
 			}
-			entryResolver.MergeLayerTypesCall.Returns.Launch = true
-			entryResolver.MergeLayerTypesCall.Returns.Build = true
 		})
 
 		it("exits build process early", func() {
