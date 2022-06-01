@@ -22,14 +22,6 @@ file that looks like the following:
   # for deprecation.
   name = "php"
 
-  # The version of the PHP dependency is not required. In the case it
-  # is not specified, the buildpack will provide the default version, which can
-  # be seen in the buildpack.toml file.
-  # If you wish to request a specific version, the buildpack supports
-  # specifying a semver constraint in the form of "8.*", "8.0.*", or even
-  # "8.0.4".
-  version = "8.0.4"
-
   # The PHP buildpack supports some non-required metadata options.
   [requires.metadata]
 
@@ -44,6 +36,11 @@ file that looks like the following:
     # writing an application that needs to run PHP at runtime, this flag should
     # be set to true.
     launch = true
+
+    # Optional. If not provided, the buildpack will provide the default version from buildpack.toml.
+    # To request a specific version, you can specify a semver constraint such as "8.*", "8.0.*",
+    # or even "8.0.4".
+    version = "8.0.4"
 ```
 
 ## Usage
@@ -99,7 +96,7 @@ $BP_PHP_LIB_DIR="some-directory"
 ### Provide custom `.ini` files
 Custom `.ini` files can be provided from users to amend the default `php.ini`
 file. This can be done by placing an `ini`-type configuration file inside
-`<application directory>/.php.ini.d/`. It's path will be made avaialble via the
+`<application directory>/.php.ini.d/`. Its path will be made available via the
 `PHP_INI_SCAN_DIR`.
 
 ## Debug Logs
