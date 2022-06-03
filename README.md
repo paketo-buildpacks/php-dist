@@ -43,6 +43,8 @@ file that looks like the following:
     version = "8.0.4"
 ```
 
+To determine which extensions are packaged with this version of PHP, set `BP_LOG_LEVEL=DEBUG` and perform a build.
+
 ## Usage
 
 To package this buildpack for consumption:

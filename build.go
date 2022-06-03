@@ -169,11 +169,22 @@ func Build(dependencies DependencyManager,
 			return packit.BuildResult{}, err
 		}
 
-		logger.Debug.Subprocess("Finding PHP extensions directory")
 		extensionsDir, err := files.FindExtensions(phpLayer.Path)
 		if err != nil {
 			return packit.BuildResult{}, err
 		}
+
+		logger.Debug.Subprocess("Found PHP extensions directory: %s", extensionsDir)
+
+		extensions, err := os.ReadDir(extensionsDir)
+		if err != nil {
+			return packit.BuildResult{}, err
+		}
+		logger.Debug.Action("Listing PHP extensions:")
+		for _, ext := range extensions {
+			logger.Debug.Detail("- %s", ext.Name())
+		}
+
 		logger.Debug.Break()
 
 		libDir := "lib"

@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/paketo-buildpacks/occam/matchers"
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/chronos"
 	"github.com/paketo-buildpacks/packit/v2/sbom"
-
 	//nolint Ignore SA1019, informed usage of deprecated package
 	"github.com/paketo-buildpacks/packit/v2/paketosbom"
 	"github.com/paketo-buildpacks/packit/v2/postal"
@@ -30,6 +30,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		layersDir         string
 		workingDir        string
 		cnbDir            string
+		extensionDir      string
 		dependencyManager *fakes.DependencyManager
 		sbomGenerator     *fakes.SBOMGenerator
 		files             *fakes.FileManager
@@ -45,7 +46,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		layersDir, err = os.MkdirTemp("", "layers")
 		Expect(err).NotTo(HaveOccurred())
 
+		workingDir, err = os.MkdirTemp("", "working-dir")
+		Expect(err).NotTo(HaveOccurred())
+
 		cnbDir, err = os.MkdirTemp("", "cnb")
+		Expect(err).NotTo(HaveOccurred())
+
+		extensionDir, err = os.MkdirTemp("", "extension")
 		Expect(err).NotTo(HaveOccurred())
 
 		dependencyManager = &fakes.DependencyManager{}
@@ -68,16 +75,13 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		sbomGenerator.GenerateFromDependencyCall.Returns.SBOM = sbom.SBOM{}
 
 		files = &fakes.FileManager{}
-		files.FindExtensionsCall.Returns.String = "no-debug-non-zts-12345"
+		files.FindExtensionsCall.Returns.String = extensionDir
 		files.WriteConfigCall.Returns.DefaultConfig = "some/ini/path/php.ini"
 		files.WriteConfigCall.Returns.BuildpackConfig = "some/other/path/buildpack.ini"
 
 		clock = chronos.DefaultClock
 
 		environment = &fakes.EnvironmentConfiguration{}
-
-		workingDir, err = os.MkdirTemp("", "working-dir")
-		Expect(err).NotTo(HaveOccurred())
 
 		buffer = bytes.NewBuffer(nil)
 		logEmitter := scribe.NewEmitter(buffer)
@@ -87,8 +91,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 	it.After(func() {
 		Expect(os.RemoveAll(layersDir)).To(Succeed())
-		Expect(os.RemoveAll(cnbDir)).To(Succeed())
 		Expect(os.RemoveAll(workingDir)).To(Succeed())
+		Expect(os.RemoveAll(cnbDir)).To(Succeed())
+		Expect(os.RemoveAll(extensionDir)).To(Succeed())
 	})
 
 	it("returns a result that builds correctly", func() {
@@ -153,7 +158,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 				filepath.Join(layersDir, "php", "lib", "php"),
 				filepath.Join(workingDir, "lib"),
 			}, ":"),
-			ExtensionDir: "no-debug-non-zts-12345",
+			ExtensionDir: extensionDir,
 		}))
 
 		Expect(dependencyManager.GenerateBillOfMaterialsCall.Receives.Dependencies).To(Equal([]postal.Dependency{{Name: "PHP"}}))
@@ -162,7 +167,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		Expect(environment.ConfigureCall.CallCount).To(Equal(1))
 		Expect(environment.ConfigureCall.Receives.Layer.Path).To(Equal(filepath.Join(layersDir, "php")))
-		Expect(environment.ConfigureCall.Receives.ExtensionsDir).To(Equal("no-debug-non-zts-12345"))
+		Expect(environment.ConfigureCall.Receives.ExtensionsDir).To(Equal(extensionDir))
 		Expect(environment.ConfigureCall.Receives.DefaultIni).To(Equal("some/ini/path/php.ini"))
 		Expect(environment.ConfigureCall.Receives.ScanDirs).To(Equal([]string{
 			"some/ini/path",
@@ -210,7 +215,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					filepath.Join(layersDir, "php", "lib", "php"),
 					filepath.Join(workingDir, "user-lib-dir"),
 				}, ":"),
-				ExtensionDir: "no-debug-non-zts-12345",
+				ExtensionDir: extensionDir,
 			}))
 		})
 	})
@@ -405,6 +410,37 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(buffer.String()).To(ContainSubstring("Selected PHP version (using some-source): "))
 			Expect(buffer.String()).To(ContainSubstring("Reusing cached layer"))
 			Expect(buffer.String()).ToNot(ContainSubstring("Executing build process"))
+		})
+	})
+
+	context("when there are extensions to log", func() {
+		it.Before(func() {
+			Expect(os.WriteFile(filepath.Join(extensionDir, "ext1.so"), []byte(""), os.ModePerm)).To(Succeed())
+			Expect(os.WriteFile(filepath.Join(extensionDir, "ext2.so"), []byte(""), os.ModePerm)).To(Succeed())
+
+			logEmitter := scribe.NewEmitter(buffer).WithLevel("DEBUG")
+
+			build = phpdist.Build(dependencyManager, files, environment, sbomGenerator, logEmitter, clock)
+		})
+
+		it.After(func() {
+		})
+
+		it("logs the extensions", func() {
+			_, err := build(packit.BuildContext{
+				CNBPath:       cnbDir,
+				BuildpackInfo: packit.BuildpackInfo{},
+				Plan:          packit.BuildpackPlan{},
+				Layers:        packit.Layers{Path: layersDir},
+			})
+
+			Expect(err).NotTo(HaveOccurred())
+			Expect(buffer).To(matchers.ContainLines(
+				MatchRegexp(`\s*Found PHP extensions directory: %s`, extensionDir),
+				MatchRegexp(`\s*Listing PHP extensions:`),
+				MatchRegexp(`\s*- ext1.so`),
+				MatchRegexp(`\s*- ext2.so`),
+			))
 		})
 	})
 
