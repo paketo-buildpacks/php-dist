@@ -47,20 +47,6 @@ api = "0.7"
     version = "7.4.30"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.0.19:*:*:*:*:*:*:*"
-    deprecation_date = "2023-11-26T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.0.19?checksum=48e57634d350bcab4745d25d9d94ffa474649bf4f7e879fad163226c0d107bb5&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.19.tar.gz"
-    sha256 = "345898e7939de57b4710bffc558ec5818ebc6f61e1da250a02082310a7aaed3f"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.19.tar.gz"
-    source_sha256 = "48e57634d350bcab4745d25d9d94ffa474649bf4f7e879fad163226c0d107bb5"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.0.19_linux_x64_bionic_345898e7.tgz"
-    version = "8.0.19"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.0.20:*:*:*:*:*:*:*"
     deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
@@ -73,6 +59,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_8.0.20_linux_x64_bionic_da14dc23.tgz"
     version = "8.0.20"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:8.0.21:*:*:*:*:*:*:*"
+    deprecation_date = "2023-11-26T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@8.0.21?checksum=2f51f6e90e2e8efd3a20db08f0dd61d7f8d5a9362f8c7325f1ad28ccea5be0ac&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.21.tar.gz"
+    sha256 = "f11a193dee74850480570043ddcfe041bc9454453939b8b7dc4c4b53f4197e2f"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.21.tar.gz"
+    source_sha256 = "2f51f6e90e2e8efd3a20db08f0dd61d7f8d5a9362f8c7325f1ad28ccea5be0ac"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.0.21_linux_x64_bionic_f11a193d.tgz"
+    version = "8.0.21"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.1.6:*:*:*:*:*:*:*"
