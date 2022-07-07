@@ -75,20 +75,6 @@ api = "0.7"
     version = "8.0.21"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.1.6:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-25T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.1.6?checksum=e847745fd66fc8c57fac993a609fefcded93fddccd225f0620a26bb5ae5753c3&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.6.tar.gz"
-    sha256 = "f847907a1053e49c25733d7230e24f255aacb8262502e4ee278c0c1a618549e9"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.6.tar.gz"
-    source_sha256 = "e847745fd66fc8c57fac993a609fefcded93fddccd225f0620a26bb5ae5753c3"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.1.6_linux_x64_bionic_f847907a.tgz"
-    version = "8.1.6"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.1.7:*:*:*:*:*:*:*"
     deprecation_date = "2024-11-25T00:00:00Z"
     id = "php"
@@ -101,6 +87,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_8.1.7_linux_x64_bionic_b68e474e.tgz"
     version = "8.1.7"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:8.1.8:*:*:*:*:*:*:*"
+    deprecation_date = "2024-11-25T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@8.1.8?checksum=889d910558d2492f7f2236921b9bcde620674c8b684ec02d126060f8ca45dc8d&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.8.tar.gz"
+    sha256 = "a1221db600664cec5a543b5efa3fea6637715399d8a2a947100885221dc61792"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.8.tar.gz"
+    source_sha256 = "889d910558d2492f7f2236921b9bcde620674c8b684ec02d126060f8ca45dc8d"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.1.8_linux_x64_bionic_a1221db6.tgz"
+    version = "8.1.8"
 
   [[metadata.dependency-constraints]]
     constraint = "7.4.*"
