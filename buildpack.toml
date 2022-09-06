@@ -47,20 +47,6 @@ api = "0.7"
     version = "7.4.30"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.0.21:*:*:*:*:*:*:*"
-    deprecation_date = "2023-11-26T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.0.21?checksum=2f51f6e90e2e8efd3a20db08f0dd61d7f8d5a9362f8c7325f1ad28ccea5be0ac&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.21.tar.gz"
-    sha256 = "f11a193dee74850480570043ddcfe041bc9454453939b8b7dc4c4b53f4197e2f"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.21.tar.gz"
-    source_sha256 = "2f51f6e90e2e8efd3a20db08f0dd61d7f8d5a9362f8c7325f1ad28ccea5be0ac"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.0.21_linux_x64_bionic_f11a193d.tgz"
-    version = "8.0.21"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.0.22:*:*:*:*:*:*:*"
     deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
@@ -75,18 +61,18 @@ api = "0.7"
     version = "8.0.22"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.1.8:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-25T00:00:00Z"
+    cpe = "cpe:2.3:a:php:php:8.0.23:*:*:*:*:*:*:*"
+    deprecation_date = "2023-11-26T00:00:00Z"
     id = "php"
     licenses = ["PHP-3.0", "PHP-3.01"]
     name = "PHP"
-    purl = "pkg:generic/php@8.1.8?checksum=889d910558d2492f7f2236921b9bcde620674c8b684ec02d126060f8ca45dc8d&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.8.tar.gz"
-    sha256 = "a1221db600664cec5a543b5efa3fea6637715399d8a2a947100885221dc61792"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.8.tar.gz"
-    source_sha256 = "889d910558d2492f7f2236921b9bcde620674c8b684ec02d126060f8ca45dc8d"
+    purl = "pkg:generic/php@8.0.23?checksum=a2dd50e9c4a0328d921b6bc914e8b4e6572f94f09867318f88acca5ac4fa76c7&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.23.tar.gz"
+    sha256 = "1d6f312fd3b993f4b4d6e15d52ac6b702d89b11691a0e77d29cc96687826c62b"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.23.tar.gz"
+    source_sha256 = "a2dd50e9c4a0328d921b6bc914e8b4e6572f94f09867318f88acca5ac4fa76c7"
     stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.1.8_linux_x64_bionic_a1221db6.tgz"
-    version = "8.1.8"
+    uri = "https://deps.paketo.io/php/php_8.0.23_linux_x64_bionic_1d6f312f.tgz"
+    version = "8.0.23"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.1.9:*:*:*:*:*:*:*"
@@ -101,6 +87,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_8.1.9_linux_x64_bionic_598ab904.tgz"
     version = "8.1.9"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:8.1.10:*:*:*:*:*:*:*"
+    deprecation_date = "2024-11-25T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@8.1.10?checksum=3ea4f323109dfbc8d2631d08aa0e08602c1f713678e9dc6c750f081ef49eab0f&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.10.tar.gz"
+    sha256 = "b3e64cfc0b95db5f9e0ee9517fc395a8b98d611115fc30416acc0c59f61735da"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.10.tar.gz"
+    source_sha256 = "3ea4f323109dfbc8d2631d08aa0e08602c1f713678e9dc6c750f081ef49eab0f"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.1.10_linux_x64_bionic_b3e64cfc.tgz"
+    version = "8.1.10"
 
   [[metadata.dependency-constraints]]
     constraint = "7.4.*"
