@@ -5,7 +5,7 @@ api = "0.7"
   homepage = "https://github.com/paketo-buildpacks/php-dist"
   id = "paketo-buildpacks/php-dist"
   keywords = ["php"]
-  name = "Paketo PHP Distribution Buildpack"
+  name = "Paketo Buildpack for PHP Distribution"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
 
   [[buildpack.licenses]]
