@@ -19,20 +19,6 @@ api = "0.7"
     php = "8.0.*"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.4.29:*:*:*:*:*:*:*"
-    deprecation_date = "2022-11-28T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@7.4.29?checksum=f73f89873bb9447cb99eb4863cf0a0deab4481cb8acf7552c0e70647e6885854&download_url=https://www.php.net/distributions/php-7.4.29.tar.gz"
-    sha256 = "5b02ff2b6571416022f7978cf5ca7241a718dc99490d3714e538d079fd63792f"
-    source = "https://www.php.net/distributions/php-7.4.29.tar.gz"
-    source_sha256 = "f73f89873bb9447cb99eb4863cf0a0deab4481cb8acf7552c0e70647e6885854"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_7.4.29_linux_x64_bionic_5b02ff2b.tgz"
-    version = "7.4.29"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:7.4.30:*:*:*:*:*:*:*"
     deprecation_date = "2022-11-28T00:00:00Z"
     id = "php"
@@ -45,6 +31,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_7.4.30_linux_x64_bionic_0903572c.tgz"
     version = "7.4.30"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:7.4.32:*:*:*:*:*:*:*"
+    deprecation_date = "2022-11-28T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@7.4.32?checksum=197e3372afd69694eb6b230838305eb9e1cbe5db272e0fa3bbe0d38e329a95bc&download_url=https://github.com/php/web-php-distributions/raw/master/php-7.4.32.tar.gz"
+    sha256 = "3e13a55a2effc1c0dd110ab63ac5335159780e24fb76c861c9c95ee654fbe6d5"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-7.4.32.tar.gz"
+    source_sha256 = "197e3372afd69694eb6b230838305eb9e1cbe5db272e0fa3bbe0d38e329a95bc"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.4.32_linux_x64_bionic_3e13a55a.tgz"
+    version = "7.4.32"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.0.22:*:*:*:*:*:*:*"
