@@ -19,20 +19,6 @@ api = "0.7"
     php = "8.0.*"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:7.4.30:*:*:*:*:*:*:*"
-    deprecation_date = "2022-11-28T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@7.4.30?checksum=e37ea37e0f79109351ac615da85eb7c2c336101fc5bc802ee79a124a4310dc10&download_url=https://github.com/php/web-php-distributions/raw/master/php-7.4.30.tar.gz"
-    sha256 = "0903572c8d86e84f3aa9dbe4f38da735d03f0ccc36692af973bdafd492cdf0cf"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-7.4.30.tar.gz"
-    source_sha256 = "e37ea37e0f79109351ac615da85eb7c2c336101fc5bc802ee79a124a4310dc10"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_7.4.30_linux_x64_bionic_0903572c.tgz"
-    version = "7.4.30"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:7.4.32:*:*:*:*:*:*:*"
     deprecation_date = "2022-11-28T00:00:00Z"
     id = "php"
@@ -45,6 +31,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_7.4.32_linux_x64_bionic_3e13a55a.tgz"
     version = "7.4.32"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:7.4.33:*:*:*:*:*:*:*"
+    deprecation_date = "2022-11-28T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@7.4.33?checksum=5a2337996f07c8a097e03d46263b5c98d2c8e355227756351421003bea8f463e&download_url=https://github.com/php/web-php-distributions/raw/master/php-7.4.33.tar.gz"
+    sha256 = "29cd16769c942e26848693d3ed2d70e64818b1e66dd04bb5192dee1a3167183f"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-7.4.33.tar.gz"
+    source_sha256 = "5a2337996f07c8a097e03d46263b5c98d2c8e355227756351421003bea8f463e"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_7.4.33_linux_x64_bionic_29cd1676.tgz"
+    version = "7.4.33"
 
   [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.0.24:*:*:*:*:*:*:*"
