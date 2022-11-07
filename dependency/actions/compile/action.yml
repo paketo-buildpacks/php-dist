@@ -1,0 +1,32 @@
+name: 'Compile PHP on Target'
+description: |
+  Compiles PHP with extensions given a version, output directory, and a target image to compile on
+
+inputs:
+  version:
+    description: 'dependency version'
+    required: true
+  outputDir:
+    description: 'output directory'
+    required: true
+  target:
+    description: 'dependency OS target variant'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+
+  - name: build compilation
+    id: build-compilation
+    shell: bash
+    run: docker build -t compilation -f dependency/actions/compile/${{ inputs.target }}.Dockerfile dependency/actions/compile
+
+  - name: run compilation
+    id: run-compilation
+    shell: bash
+    run: docker run -v ${{ inputs.outputDir }}:/output --env PASSWORD="docker" compilation --version ${{ inputs.version }} --outputDir /output --target ${{ inputs.target }}
+
+  - name: print contents of output dir
+    shell: bash
+    run: ls -lah ${{ inputs.outputDir }}
