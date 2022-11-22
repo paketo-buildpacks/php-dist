@@ -25,11 +25,12 @@ extract_tarball() {
   rm -rf php
   mkdir php
   tar --extract --file "${1}" \
+    --strip-components 1 \
     --directory php
 }
 
 configure_php() {
-  extension_dir="$(find "$PWD/php/lib/php/extensions" -name "no-debug-non-zts-*")"
+  extension_dir="$(find "./php/lib/php/extensions" -name "no-debug-non-zts-*")"
   major_minor_version="$(./php/bin/php --version | head -1 | cut -d' ' -f2 | cut -d '.' -f1-2 | sed 's/\./-/')"
 
   sed \

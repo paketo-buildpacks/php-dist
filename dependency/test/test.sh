@@ -45,22 +45,27 @@ main() {
   echo "Outside image: tarball_path=${tarball_path}"
   echo "Outside image: expectedVersion=${expectedVersion}"
 
+  local target
   if [[ $(basename "${tarball_path}") == *"bionic"* ]]; then
-    echo "Running bionic test..."
-    docker build \
-      --tag test \
-      --file bionic.Dockerfile \
-      .
-
-    docker run \
-      --rm \
-      --volume "$(dirname -- "${tarball_path}"):/tarball_path" \
-      test \
-      --tarballPath "/tarball_path/$(basename "${tarball_path}")" \
-      --expectedVersion "${expectedVersion}"
+    target="bionic"
+  elif [[ $(basename "${tarball_path}") == *"jammy"* ]]; then
+    target="jammy"
   else
-    echo "bionic not found - skipping tests"
+    echo "compatible tests not found; skipping tests"
   fi
+
+  echo "Running ${target} test..."
+  docker build \
+    --tag test \
+    --file "${target}.Dockerfile" \
+    .
+
+  docker run \
+    --rm \
+    --volume "$(dirname -- "${tarball_path}"):/tarball_path" \
+    test \
+    --tarballPath "/tarball_path/$(basename "${tarball_path}")" \
+    --expectedVersion "${expectedVersion}"
 }
 
 main "$@"
