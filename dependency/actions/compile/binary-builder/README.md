@@ -4,45 +4,34 @@ This tool provides a mechanism for building php binaries
 
 # Usage
 
-TODO: deal with "run as root"
-The scripts are **meant to be run as root** on a Cloud Foundry [stack](https://docs.cloudfoundry.org/concepts/stacks.html).
-
-## Running within Docker
-
-To run `binary-builder` from within the cflinuxfs3 rootfs, use [Docker](https://docker.io):
-
-```bash
-docker run -w /binary-builder -v `pwd`:/binary-builder -it cloudfoundry/cflinuxfs3 bash
-export STACK=cflinuxfs3
-./bin/binary-builder --name=[binary_name] --version=[binary_version] --(md5|sha256)=[checksum_value]
-```
-
-This generates a gzipped tarball in the binary-builder directory with the filename format `binary_name-binary_version-linux-x64`.
-
-For example, if you were building ruby 2.2.3, you'd run the following commands:
-
-```bash
-$ docker run -w /binary-builder -v `pwd`:/binary-builder -it cloudfoundry/cflinuxfs3:ruby-2.2.4 ./bin/binary-builder --name=ruby --version=2.2.3 --md5=150a5efc5f5d8a8011f30aa2594a7654
-$ ls
-ruby-2.2.3-linux-x64.tgz
-```
+TODO: deal with "run as root" The scripts are **meant to be run as root** on a
+Cloud Foundry [stack](https://docs.cloudfoundry.org/concepts/stacks.html).
 
 # Building PHP
 
-To build PHP, you also need to pass in a YAML file containing information about the various PHP extensions to be built. For example
+To build PHP, you also need to pass in a YAML file containing information about
+the various PHP extensions to be built.
 
-```bash
-docker run -w /binary-builder -v `pwd`:/binary-builder -it cloudfoundry/cflinuxfs3 bash
-export STACK=cflinuxfs3
-./bin/binary-builder --name=php7 --version=7.3.14 --sha256=6aff532a380b0f30c9e295b67dc91d023fee3b0ae14b4771468bf5dda4cbf108 --php-extensions-file=./php7-extensions.yml
-```
+For an example of what these files look like, see:
+[php7-base-extensions.yml](../extensions-manifests).
 
-For an example of what this file looks like, see: [php7-base-extensions.yml](https://github.com/cloudfoundry/buildpacks-ci/tree/master/tasks/build-binary-new) and the various `php*-extensions-patch.yml` files in that same directory. Patch files adjust the base-extensions.yml file by adding/removing extensions. The `--php-extensions-file` argument will need the base-extensions file with one of the patch files applied. That normally happens automatically through the pipeline, so if you are building manually you need to manually create this file.
-
-**TIP** If you are updating or building a specific PHP extension, remove everything except that specific extension from your `--php-extensions-file` file. This will decrease the build times & make it easier for you to test your changes.
+**TIP** If you are updating or building a specific PHP extension, remove
+everything except that specific extension from your `--php-extensions-file`
+file. This will decrease the build times & make it easier for you to test your
+changes.
 
 # Running the tests
+                                                                                                                                                              │ 24       libgpgme11-dev \
+```bash                                                                                                                                                       │ 25       libjpeg-dev \
+bundle                                                                                                                                                        │ 26       libkrb5-dev \
+bundle exec rspec                                                                                                                                             │ 27       libldap2-dev \
+```
 
-The integration test suite includes specs that test the functionality for building [PHP with Oracle client libraries](./PHP-Oracle.md). These tests are tagged `:run_oracle_php_tests` and require access to an S3 bucket containing the Oracle client libraries. This is configured using the environment variables `AWS_ACCESS_KEY` and `AWS_SECRET_ACCESS_KEY`
+The integration test suite includes specs that test the functionality for
+building [PHP with Oracle client libraries](./PHP-Oracle.md). These tests are
+tagged `:run_oracle_php_tests` and require access to an S3 bucket containing
+the Oracle client libraries. This is configured using the environment variables
+`AWS_ACCESS_KEY` and `AWS_SECRET_ACCESS_KEY`
 
-If you do not need to test this functionality, exclude the tag `:run_oracle_php_tests` when you run `rspec`.
+If you do not need to test this functionality, exclude the tag
+`:run_oracle_php_tests` when you run `rspec`.

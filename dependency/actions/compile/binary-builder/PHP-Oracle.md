@@ -1,3 +1,4 @@
+# TODO: Is this information still relevant?
 # PHP & Oracle Support
 
 The binary builder has support for building the `oci8` and `pdo_oci` extensions of PHP 5.5, 5.6 and 7.0.  While the builder is capable of building them, it does *not* provide the Oracle libraries and SDK which are required to build these extensions.  These are not provided by binary-builder because of licensing restrictions and binary builder does not automatically download them because they are behind an Oracle pay-wall.  To build the extensions, you *must* download and provide these to the builder.
