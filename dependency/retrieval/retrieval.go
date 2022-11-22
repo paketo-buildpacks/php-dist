@@ -52,13 +52,35 @@ func GenerateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 		Version:         version,
 	}
 
-	return []versionology.Dependency{
+	deps := []versionology.Dependency{
 		{
 			ConfigMetadataDependency: configMetadataDependency,
 			SemverVersion:            versionFetcher.Version(),
 			Target:                   "bionic",
 		},
-	}, nil
+	}
+
+	if versionFetcher.Version().GreaterThan(semver.MustParse("8.1.0")) {
+		configMetadataDependency := cargo.ConfigMetadataDependency{
+			CPE:             fmt.Sprintf("cpe:2.3:a:php:php:%s:*:*:*:*:*:*:*", version),
+			DeprecationDate: deprecationDate,
+			ID:              "php",
+			Licenses:        retrieve.LookupLicenses(sourceURL, upstream.DefaultDecompress),
+			Name:            "PHP",
+			PURL:            retrieve.GeneratePURL("php", version, phpReleasePretty.Sha256, sourceURL),
+			Source:          sourceURL,
+			SourceChecksum:  fmt.Sprintf("sha256:%s", phpReleasePretty.Sha256),
+			Stacks:          []string{"io.buildpacks.stacks.jammy"},
+			Version:         version,
+		}
+		deps = append(deps, versionology.Dependency{
+			ConfigMetadataDependency: configMetadataDependency,
+			SemverVersion:            versionFetcher.Version(),
+			Target:                   "jammy",
+		})
+
+	}
+	return deps, nil
 }
 
 func hasKey[T comparable, U any](m map[T]U, key T) bool {
