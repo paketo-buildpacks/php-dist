@@ -75,20 +75,6 @@ api = "0.7"
     version = "8.0.25"
 
   [[metadata.dependencies]]
-    cpe = "cpe:2.3:a:php:php:8.1.11:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-25T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.1.11?checksum=3660e8408321149f5d382bb8eeb9ea7b12ea8dd7ea66069da33f6f7383750ab2&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.11.tar.gz"
-    sha256 = "266b61f5132ed9a89afc0341a6a308ae7e333875fd360e68b637716d8f0543e4"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.11.tar.gz"
-    source_sha256 = "3660e8408321149f5d382bb8eeb9ea7b12ea8dd7ea66069da33f6f7383750ab2"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://deps.paketo.io/php/php_8.1.11_linux_x64_bionic_266b61f5.tgz"
-    version = "8.1.11"
-
-  [[metadata.dependencies]]
     cpe = "cpe:2.3:a:php:php:8.1.12:*:*:*:*:*:*:*"
     deprecation_date = "2024-11-25T00:00:00Z"
     id = "php"
@@ -101,6 +87,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://deps.paketo.io/php/php_8.1.12_linux_x64_bionic_262d9c4e.tgz"
     version = "8.1.12"
+
+  [[metadata.dependencies]]
+    cpe = "cpe:2.3:a:php:php:8.1.13:*:*:*:*:*:*:*"
+    deprecation_date = "2024-11-25T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@8.1.13?checksum=eed1981ce9999d807cb139a9d463ae54bbeda2a57a9a28ad513badf5b99b0073&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.13.tar.gz"
+    sha256 = "eb82ab00766399862bc51dad4f665f7159ccec01e87f97d1e40641e92228b259"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.13.tar.gz"
+    source_sha256 = "eed1981ce9999d807cb139a9d463ae54bbeda2a57a9a28ad513badf5b99b0073"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://deps.paketo.io/php/php_8.1.13_linux_x64_bionic_eb82ab00.tgz"
+    version = "8.1.13"
 
   [[metadata.dependency-constraints]]
     constraint = "7.4.*"
