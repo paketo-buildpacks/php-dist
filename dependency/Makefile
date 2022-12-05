@@ -1,7 +1,14 @@
-.PHONY: retrieve
+.PHONY: test retrieve
+
+id:
+	@echo php
+
+test:
+	@cd test; \
+	./test.sh --version $(version) --tarballPath $(tarballPath)
 
 retrieve:
 	@cd retrieval; \
-	go test -v ./... && cd run && BP_LOG_LEVEL=debug go run . \
+	go run . \
 		--buildpack_toml_path=$(buildpackTomlPath) \
 		--output=$(output)

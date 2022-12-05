@@ -17,7 +17,7 @@ main() {
         shift 2
         ;;
 
-      --expectedVersion)
+      --version)
         expectedVersion="${2}"
         shift 2
         ;;

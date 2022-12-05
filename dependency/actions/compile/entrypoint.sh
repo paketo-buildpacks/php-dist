@@ -92,15 +92,19 @@ function main() {
     --sha256 "${upstream_sha}" \
     --php-extensions-file "/tmp/extensions-manifests/${extensions_file}"
 
-  echo "Packaging php dependency"
   cp ./php-"${version}"*.tgz "${output_dir}/php-${target}-${version}.tgz"
-  echo "Wrote php-${target}-${version}.tgz to ${output_dir}"
+  SHA256=$(sha256sum "${output_dir}/php-${target}-${version}.tgz")
+  SHA256="${SHA256:0:64}"
 
-  # extract SHA256 from sha256sum output in the formm
-  # someshaabcdefgh /path/to/file
-  sha="$(sha256sum "${output_dir}/php-${target}-${version}.tgz" | cut -d " " -f 1 )"
-  echo "sha256:${sha}" > "${output_dir}/php-${target}-${version}.tgz.checksum"
-  echo "Wrote php-${target}-${version}.tgz.checksum to ${output_dir}"
+  OUTPUT_TARBALL_NAME="php_${version}_linux_x64_${target}_${SHA256:0:8}.tgz"
+  OUTPUT_SHAFILE_NAME="php_${version}_linux_x64_${target}_${SHA256:0:8}.tgz.checksum"
+
+  echo "Building tarball ${OUTPUT_TARBALL_NAME}"
+
+  mv "${output_dir}/php-${target}-${version}.tgz" "${output_dir}/${OUTPUT_TARBALL_NAME}"
+
+  echo "Creating checksum file for ${OUTPUT_TARBALL_NAME}"
+  echo "sha256:${SHA256}" > "${output_dir}/${OUTPUT_SHAFILE_NAME}"
 }
 
 main "${@:-}"
