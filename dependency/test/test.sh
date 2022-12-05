@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-#shopt -s inherit_errexit
-
-parent_dir="$(cd "$(dirname "$0")" && pwd)"
+shopt -s inherit_errexit
 
 main() {
   local tarball_path expectedVersion
