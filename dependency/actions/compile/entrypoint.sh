@@ -92,8 +92,18 @@ function main() {
     --sha256 "${upstream_sha}" \
     --php-extensions-file "/tmp/extensions-manifests/${extensions_file}"
 
-  cp ./php-"${version}"*.tgz "${output_dir}/php-${target}-${version}.tgz"
-  SHA256=$(sha256sum "${output_dir}/php-${target}-${version}.tgz")
+  archive="${output_dir}/php-${target}-${version}.tgz"
+  cp ./php-"${version}"*.tgz "${archive}"
+  strip_dir="${output_dir}/strip_dir"
+  rm -rf "${strip_dir}"
+  mkdir "${strip_dir}"
+  tar -C "${strip_dir}" --transform s:^\./:: --strip-components 1 -xf "${archive}"
+  tar -C "${strip_dir}" -czf "${archive}" .
+  rm -rf strip_dir
+
+  echo "Stripped top-level directory from tar"
+
+  SHA256=$(sha256sum "${archive}")
   SHA256="${SHA256:0:64}"
 
   OUTPUT_TARBALL_NAME="php_${version}_linux_x64_${target}_${SHA256:0:8}.tgz"
