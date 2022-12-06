@@ -68,14 +68,6 @@ ADD ./binary-builder /binary-builder
 WORKDIR /binary-builder/cflinuxfs4
 RUN bundle install
 
-
-# add docker user to sudo-ers group
-RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-
-# make the user be docker, so it has sudo privileges
-USER docker
-# as currently written, the docker user has password docker and that needs to be manually entered to 'sudo'
-
 ADD ./entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
