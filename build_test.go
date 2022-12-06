@@ -328,8 +328,8 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 
 			dependencyManager.ResolveCall.Returns.Dependency = postal.Dependency{
-				Name:   "PHP",
-				SHA256: "some-sha",
+				Name:     "PHP",
+				Checksum: "some-sha",
 			}
 		})
 
@@ -359,8 +359,8 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(dependencyManager.GenerateBillOfMaterialsCall.CallCount).To(Equal(1))
 			Expect(dependencyManager.GenerateBillOfMaterialsCall.Receives.Dependencies).To(Equal([]postal.Dependency{
 				{
-					Name:   "PHP",
-					SHA256: "some-sha",
+					Name:     "PHP",
+					Checksum: "some-sha",
 				},
 			}))
 
