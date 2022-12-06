@@ -102,7 +102,7 @@ func Build(dependencies DependencyManager,
 		}
 
 		cachedSHA, ok := phpLayer.Metadata[DepKey].(string)
-		if ok && cachedSHA == dependency.SHA256 {
+		if ok && cachedSHA == dependency.Checksum {
 			logger.Process("Reusing cached layer %s", phpLayer.Path)
 			logger.Debug.Subprocess("SHA256 of cached PHP dependency matches SHA256 of resolved dependency")
 			logger.Break()
@@ -134,7 +134,7 @@ func Build(dependencies DependencyManager,
 		phpLayer.Launch, phpLayer.Build, phpLayer.Cache = launch, build, build
 
 		phpLayer.Metadata = map[string]interface{}{
-			DepKey: dependency.SHA256,
+			DepKey: dependency.Checksum,
 		}
 
 		logger.Subprocess("Installing PHP %s", dependency.Version)
