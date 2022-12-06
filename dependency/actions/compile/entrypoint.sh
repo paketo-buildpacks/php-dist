@@ -86,7 +86,7 @@ function main() {
   echo "${upstream_sha}"
 
   echo "Compiling PHP with extensions from ${extensions_file}"
-  echo "${PASSWORD}" | sudo -S /usr/bin/ruby -x /usr/bin/bundler exec /usr/bin/ruby ./bin/binary-builder.rb \
+  /usr/bin/ruby -x /usr/bin/bundler exec /usr/bin/ruby ./bin/binary-builder.rb \
     --name php \
     --version "${version}" \
     --sha256 "${upstream_sha}" \
