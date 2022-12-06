@@ -25,7 +25,7 @@ runs:
   - name: run compilation
     id: run-compilation
     shell: bash
-    run: docker run -v ${{ inputs.outputDir }}:/output --env PASSWORD="docker" compilation --version ${{ inputs.version }} --outputDir /output --target ${{ inputs.target }}
+    run: docker run -v ${{ inputs.outputDir }}:/home --env PASSWORD="docker" compilation --version ${{ inputs.version }} --outputDir /home --target ${{ inputs.target }}
 
   - name: print contents of output dir
     shell: bash
