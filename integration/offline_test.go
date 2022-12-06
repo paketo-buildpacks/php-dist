@@ -59,13 +59,13 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 					offlinePhpDistBuildpack,
 					buildPlanBuildpack,
 				).
-				WithEnv(map[string]string{"BP_PHP_VERSION": "8.0.*"}).
+				WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.*"}).
 				WithNetwork("none").
 				Execute(name, source)
 			Expect(err).NotTo(HaveOccurred(), logs.String())
 
 			Expect(logs.String()).To(ContainSubstring(buildpackInfo.Buildpack.Name))
-			Expect(logs.String()).To(MatchRegexp(`PHP 8\.0\.\d+`))
+			Expect(logs.String()).To(MatchRegexp(`PHP 8\.1\.\d+`))
 			Expect(logs.String()).NotTo(ContainSubstring("Downloading"))
 
 			container, err = docker.Container.Run.WithCommand("php -i && sleep infinity").Execute(image.ID)
@@ -77,7 +77,7 @@ func testOffline(t *testing.T, context spec.G, it spec.S) {
 				return cLogs.String()
 			}).Should(
 				And(
-					MatchRegexp(`PHP Version => 8\.0\.\d+`),
+					MatchRegexp(`PHP Version => 8\.1\.\d+`),
 					ContainSubstring(
 						fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 					),

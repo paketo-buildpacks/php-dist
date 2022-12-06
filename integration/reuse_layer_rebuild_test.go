@@ -118,7 +118,7 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 					phpDistBuildpack,
 					buildPlanBuildpack,
 				).
-				WithEnv(map[string]string{"BP_PHP_VERSION": "8.0.*"})
+				WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.13"})
 
 			firstImage, logs, err = build.Execute(name, source)
 			Expect(err).NotTo(HaveOccurred())
@@ -133,7 +133,7 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 			Expect(logs.String()).To(ContainSubstring("  Executing build process"))
 
 			// Second pack build
-			secondImage, logs, err = build.WithEnv(map[string]string{"BP_PHP_VERSION": "7.4.*"}).Execute(name, source)
+			secondImage, logs, err = build.WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.12"}).Execute(name, source)
 			Expect(err).NotTo(HaveOccurred())
 
 			imageIDs[secondImage.ID] = struct{}{}
