@@ -1,0 +1,11 @@
+/*.tgz
+/*.tar.gz
+.rspec
+.bundle
+.ccache
+/logs
+ports/
+tmp/
+.idea/
+oracle_client_libs
+*deb*
