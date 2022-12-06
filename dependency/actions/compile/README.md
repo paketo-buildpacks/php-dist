@@ -12,5 +12,5 @@ mkdir <output dir>
 
 3. Run compilation and use a volume mount to access it:
 ```
-docker run -v <output dir>:$PWD --rm --env PASSWORD=docker compilation --version <version> --output-dir $PWD --target <target>
+docker run -v <output dir>:$PWD --rm --env PASSWORD=docker compilation --version <version> --outputDir $PWD --target <target>
 ```

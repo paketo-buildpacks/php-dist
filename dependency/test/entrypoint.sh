@@ -25,7 +25,6 @@ extract_tarball() {
   rm -rf php
   mkdir php
   tar --extract --file "${1}" \
-    --strip-components 1 \
     --directory php
 }
 
