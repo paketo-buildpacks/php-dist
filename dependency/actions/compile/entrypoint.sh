@@ -93,7 +93,7 @@ function main() {
     --php-extensions-file "/tmp/extensions-manifests/${extensions_file}"
 
   archive="${output_dir}/php-${target}-${version}.tgz"
-  cp ./php-"${version}"*.tgz "${archive}"
+  echo "${PASSWORD}" | sudo -S cp ./php-"${version}"*.tgz "${archive}"
   strip_dir="${output_dir}/strip_dir"
   rm -rf "${strip_dir}"
   mkdir "${strip_dir}"
