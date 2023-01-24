@@ -116,14 +116,32 @@ func generateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 		return nil, fmt.Errorf("could get create bionic dependency: %w", err)
 	}
 
-	dep.Stacks = []string{"io.buildpacks.stacks.jammy"}
+	dependencies := []versionology.Dependency{bionicDependency}
 
-	jammyDependency, err := versionology.NewDependency(dep, "jammy")
+	// If target==jammy and version >= 8.1, include it
+	// Versions less than 8.1 are not supported on Jammy.
+	semVersion, err := semver.NewVersion(version)
 	if err != nil {
-		return nil, fmt.Errorf("could get create jammy dependency: %w", err)
+		return nil, err
+	}
+	constraint, err := semver.NewConstraint(">= 8.1")
+	if err != nil {
+		//untested
+		return nil, err
 	}
 
-	return []versionology.Dependency{bionicDependency, jammyDependency}, nil
+	if constraint.Check(semVersion) {
+		dep.Stacks = []string{"io.buildpacks.stacks.jammy"}
+
+		jammyDependency, err := versionology.NewDependency(dep, "jammy")
+		if err != nil {
+			return nil, fmt.Errorf("could get create jammy dependency: %w", err)
+		}
+
+		dependencies = append(dependencies, jammyDependency)
+	}
+
+	return dependencies, nil
 }
 
 func getPhpReleases() ([]PhpRelease, error) {
