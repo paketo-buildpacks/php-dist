@@ -100,53 +100,58 @@ func testReusingLayerRebuild(t *testing.T, context spec.G, it spec.S) {
 		})
 	})
 
-	context("when an app is rebuilt and there is a change in php version", func() {
-		it("rebuilds the layer", func() {
-			var (
-				err         error
-				logs        fmt.Stringer
-				firstImage  occam.Image
-				secondImage occam.Image
-			)
+	// This test is not currently applicable on jammy because currently Jammy support
+	// only applies to versions of PHP 8.1 and above.
+	// This if statement can be removed when we support PHP 8.2
+	if builder.LocalInfo.Stack.ID != "io.buildpacks.stacks.jammy" {
+		context("when an app is rebuilt and there is a change in php version", func() {
+			it("rebuilds the layer", func() {
+				var (
+					err         error
+					logs        fmt.Stringer
+					firstImage  occam.Image
+					secondImage occam.Image
+				)
 
-			source, err = occam.Source(filepath.Join("testdata", "simple_app"))
-			Expect(err).NotTo(HaveOccurred())
+				source, err = occam.Source(filepath.Join("testdata", "simple_app"))
+				Expect(err).NotTo(HaveOccurred())
 
-			build := pack.WithNoColor().Build.
-				WithPullPolicy("never").
-				WithBuildpacks(
-					phpDistBuildpack,
-					buildPlanBuildpack,
-				).
-				WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.13"})
+				build := pack.WithNoColor().Build.
+					WithPullPolicy("never").
+					WithBuildpacks(
+						phpDistBuildpack,
+						buildPlanBuildpack,
+					).
+					WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.*"})
 
-			firstImage, logs, err = build.Execute(name, source)
-			Expect(err).NotTo(HaveOccurred())
+				firstImage, logs, err = build.Execute(name, source)
+				Expect(err).NotTo(HaveOccurred())
 
-			imageIDs[firstImage.ID] = struct{}{}
+				imageIDs[firstImage.ID] = struct{}{}
 
-			Expect(firstImage.Buildpacks).To(HaveLen(2))
+				Expect(firstImage.Buildpacks).To(HaveLen(2))
 
-			Expect(firstImage.Buildpacks[0].Key).To(Equal(buildpackInfo.Buildpack.ID))
-			Expect(firstImage.Buildpacks[0].Layers).To(HaveKey("php"))
+				Expect(firstImage.Buildpacks[0].Key).To(Equal(buildpackInfo.Buildpack.ID))
+				Expect(firstImage.Buildpacks[0].Layers).To(HaveKey("php"))
 
-			Expect(logs.String()).To(ContainSubstring("  Executing build process"))
+				Expect(logs.String()).To(ContainSubstring("  Executing build process"))
 
-			// Second pack build
-			secondImage, logs, err = build.WithEnv(map[string]string{"BP_PHP_VERSION": "8.1.12"}).Execute(name, source)
-			Expect(err).NotTo(HaveOccurred())
+				// Second pack build
+				secondImage, logs, err = build.WithEnv(map[string]string{"BP_PHP_VERSION": "8.0.*"}).Execute(name, source)
+				Expect(err).NotTo(HaveOccurred())
 
-			imageIDs[secondImage.ID] = struct{}{}
+				imageIDs[secondImage.ID] = struct{}{}
 
-			Expect(secondImage.Buildpacks).To(HaveLen(2))
+				Expect(secondImage.Buildpacks).To(HaveLen(2))
 
-			Expect(secondImage.Buildpacks[0].Key).To(Equal(buildpackInfo.Buildpack.ID))
-			Expect(secondImage.Buildpacks[0].Layers).To(HaveKey("php"))
+				Expect(secondImage.Buildpacks[0].Key).To(Equal(buildpackInfo.Buildpack.ID))
+				Expect(secondImage.Buildpacks[0].Layers).To(HaveKey("php"))
 
-			Expect(logs.String()).To(ContainSubstring("  Executing build process"))
-			Expect(logs.String()).NotTo(ContainSubstring("Reusing cached layer"))
+				Expect(logs.String()).To(ContainSubstring("  Executing build process"))
+				Expect(logs.String()).NotTo(ContainSubstring("Reusing cached layer"))
 
-			Expect(secondImage.Buildpacks[0].Layers["php"].SHA).NotTo(Equal(firstImage.Buildpacks[0].Layers["php"].SHA))
+				Expect(secondImage.Buildpacks[0].Layers["php"].SHA).NotTo(Equal(firstImage.Buildpacks[0].Layers["php"].SHA))
+			})
 		})
-	})
+	}
 }
