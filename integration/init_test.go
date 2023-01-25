@@ -34,8 +34,11 @@ var (
 	}
 )
 
+var builder occam.Builder
+
 func TestIntegration(t *testing.T) {
 	Expect := NewWithT(t).Expect
+	pack := occam.NewPack()
 
 	format.MaxLength = 0
 
@@ -75,6 +78,9 @@ func TestIntegration(t *testing.T) {
 	Expect(err).ToNot(HaveOccurred())
 
 	SetDefaultEventuallyTimeout(5 * time.Second)
+
+	builder, err = pack.Builder.Inspect.Execute()
+	Expect(err).NotTo(HaveOccurred())
 
 	suite := spec.New("Integration", spec.Report(report.Terminal{}), spec.Parallel())
 	suite("LayerReuse", testReusingLayerRebuild)
