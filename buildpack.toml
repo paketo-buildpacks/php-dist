@@ -111,6 +111,11 @@ api = "0.7"
     constraint = "8.1.*"
     id = "php"
     patches = 2
+    
+  [[metadata.dependency-constraints]]
+    constraint = "8.2.*"
+    id = "php"
+    patches = 2
 
 [[stacks]]
   id = "io.buildpacks.stacks.bionic"
