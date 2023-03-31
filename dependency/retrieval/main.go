@@ -226,7 +226,7 @@ func getRelease(version string) (PhpRawRelease, error) {
 	patchVersion := semverSplit[2]
 
 	// Mirroring what PHP does, it converts the wildcard patch version to the oldest patch version for that line.
-	// Eg:  7.4.x ---- 7.4.0
+	// Eg:  8.0.x ---- 8.0.0
 	// Note: Assuming that the oldest patch version is always 0.
 	if patchVersion == "*" {
 		version = strings.ReplaceAll(version, "*", "0")

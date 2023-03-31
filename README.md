@@ -77,13 +77,13 @@ Specifying the PHP Dist version through buildpack.yml configuration is deprecate
 
 To migrate from using `buildpack.yml` please set the `$BP_PHP_VERSION`
 environment variable at build time either directly (ex. `pack build my-app
---env BP_PHP_VERSION=7.3.*`) or through a [`project.toml`
+--env BP_PHP_VERSION=8.0.*`) or through a [`project.toml`
 file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md)
 
 ```shell
 # this allows you to specify a version constraint for the `php` depdendency
-# any valid semver constaints (e.g. 7.*) are also acceptable
-$BP_PHP_VERSION="7.3.*"
+# any valid semver constaints (e.g. 8.*) are also acceptable
+$BP_PHP_VERSION="8.0.*"
 ```
 ### PHP library directory
 The PHP library directory is available to PHP via an include path in the PHP

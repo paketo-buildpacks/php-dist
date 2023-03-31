@@ -252,11 +252,7 @@ class Gd72and73FakePeclRecipe < FakePeclRecipe
   def configure_options
     baseOpts = %w[--with-jpeg-dir --with-png-dir --with-xpm-dir --with-freetype-dir --with-webp-dir --with-zlib-dir]
 
-    if version.start_with?('7.2')
-      baseOpts.push('--enable-gd-jis-conv')
-    else
-      baseOpts.push('--with-gd-jis-conv')
-    end
+    baseOpts.push('--with-gd-jis-conv')
   end
 end
 
@@ -404,17 +400,6 @@ class RedisPeclRecipe < PeclRecipe
       '--enable-redis-lzf',
       '--with-liblzf=no'
     ]
-  end
-end
-
-# TODO: Remove after PHP 7 is out of support
-class PHPProtobufPeclRecipe < PeclRecipe
-  def url
-    "https://github.com/allegro/php-protobuf/archive/v#{version}.tar.gz"
-  end
-
-  def local_path
-    "php-protobuf-#{version}.tar.gz"
   end
 end
 

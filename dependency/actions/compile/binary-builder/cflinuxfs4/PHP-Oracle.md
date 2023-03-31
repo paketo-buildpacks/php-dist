@@ -23,7 +23,7 @@ Ex:
 ```
 docker run -w /binary-builder -v `pwd`:/binary-builder -v /path/to/oracle:/oracle -it cloudfoundry/cflinuxfs3 bash
 export STACK=cflinuxfs3 
-./bin/binary-builder --name=php --version=7.1.29 --md5=ae625e0cfcfdacea3e7a70a075e47155 --php-extensions-file=./php71-extensions.yml
+./bin/binary-builder --name=php --version=8.1.16 --md5=ae625e0cfcfdacea3e7a70a075e47155 --php-extensions-file=./php71-extensions.yml
 ```
 
 ## What's Included

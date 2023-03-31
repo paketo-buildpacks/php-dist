@@ -267,11 +267,7 @@ class Gd72and73FakePeclRecipe < FakePeclRecipe
       "--with-zlib-dir",
     ]
 
-    if version.start_with?("7.2")
-      return baseOpts.push("--enable-gd-jis-conv")
-    else
-      return baseOpts.push("--with-gd-jis-conv")
-    end
+    return baseOpts.push("--with-gd-jis-conv")
   end
 end
 
@@ -420,17 +416,6 @@ class RedisPeclRecipe < PeclRecipe
       "--enable-redis-lzf",
       "--with-liblzf=no"
     ]
-  end
-end
-
-# TODO: Remove after PHP 7 is out of support
-class PHPProtobufPeclRecipe < PeclRecipe
-  def url
-    "https://github.com/allegro/php-protobuf/archive/v#{version}.tar.gz"
-  end
-
-  def local_path
-    "php-protobuf-#{version}.tar.gz"
   end
 end
 

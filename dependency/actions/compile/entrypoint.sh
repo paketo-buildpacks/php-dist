@@ -52,7 +52,7 @@ function main() {
   fi
 
   echo "Validating PHP version + target combination"
-  if [[ ${version} == "7.4"* || ${version} == "8.0"* ]]; then
+  if [[ ${version} == "8.0"* ]]; then
     if grep -q "Jammy" "/etc/os-release"; then
     echo "Cannot build PHP ${version} on Jammy"
     exit 1
@@ -70,9 +70,7 @@ function main() {
   echo "Determining extensions file"
   local extensions_file
 
-  if [[ ${version} == "7.4"* ]]; then
-    extensions_file="extensions-7.4.yml"
-  elif [[ ${version} == "8.0"* ]]; then
+  if [[ ${version} == "8.0"* ]]; then
     extensions_file="extensions-8.0.yml"
   elif [[ ${version} == "8.1"* ]]; then
     extensions_file="extensions-8.1.yml"

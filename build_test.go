@@ -107,7 +107,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					{
 						Name: "php",
 						Metadata: map[string]interface{}{
-							"version":        "7.2.*",
+							"version":        "8.0.*",
 							"version-source": "some-source",
 						},
 					},
@@ -177,7 +177,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
 		Expect(dependencyManager.ResolveCall.Receives.Id).To(Equal("php"))
-		Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("7.2.*"))
+		Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("8.0.*"))
 		Expect(dependencyManager.ResolveCall.Receives.Stack).To(Equal("some-stack"))
 
 		Expect(dependencyManager.DeliverCall.Receives.Dependency).To(Equal(postal.Dependency{Name: "PHP"}))
@@ -235,7 +235,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						{
 							Name: "php",
 							Metadata: map[string]interface{}{
-								"version":        "7.2.*",
+								"version":        "8.0.*",
 								"version-source": "some-source",
 								"launch":         true,
 								"build":          true,
@@ -267,7 +267,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						{
 							Name: "php",
 							Metadata: map[string]interface{}{
-								"version":        "7.2.*",
+								"version":        "8.0.*",
 								"version-source": "some-source",
 								"launch":         true,
 								"build":          true,
@@ -387,7 +387,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 						{
 							Name: "php",
 							Metadata: map[string]interface{}{
-								"version":        "7.2.*",
+								"version":        "8.0.*",
 								"version-source": "some-source",
 								"launch":         true,
 								"build":          true,
@@ -463,7 +463,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -488,7 +488,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -517,7 +517,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -541,7 +541,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -570,7 +570,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -593,7 +593,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},
@@ -617,7 +617,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 							{
 								Name: "php",
 								Metadata: map[string]interface{}{
-									"version":        "7.2.*",
+									"version":        "8.0.*",
 									"version-source": "some-source",
 								},
 							},

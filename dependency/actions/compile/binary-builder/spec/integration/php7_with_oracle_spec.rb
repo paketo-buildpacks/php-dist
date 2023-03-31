@@ -4,12 +4,12 @@ require 'fileutils'
 require 'open-uri'
 
 describe 'building a binary', :run_oracle_php_tests do
-  context 'when php7.4 is specified with oracle libraries' do
+  context 'when php8.0 is specified with oracle libraries' do
     before(:all) do
       extensions_file = File.join('spec', 'assets', 'php-extensions.yml')
 
-      run_binary_builder('php', '7.4.0', "--sha256=004a1a8176176ee1b5c112e73d705977507803f425f9e48cb4a84f42b22abf22 --php-extensions-file=#{extensions_file}")
-      @binary_tarball_location = Dir.glob(File.join(Dir.pwd, 'php-7.4.0-linux-x64.tgz')).first
+      run_binary_builder('php', '8.0.0', "--sha256=3ed7b48d64357d3e8fa9e828dbe7416228f84105b8290c2f9779cd66be31ea71 --php-extensions-file=#{extensions_file}")
+      @binary_tarball_location = Dir.glob(File.join(Dir.pwd, 'php-8.0.0-linux-x64.tgz')).first
     end
 
     after(:all) do
