@@ -108,7 +108,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				"    application/vnd.syft+json",
 			))
 			Expect(logs).To(ContainLines(
-				"    Finding PHP extensions directory",
+				MatchRegexp(`\s*Found PHP extensions directory:.*`),
 			))
 			Expect(logs).To(ContainLines(
 				"    Generating default PHP configuration",

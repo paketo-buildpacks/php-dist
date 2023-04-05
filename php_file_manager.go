@@ -11,7 +11,7 @@ import (
 	"github.com/paketo-buildpacks/packit/v2/fs"
 )
 
-// PHPIniConfig represents the data that will be inserted in a templated
+// PhpIniConfig represents the data that will be inserted in a templated
 // php.ini file.
 type PhpIniConfig struct {
 	IncludePath string
