@@ -19,20 +19,6 @@ api = "0.7"
     php = "8.1.*"
 
   [[metadata.dependencies]]
-    checksum = "sha256:9a1387aca3e427e7a44fa83c4ce52566e10fca047283f43fb3123cbb530b450b"
-    cpe = "cpe:2.3:a:php:php:8.0.27:*:*:*:*:*:*:*"
-    deprecation_date = "2023-11-26T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.0.27?checksum=fe2376faaf91c28ead89a36e118c177f4a8c9a7280a189b97265da1af1f4d305&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.27.tar.gz"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.27.tar.gz"
-    source-checksum = "sha256:fe2376faaf91c28ead89a36e118c177f4a8c9a7280a189b97265da1af1f4d305"
-    stacks = ["io.buildpacks.stacks.bionic"]
-    uri = "https://artifacts.paketo.io/php/php_8.0.27_linux_x64_bionic_9a1387ac.tgz"
-    version = "8.0.27"
-
-  [[metadata.dependencies]]
     checksum = "sha256:59cf7e6cf108f3a24da5958d46484b4b5d1bbb97ab9c6620e1f9d6254172a593"
     cpe = "cpe:2.3:a:php:php:8.0.28:*:*:*:*:*:*:*"
     deprecation_date = "2023-11-26T00:00:00Z"
@@ -45,6 +31,20 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.bionic"]
     uri = "https://artifacts.paketo.io/php/php_8.0.28_linux_x64_bionic_59cf7e6c.tgz"
     version = "8.0.28"
+
+  [[metadata.dependencies]]
+    checksum = "sha256:5b43a503dc539b45e573c2b0ee77e4585ad6a37de02eb46b16597b0428793d8b"
+    cpe = "cpe:2.3:a:php:php:8.0.29:*:*:*:*:*:*:*"
+    deprecation_date = "2023-11-26T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    purl = "pkg:generic/php@8.0.29?checksum=db6ee08df5706365f624cde1cffb20ad6de1effe59d7e886337213a09f2e2684&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.0.29.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.0.29.tar.gz"
+    source-checksum = "sha256:db6ee08df5706365f624cde1cffb20ad6de1effe59d7e886337213a09f2e2684"
+    stacks = ["io.buildpacks.stacks.bionic"]
+    uri = "https://artifacts.paketo.io/php/php_8.0.29_linux_x64_bionic_5b43a503.tgz"
+    version = "8.0.29"
 
   [[metadata.dependencies]]
     checksum = "sha256:97a2b588acc83aebff6d7a26f445a5d152b59b988af53cb857923732db3e2a10"
