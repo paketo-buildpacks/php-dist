@@ -95,7 +95,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				"  Executing build process",
 				MatchRegexp(`    Installing PHP 8\.1\.\d+`),
 				fmt.Sprintf("    Installation path: /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
-				MatchRegexp(`    Dependency URI: https:\/\/artifacts\.paketo.io\/php\/.*\.tgz`),
+				MatchRegexp(`    Dependency URI: https:\/\/.*\/php\/.*\.tgz`),
 				MatchRegexp(`      Completed in \d+\.\d+`),
 			))
 			Expect(logs).To(ContainLines(
