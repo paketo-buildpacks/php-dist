@@ -1,73 +1,52 @@
-FROM ubuntu:18.04
+FROM paketobuildpacks/build-bionic-full
 
-RUN apt-get update && apt-get install -y \
-      automake \
-      build-essential \
-      bundler \
-      cmake \
-      curl \
-      firebird-dev \
-      gcc \
-      git \
-      libargon2-0-dev \
-      libaspell-dev \
-      libbz2-dev \
-      libc-client2007e-dev \
-      libcurl4-openssl-dev \
-      libedit-dev \
-      libenchant-dev \
-      libexpat1-dev \
-      libgd-dev \
-      libgdbm-dev \
-      libgeoip-dev \
-      libgmp-dev \
-      libgpgme11-dev \
-      libjpeg-dev \
-      libkrb5-dev \
-      libldap2-dev \
-      libmagickcore-dev \
-      libmagickwand-dev \
-      libmaxminddb-dev \
-      libmcrypt-dev \
-      libmemcached-dev \
-      libonig-dev \
-      libpng-dev \
-      libpq-dev \
-      libpspell-dev \
-      librecode-dev \
-      libsasl2-dev \
-      libsnmp-dev \
-      libsqlite3-dev \
-      libsqlite3-dev \
-      libssh2-1-dev \
-      libssl-dev \
-      libtidy-dev \
-      libtool \
-      libwebp-dev \
-      libxml2-dev \
-      libxml2-dev \
-      libxslt1-dev \
-      libyaml-dev \
-      libzip-dev \
-      libzookeeper-mt-dev \
-      make \
-      pkg-config \
-      rbenv \
-      ruby \
-      ruby-dev \
-      rubygems \
-      snmp-mibs-downloader \
-      sqlite3 \
-      sudo \
-      unixodbc-dev
+ENV DEBIAN_FRONTEND noninteractive
 
-ADD ./extensions-manifests /tmp/extensions-manifests
+ARG cnb_uid=0
+ARG cnb_gid=0
 
-ADD ./binary-builder /binary-builder
-WORKDIR /binary-builder
+USER ${cnb_uid}:${cnb_gid}
 
-RUN bundle install
+RUN apt-get update && \
+  apt-get -y install \
+  firebird-dev \
+  gcc \
+  libaspell-dev \
+  libbz2-dev \
+  libc-client2007e-dev \
+  libedit-dev \
+  libenchant-dev \
+  libexpat1-dev \
+  libgdbm-dev \
+  libgeoip-dev \
+  libgpgme11-dev \
+  libjpeg-dev \
+  libmagickcore-dev \
+  libmaxminddb-dev \
+  libmcrypt-dev \
+  libmemcached-dev \
+  libonig-dev \
+  libpng-dev \
+  libpspell-dev \
+  librecode-dev \
+  libsnmp-dev \
+  libssh2-1-dev \
+  libtidy-dev \
+  libwebp-dev \
+  libxml2-dev \
+  libzip-dev \
+  libzookeeper-mt-dev \
+  make \
+  pkg-config \
+  snmp-mibs-downloader \
+  software-properties-common \
+  sqlite3 \
+  sudo
 
-ADD ./entrypoint.sh /entrypoint.sh
+RUN add-apt-repository ppa:longsleep/golang-backports
+RUN apt-get -y install golang-go
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint /tmp/entrypoint
+RUN cd /tmp/entrypoint && go build -o /entrypoint .
+
+ENTRYPOINT ["/entrypoint"]

@@ -1,0 +1,155 @@
+{
+  "native_modules": {
+    "ioncube": {
+      "version": "12.0.5",
+      "md5": "66ec1bf414243ded3dd04f7c97bae1e2"
+    },
+    "rabbitmq": {
+      "version": "0.11.0",
+      "md5": "e7d9896577aea6351811d7c1d7f0a68a"
+    },
+    "lua": {
+      "version": "5.4.4",
+      "md5": "bd8ce7069ff99a400efd14cf339a727b"
+    },
+    "hiredis": {
+      "version": "1.0.2",
+      "md5": "58e8313188f66ed1be1c220d14a7752e"
+    },
+    "librdkafka": {
+      "version": "1.9.1",
+      "md5": "8364a513957fc847cbe8f5758087e35d"
+    },
+    "libsodium": {
+      "version": "1.0.18",
+      "md5": "3ca9ebc13b6b4735acae0a6a4c4f9a95"
+    },
+    "tideways_xhprof": {
+      "version": "5.0.4",
+      "md5": "68b68cd9410e62b8481445e0d89220c0"
+    },
+    "phpiredis": {
+      "version": "1.0.1",
+      "md5": "09a9bdb347c70832d3e034655b604064"
+    }
+  },
+  "pecl_extensions": [
+    {
+      "name": "oci8",
+      "version": "3.2.1",
+      "md5": "309190ef3ede2779a617c9375d32ea7a"
+    },
+    {
+      "name": "amqp",
+      "version": "1.11.0",
+      "md5": "3a0638223e320fc21f3b079198c24f12"
+    },
+    {
+      "name": "ssh2",
+      "version": "1.3.1",
+      "md5": "aa29046de73f1036aea66b4a70f6f598"
+    },
+    {
+      "name": "rdkafka",
+      "version": "6.0.3",
+      "md5": "fd10faec0c599e34837a9482d3c6c801"
+    },
+    {
+      "name": "imagick",
+      "version": "3.7.0",
+      "md5": "0687774a6126467d4e5ede02171e981d"
+    },
+    {
+      "name": "gnupg",
+      "version": "1.5.1",
+      "md5": "c48f5de2f96ffebe2e18eaefff4917f9"
+    },
+    {
+      "name": "apcu",
+      "version": "5.1.21",
+      "md5": "7f675ceba180cd6688d09100badbcdda"
+    },
+    {
+      "name": "igbinary",
+      "version": "3.2.7",
+      "md5": "927f6cff8e74287453fe327d3893aaa3"
+    },
+    {
+      "name": "LZF",
+      "version": "1.7.0",
+      "md5": "e242c66e53c0d155982713cd78b3d480"
+    },
+    {
+      "name": "mailparse",
+      "version": "3.1.3",
+      "md5": "64be25ebcb8b792219c14d05038396bc"
+    },
+    {
+      "name": "mongodb",
+      "version": "1.13.0",
+      "md5": "ebe9b977f272f509ae1d0d12c100a1af"
+    },
+    {
+      "name": "msgpack",
+      "version": "2.1.2",
+      "md5": "9bcaad416fc2b3c6ffd6966e0ae30313"
+    },
+    {
+      "name": "oauth",
+      "version": "2.0.7",
+      "md5": "8ea6eb5ac6de8a4ed399980848c04c0c"
+    },
+    {
+      "name": "xdebug",
+      "version": "3.1.5",
+      "md5": "fe2b85050c8ac6ddba6ae431f5c6dade"
+    },
+    {
+      "name": "yaf",
+      "version": "3.3.5",
+      "md5": "128ecf6c84dd71d59c12d826cc51f0c4"
+    },
+    {
+      "name": "yaml",
+      "version": "2.2.2",
+      "md5": "22678c1238f2c6848ff7d74b780a8307"
+    },
+    {
+      "name": "memcached",
+      "version": "3.2.0",
+      "md5": "acc58fea7b7f456408a25ac927846ad0"
+    },
+    {
+      "name": "redis",
+      "version": "5.3.7",
+      "md5": "1ed6793902214cc02467666ba69dd2be"
+    },
+    {
+      "name": "maxminddb",
+      "version": "1.11.0",
+      "md5": "5feec07108cf7898bd0591ee54b572cd"
+    },
+    {
+      "name": "psr",
+      "version": "1.2.0",
+      "md5": "07695da8376002babbce528205decf07"
+    },
+    {
+      "name": "solr",
+      "version": "2.5.1",
+      "md5": "29fc866198d61bccdbc4c4f53fb7ef06"
+    }
+  ],
+  "local_extensions": [
+    "tidy",
+    "pdo_firebird",
+    "readline",
+    "gd",
+    "enchant",
+    "zip",
+    "odbc",
+    "pdo_odbc",
+    "sodium",
+    "pdo_oci"
+  ]
+}

@@ -1,9 +1,11 @@
-FROM ubuntu:22.04
+FROM paketobuildpacks/build-jammy-full
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# See this list as the source for the apt packages installed
-# https://github.com/paketo-buildpacks/dep-server/blob/3eb4dacd4be8ccca16bdf804c7308054563d98ba/.github/workflows/php-test-upload-metadata.yml#L19
+ARG cnb_uid=0
+ARG cnb_gid=0
+
+USER ${cnb_uid}:${cnb_gid}
 
 RUN apt-get update && \
   apt-get -y install \
