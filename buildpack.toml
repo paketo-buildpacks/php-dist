@@ -140,11 +140,6 @@ api = "0.7"
     id = "php"
     patches = 2
 
-  [[metadata.dependency-constraints]]
-    constraint = "8.3.*"
-    id = "php"
-    patches = 2
-
 [[stacks]]
   id = "io.buildpacks.stacks.bionic"
   mixins = ["libargon2-0", "libcurl4", "libedit2", "libgd3", "libmagickwand-6.q16-3", "libonig4", "libxml2", "libyaml-0-2"]
