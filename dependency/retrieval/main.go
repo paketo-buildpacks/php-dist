@@ -146,7 +146,7 @@ func generateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 
 func getPhpReleases() ([]PhpRelease, error) {
 	webClient := NewWebClient()
-	body, err := webClient.Get("https://raw.githubusercontent.com/brayanhenao/php-releases-information/main/releases.json")
+	body, err := webClient.Get("https://raw.githubusercontent.com/cloudfoundry/buildpacks-ci/master/php-releases/releases.json")
 	if err != nil {
 		return nil, fmt.Errorf("could not hit php.net: %w", err)
 	}
@@ -170,7 +170,7 @@ func getPhpReleases() ([]PhpRelease, error) {
 	var allPhpReleases []PhpRelease
 
 	for _, line := range versionLines {
-		body, err = webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/brayanhenao/php-releases-information/main/php-%s.json", line))
+		body, err = webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/cloudfoundry/buildpacks-ci/master/php-releases/php-%s.json", line))
 		if err != nil {
 			return nil, fmt.Errorf("could not hit php.net: %w", err)
 		}
@@ -232,7 +232,7 @@ func getRelease(version string) (PhpRawRelease, error) {
 		version = strings.ReplaceAll(version, "*", "0")
 	}
 
-	body, err := webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/brayanhenao/php-releases-information/main/php-%s.json", searchMajorVersion))
+	body, err := webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/cloudfoundry/buildpacks-ci/master/php-releases/php-%s.json", searchMajorVersion))
 	if err != nil {
 		fmt.Println(string(body))
 		return PhpRawRelease{}, fmt.Errorf("could not hit php.net: %w", err)
