@@ -161,6 +161,10 @@ extensions:
   version: 1.0.1
   md5: 9e44b2f2e271bf57c5dbf6b6b07a8acf
   klass: PeclRecipe
+- name: opentelemetry
+  version: 1.0.3
+  md5: 5dc35bdb9706873df0e890ee04c7e594
+  klass: PeclRecipe
 - name: phalcon
   version: 4.1.0
   md5: c13b72a724820027ec9889f0dca0670d
