@@ -539,3 +539,11 @@ class XhprofPeclRecipe < PeclRecipe
     "#{super}/extension"
   end
 end
+
+class OpentelemetryPeclRecipe < PeclRecipe
+  def configure_options
+    [
+      "--with-php-config=#{@php_path}/bin/php-config"
+    ]
+  end
+end
