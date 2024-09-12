@@ -25,6 +25,7 @@
     "oauth",
     "odbc",
     "openssl",
+    "opentelemetry",
     "pcntl",
     "pdo",
     "pdo_firebird",

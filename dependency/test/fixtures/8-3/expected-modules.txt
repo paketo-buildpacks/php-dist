@@ -37,6 +37,7 @@ mysqlnd
 OAuth
 odbc
 openssl
+opentelemetry
 pcntl
 pcre
 PDO
