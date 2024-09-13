@@ -161,3 +161,7 @@ extensions:
   version: 3.2.1
   md5: 309190ef3ede2779a617c9375d32ea7a
   klass: OraclePeclRecipe
+- name: opentelemetry
+  version: 1.0.3
+  md5: 5dc35bdb9706873df0e890ee04c7e594
+  klass: PeclRecipe

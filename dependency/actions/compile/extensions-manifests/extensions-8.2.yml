@@ -169,3 +169,7 @@ extensions:
   version: nil
   md5: nil
   klass: Gd74FakePeclRecipe
+- name: opentelemetry
+  version: 1.0.3
+  md5: 5dc35bdb9706873df0e890ee04c7e594
+  klass: PeclRecipe
