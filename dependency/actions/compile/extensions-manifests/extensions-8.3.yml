@@ -173,3 +173,7 @@ extensions:
   version: 13.0.2
   md5: 0526cd3702ef25de119e4724d603d773
   klass: IonCubeRecipe
+- name: opentelemetry
+  version: 1.0.3
+  md5: 5dc35bdb9706873df0e890ee04c7e594
+  klass: PeclRecipe
