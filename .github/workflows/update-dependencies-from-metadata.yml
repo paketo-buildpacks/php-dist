@@ -3,7 +3,7 @@ name: Update Dependencies From Metadata (Retrieve, Metadata, Compile, Test, Crea
 on:
   workflow_dispatch:
   schedule:
-    - cron: '57 13 * * *' # daily at 13:57 UTC
+    - cron: '57 13 * * *'  # daily at 13:57 UTC
 
 jobs:
   retrieve:
@@ -23,12 +23,13 @@ jobs:
       compilation-length: ${{ steps.retrieve.outputs.compilation-length }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
-          go-version: 'stable'
+          # hashFiles returns empty string if file does not exist
+          go-version-file: ${{ hashFiles('dependency/retrieval/go.mod') != '' && 'dependency/retrieval/go.mod' || 'go.mod' }}
 
       - name: Run Retrieve
         id: retrieve
@@ -63,15 +64,14 @@ jobs:
           printf "compilation-json<<%s\n%s\n%s\n" "${delimiter}" "${compilation}" "${delimiter}" >> "$GITHUB_OUTPUT" # see https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
           echo "compilation-length=$complength" >> "$GITHUB_OUTPUT"
 
-
       - name: Upload `${{ steps.retrieve.outputs.metadata-filepath }}`
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: metadata.json
           path: ${{ steps.retrieve.outputs.metadata-filepath }}
 
       - name: Upload `${{ steps.retrieve.outputs.from-source-metadata-filepath }}`
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: from-source-metadata.json
           path: ${{ steps.retrieve.outputs.from-source-metadata-filepath }}
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Has Compilation Action?
         id: compile-check
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Make Temporary Artifact Directory
         id: make-outputdir
@@ -168,50 +168,15 @@ jobs:
     #   AND:
     #   (3) there is at least one version to compile/test
     if: ${{ needs.retrieve.outputs.compilation-length > 0 && (needs.get-compile-and-test.outputs.should-compile == 'true' || needs.get-compile-and-test.outputs.should-test == 'true') }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Make Temporary Artifact Directory
-        id: make-outputdir
-        run: |
-          echo "outputdir=$(mktemp -d)" >> "$GITHUB_OUTPUT"
-
-      # Compile if all of the following conditions are met:
-      #   (1) compilation Github Action presetn in the buildpack directory
-      #   (2) checksum in metadata.json is empty
-      #   (3) URI in metadata.json is empty
-      - name: Compile version ${{ matrix.includes.version }} on ${{ matrix.includes.target }} Dockerfile
-        id: compile
-        if: ${{ needs.get-compile-and-test.outputs.should-compile && matrix.includes.checksum == '' && matrix.includes.uri == '' }}
-        uses: ./dependency/actions/compile
-        with:
-          version: "${{ matrix.includes.version }}"
-          outputdir: "${{ steps.make-outputdir.outputs.outputdir }}"
-          target: "${{ matrix.includes.target }}"
-
-      # If compiled, upload the tarball and checksum file for usage in the Update metadata job
-      - name: Upload workflow asset
-        uses: actions/upload-artifact@v4
-        if: ${{ needs.get-compile-and-test.outputs.should-compile && matrix.includes.checksum == '' && matrix.includes.uri == '' }}
-        with:
-          name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
-          path: '${{ steps.make-outputdir.outputs.outputdir }}/*'
-
-      # Test the dependency tarball if:
-      #   (1) dependency testing code is present in the buildpack directory
-      - name: Test Dependency
-        working-directory: dependency
-        if: ${{ needs.get-compile-and-test.outputs.should-test == 'true' }}
-        run: |
-          #!/usr/bin/env bash
-          set -euo pipefail
-          shopt -s inherit_errexit
-
-          make test \
-            version="${{ matrix.includes.version }}" \
-            tarballPath="${{ steps.make-outputdir.outputs.outputdir }}/*.tgz"
+    uses: ./.github/workflows/compile-dependency.yml
+    with:
+      version: "${{ matrix.includes.version }}"
+      target: "${{ matrix.includes.target }}"
+      os: "${{ matrix.includes.os }}"
+      arch: "${{ matrix.includes.arch }}"
+      shouldCompile: ${{ matrix.includes.checksum == '' && matrix.includes.uri == '' }}
+      shouldTest: ${{ matrix.includes.checksum == '' && matrix.includes.uri == '' && needs.get-compile-and-test.outputs.should-test == 'true' }}
+      uploadArtifactName: "${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.os != '' && matrix.includes.os || 'linux' }}-${{ matrix.includes.arch != '' && matrix.includes.arch || 'amd64' }}-${{ matrix.includes.target }}"
 
   # Add in the checksum and URI fields to the metadata if the dependency was compiled
   update-metadata:
@@ -227,12 +192,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download artifact files
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
-          name: '${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.target }}'
+          name: "${{ needs.retrieve.outputs.id }}-${{ matrix.includes.version }}-${{ matrix.includes.os != '' && matrix.includes.os || 'linux' }}-${{ matrix.includes.arch != '' && matrix.includes.arch || 'amd64' }}-${{ matrix.includes.target }}"
 
       - name: Get artifact file name
         id: get-file-names
@@ -245,7 +210,7 @@ jobs:
           echo "checksum-file=$(basename ./*.tgz.checksum)" >> "$GITHUB_OUTPUT"
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_S3_DEPENDENCIES_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_S3_DEPENDENCIES_SECRET_ACCESS_KEY }}
@@ -264,7 +229,7 @@ jobs:
         run: echo "checksum=$(cat ${{ steps.get-file-names.outputs.checksum-file }})" >> "$GITHUB_OUTPUT"
 
       - name: Download metadata.json
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: metadata.json
 
@@ -277,8 +242,13 @@ jobs:
           set -euo pipefail
           shopt -s inherit_errexit
 
-          metadata_file_name="${{ matrix.includes.target }}-${{ matrix.includes.version }}-metadata-file.json"
-          cat metadata.json | jq -r ['.[] | select( .version == "${{ matrix.includes.version }}" and .target == "${{ matrix.includes.target }}")'] > $metadata_file_name
+          metadata_file_name="${{ matrix.includes.target }}-${{ matrix.includes.version }}-${{ matrix.includes.os != '' && matrix.includes.os || 'linux' }}-${{ matrix.includes.arch != '' && matrix.includes.arch || 'amd64' }}-metadata-file.json"
+          if [[ -z "${{ matrix.includes.os }}" && -z "${{ matrix.includes.arch }}" ]]; then
+            cat metadata.json | jq -r ['.[] | select( .version == "${{ matrix.includes.version }}" and .target == "${{ matrix.includes.target }}")'] > $metadata_file_name
+          else
+            echo "multi-arch buildpack with os and arch specified"
+            cat metadata.json | jq -r ['.[] | select( .version == "${{ matrix.includes.version }}" and .target == "${{ matrix.includes.target }}" and .os == "${{ matrix.includes.os }}" and .arch == "${{ matrix.includes.arch }}")'] > $metadata_file_name
+          fi
           echo "file=$(echo $metadata_file_name)" >> "$GITHUB_OUTPUT"
 
       - name: Update `checksum` and `uri` in metadata for ${{ matrix.includes.target }} ${{ matrix.includes.version }}
@@ -290,9 +260,11 @@ jobs:
           checksum: ${{ steps.get-checksum.outputs.checksum }}
           uri: ${{ steps.upload.outputs.dependency-uri }}
           file: ${{ steps.dependency-metadata.outputs.file }}
+          os: ${{ matrix.includes.os }}
+          arch: ${{ matrix.includes.arch }}
 
       - name: Upload modified metadata
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.dependency-metadata.outputs.file }}
           path: ${{ steps.dependency-metadata.outputs.file }}
@@ -313,7 +285,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout Branch
         uses: paketo-buildpacks/github-config/actions/pull-request/checkout-branch@main
@@ -327,7 +299,7 @@ jobs:
 
       # Metadata file for the non-compiled dependencies, if there are any
       - name: Download metadata.json file
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: "${{ steps.make-outputdir.outputs.outputdir }}/metadata-files"
           pattern: "from-source-metadata.json"
@@ -337,7 +309,7 @@ jobs:
       # Download each metadata file, and combine them into one
       - name: Download individual metadata-file.json file(s)
         if: ${{ needs.update-metadata.result == 'success' }}
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: "${{ steps.make-outputdir.outputs.outputdir }}/metadata-files"
           pattern: "*metadata-file.json"
@@ -384,11 +356,11 @@ jobs:
         with:
           token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
           title: "Updates buildpack.toml with ${{ steps.update.outputs.new-versions }}"
-          branch: automation/buildpack.toml/update-from-metadata
+          branch: automation/dependencies/update-from-metadata
 
   failure:
     name: Alert on Failure
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [ retrieve, get-compile-and-test, test, compile, update-metadata, assemble ]
     if: ${{ always() && needs.retrieve.result == 'failure' || needs.get-compile-and-test.result == 'failure' || needs.test.result == 'failure' || needs.compile.result == 'failure' || needs.update-metadata.result == 'failure' || needs.assemble.result == 'failure' }}
     steps:
