@@ -1,7 +1,7 @@
 module github.com/paketo-buildpacks/php-dist/retrieval
 
 go 1.22
-toolchain go1.23.7
+toolchain go1.24.1
 
 // This is required because of a breaking change in a newer version
 replace github.com/ekzhu/minhash-lsh => github.com/ekzhu/minhash-lsh v0.0.0-20171225071031-5c06ee8586a1
@@ -43,11 +43,11 @@ require (
 	github.com/skeema/knownhosts v1.3.0 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.org/x/crypto v0.35.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20240719175910-8a7402abbf56 // indirect
-	golang.org/x/net v0.36.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	gonum.org/v1/gonum v0.15.0 // indirect
 	gopkg.in/neurosnap/sentences.v1 v1.0.7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
