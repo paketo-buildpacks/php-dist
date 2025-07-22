@@ -10,7 +10,7 @@ env:
 jobs:
   push:
     name: Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
 
     - name: Checkout
@@ -41,7 +41,7 @@ jobs:
         registries_filename="${{ env.REGISTRIES_FILENAME }}"
 
         push_to_dockerhub=true
-        push_to_gcr=true
+        push_to_gcr=false
 
         if [[ -f $registries_filename ]]; then
           if jq 'has("dockerhub")' $registries_filename > /dev/null; then
@@ -103,7 +103,7 @@ jobs:
 
   failure:
     name: Alert on Failure
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [push]
     if: ${{ always() && needs.push.result == 'failure' }}
     steps:
