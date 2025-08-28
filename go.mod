@@ -126,7 +126,7 @@ require (
 	github.com/therootcompany/xz v1.0.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.8.0 // indirect
-	github.com/ulikunitz/xz v0.5.12 // indirect
+	github.com/ulikunitz/xz v0.5.14 // indirect
 	github.com/vbatts/go-mtree v0.5.4 // indirect
 	github.com/vbatts/tar-split v0.11.5 // indirect
 	github.com/vifraa/gopom v0.2.1 // indirect
