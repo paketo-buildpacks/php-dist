@@ -108,40 +108,15 @@ func generateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 		PURL:            retrieve.GeneratePURL("php", version, dependencySHA, dependencyURL),
 		Licenses:        retrieve.LookupLicenses(dependencyURL, upstream.DefaultDecompress),
 		DeprecationDate: deprecationDate,
-		Stacks:          []string{"io.buildpacks.stacks.bionic"},
+		Stacks:          []string{"io.buildpacks.stacks.jammy"},
 	}
 
-	bionicDependency, err := versionology.NewDependency(dep, "bionic")
+	jammyDependency, err := versionology.NewDependency(dep, "jammy")
 	if err != nil {
-		return nil, fmt.Errorf("could get create bionic dependency: %w", err)
+		return nil, fmt.Errorf("could get create jammy dependency: %w", err)
 	}
 
-	dependencies := []versionology.Dependency{bionicDependency}
-
-	// If target==jammy and version >= 8.1, include it
-	// Versions less than 8.1 are not supported on Jammy.
-	semVersion, err := semver.NewVersion(version)
-	if err != nil {
-		return nil, err
-	}
-	constraint, err := semver.NewConstraint(">= 8.1")
-	if err != nil {
-		//untested
-		return nil, err
-	}
-
-	if constraint.Check(semVersion) {
-		dep.Stacks = []string{"io.buildpacks.stacks.jammy"}
-
-		jammyDependency, err := versionology.NewDependency(dep, "jammy")
-		if err != nil {
-			return nil, fmt.Errorf("could get create jammy dependency: %w", err)
-		}
-
-		dependencies = append(dependencies, jammyDependency)
-	}
-
-	return dependencies, nil
+	return []versionology.Dependency{jammyDependency}, nil
 }
 
 func getPhpReleases() ([]PhpRelease, error) {

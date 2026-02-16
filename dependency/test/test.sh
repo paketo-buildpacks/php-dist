@@ -43,9 +43,7 @@ main() {
   echo "Outside image: expectedVersion=${expectedVersion}"
 
   local target
-  if [[ $(basename "${tarball_path}") == *"bionic"* ]]; then
-    target="bionic"
-  elif [[ $(basename "${tarball_path}") == *"jammy"* ]]; then
+  if [[ $(basename "${tarball_path}") == *"jammy"* ]]; then
     target="jammy"
   else
     echo "compatible tests not found; skipping tests"
