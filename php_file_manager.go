@@ -40,7 +40,7 @@ func (f PHPFileManager) FindExtensions(layerRoot string) (string, error) {
 	}
 
 	if len(folders) != 1 {
-		return "", fmt.Errorf("Expected 1 PHP extensions dir matching '%s', but found %d", filepath.Join(layerRoot, "lib/php/extensions/no-debug-non-zts-*"), len(folders))
+		return "", fmt.Errorf("expected 1 PHP extensions dir matching '%s', but found %d", filepath.Join(layerRoot, "lib/php/extensions/no-debug-non-zts-*"), len(folders))
 	}
 
 	return folders[0], nil
@@ -76,7 +76,12 @@ func (f PHPFileManager) WriteConfig(layerRoot, cnbPath string, data PhpIniConfig
 	if err != nil {
 		return "", "", err
 	}
-	defer buildpackConfig.Close()
+	defer func() {
+		if err := buildpackConfig.Close(); err != nil {
+			// Log the error or handle it appropriately
+			fmt.Fprintf(os.Stderr, "failed to close buildpackConfig: %v\n", err)
+		}
+	}()
 
 	_, err = io.Copy(buildpackConfig, &b)
 	if err != nil {

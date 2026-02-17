@@ -110,6 +110,9 @@ function tools::install() {
     --directory "${BUILDPACKDIR}/.bin" \
     --token "${token}"
 
+  util::tools::libpak-tools::install \
+    --directory "${BUILDPACKDIR}/.bin"
+
   util::tools::create-package::install \
     --directory "${BUILDPACKDIR}/.bin"
 
@@ -131,6 +134,7 @@ function builder_images::pull() {
     pack inspect-builder "${builder}" --output json \
       | jq -r '.remote_info.run_images[0].name'
   )"
+
   lifecycle_image="index.docker.io/buildpacksio/lifecycle:$(
     pack inspect-builder "${builder}" --output json \
       | jq -r '.remote_info.lifecycle.version'

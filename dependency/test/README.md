@@ -8,10 +8,10 @@ To test locally:
 $ ./test.sh \
   --tarballPath ${output_dir}/*.tgz \
   --expectedVersion 8.1.12
-Outside image: tarball_path=</path/to/output_dir>php_8.1.12_linux_x64_bionic_262d9c4e.tgz
+Outside image: tarball_path=</path/to/output_dir>php_8.1.12_linux_x64_jammy_262d9c4e.tgz
 Outside image: expectedVersion=8.1.12
 # Docker compilation output
-Inside image: tarballPath=/tarball_path/php_8.1.12_linux_x64_bionic_262d9c4e.tgz
+Inside image: tarballPath=/tarball_path/php_8.1.12_linux_x64_jammy_262d9c4e.tgz
 Inside image: expectedVersion=8.1.12
 All tests passed!
 
@@ -19,7 +19,7 @@ All tests passed!
 $ /tmp/test/test.sh \
   --tarballPath ${output_dir}/*.tgz \
   --expectedVersion 999.999.999
-tarballPath=/tmp/output_dir/php_8.1.12_linux_x64_bionic_262d9c4e.tgz
+tarballPath=/tmp/output_dir/php_8.1.12_linux_x64_jammy_262d9c4e.tgz
 expectedVersion=999.999.999
 Version 8.1.12 does not match expected version 999.999.999
 ```
