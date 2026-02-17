@@ -159,7 +159,7 @@ include_path = "{{ .IncludePath"
 				})
 				it("returns an error stating that zero extensions dirs were found", func() {
 					_, err := files.FindExtensions(layerDir)
-					Expect(err).To(MatchError(ContainSubstring(fmt.Sprintf("Expected 1 PHP extensions dir matching '%s/lib/php/extensions/no-debug-non-zts-*', but found 0", layerDir))))
+					Expect(err).To(MatchError(ContainSubstring(fmt.Sprintf("expected 1 PHP extensions dir matching '%s/lib/php/extensions/no-debug-non-zts-*', but found 0", layerDir))))
 				})
 			})
 			context("when multiple extensions directories exist", func() {
@@ -169,7 +169,7 @@ include_path = "{{ .IncludePath"
 				})
 				it("returns an error stating that zero extensions dirs were found", func() {
 					_, err := files.FindExtensions(layerDir)
-					Expect(err).To(MatchError(ContainSubstring(fmt.Sprintf("Expected 1 PHP extensions dir matching '%s/lib/php/extensions/no-debug-non-zts-*', but found 2", layerDir))))
+					Expect(err).To(MatchError(ContainSubstring(fmt.Sprintf("expected 1 PHP extensions dir matching '%s/lib/php/extensions/no-debug-non-zts-*', but found 2", layerDir))))
 				})
 			})
 		})
