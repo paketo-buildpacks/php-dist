@@ -117,5 +117,15 @@ api = "0.7"
     id = "php"
     patches = 2
 
+  [[metadata.dependency-constraints]]
+    constraint = "8.4.*"
+    id = "php"
+    patches = 2
+
+  [[metadata.dependency-constraints]]
+    constraint = "8.5.*"
+    id = "php"
+    patches = 2
+
 [[stacks]]
   id = "io.buildpacks.stacks.jammy"
