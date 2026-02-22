@@ -15,6 +15,11 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v6
 
+      - name: Checkout Branch
+        uses: paketo-buildpacks/github-config/actions/pull-request/checkout-branch@main
+        with:
+          branch: automation/php-releases/update
+
       - name: Get PHP Versions
         id: fetch
         run: |
