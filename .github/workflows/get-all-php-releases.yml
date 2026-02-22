@@ -25,17 +25,7 @@ jobs:
             --http2 \
             --output php-releases/releases.json
 
-      - name: Check for Changes
-        id: changes
-        run: |
-          if git diff --exit-code php-releases/releases.json > /dev/null 2>&1; then
-            echo "has-changes=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "has-changes=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Commit
-        if: ${{ steps.changes.outputs.has-changes == 'true' }}
         id: commit
         uses: paketo-buildpacks/github-config/actions/pull-request/create-commit@main
         with:
@@ -45,13 +35,11 @@ jobs:
           key: ${{ secrets.PAKETO_BOT_GPG_SIGNING_KEY }}
 
       - name: Push Branch
-        if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: paketo-buildpacks/github-config/actions/pull-request/push-branch@main
         with:
           branch: automation/php-releases/update
 
       - name: Create Pull Request
-        if: ${{ steps.commit.outputs.commit_sha != '' }}
         uses: paketo-buildpacks/github-config/actions/pull-request/open@main
         with:
           token: ${{ secrets.PAKETO_BOT_GITHUB_TOKEN }}
