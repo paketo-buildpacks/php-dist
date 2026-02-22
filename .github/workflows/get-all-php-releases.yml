@@ -18,6 +18,8 @@ jobs:
       - name: Get PHP Versions
         id: fetch
         run: |
+          mkdir php-releases
+          touch php-releases/releases.json
           curl --silent --show-error --fail \
             https://www.php.net/releases/index.php?json \
             --http2 \
