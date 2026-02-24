@@ -71,7 +71,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				).
 				WithEnv(map[string]string{
 					"BP_LOG_LEVEL":   "DEBUG",
-					"BP_PHP_VERSION": "8.1.*",
+					"BP_PHP_VERSION": "8.3.*",
 				}).
 				WithSBOMOutputDir(sbomDir).
 				Execute(name, source)
@@ -81,11 +81,11 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				fmt.Sprintf("%s %s", buildpackInfo.Buildpack.Name, version),
 				"  Resolving PHP version",
 				"    Candidate version sources (in priority order):",
-				"      BP_PHP_VERSION -> \"8.1.*\"",
+				"      BP_PHP_VERSION -> \"8.3.*\"",
 				"      <unknown>      -> \"\"",
 			))
 			Expect(logs).To(ContainLines(
-				MatchRegexp(`    Selected PHP version \(using BP_PHP_VERSION\): 8\.1\.\d+`),
+				MatchRegexp(`    Selected PHP version \(using BP_PHP_VERSION\): 8\.3\.\d+`),
 			))
 			Expect(logs).To(ContainLines(
 				"  Getting the layer associated with PHP:",
@@ -93,7 +93,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 			))
 			Expect(logs).To(ContainLines(
 				"  Executing build process",
-				MatchRegexp(`    Installing PHP 8\.1\.\d+`),
+				MatchRegexp(`    Installing PHP 8\.3\.\d+`),
 				fmt.Sprintf("    Installation path: /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 				MatchRegexp(`    Dependency URI: https:\/\/.*\/php\/.*\.tgz`),
 				MatchRegexp(`      Completed in \d+\.\d+`),
@@ -128,7 +128,7 @@ func testSimpleApp(t *testing.T, context spec.G, it spec.S) {
 				return cLogs.String()
 			}).Should(
 				And(
-					MatchRegexp(`PHP Version => 8\.1\.\d+`),
+					MatchRegexp(`PHP Version => 8\.3\.\d+`),
 					ContainSubstring(
 						fmt.Sprintf("PHP_HOME => /layers/%s/php", strings.ReplaceAll(buildpackInfo.Buildpack.ID, "/", "_")),
 					),
