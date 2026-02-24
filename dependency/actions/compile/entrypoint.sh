@@ -76,6 +76,10 @@ function main() {
     extensions_file="extensions-8.2.yml"
   elif [[ ${version} == "8.3"* ]]; then
     extensions_file="extensions-8.3.yml"
+  elif [[ ${version} == "8.4"* ]]; then
+    extensions_file="extensions-8.4.yml"
+  elif [[ ${version} == "8.5"* ]]; then
+    extensions_file="extensions-8.5.yml"
   else
     echo "No extensions file found for PHP version ${version}"
     exit 1
