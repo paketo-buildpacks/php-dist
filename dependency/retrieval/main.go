@@ -204,7 +204,12 @@ func getRelease(version string) (PhpRawRelease, error) {
 	// Eg:  7.4.x ---- 7.4.0
 	// Note: Assuming that the oldest patch version is always 0.
 	if patchVersion == "*" {
-		version = strings.ReplaceAll(version, "*", "0")
+		// Note: 8.4.0 is missing in the information from php.net
+		if version == "8.4.*" {
+			version = strings.ReplaceAll(version, "*", "1")
+		} else {
+			version = strings.ReplaceAll(version, "*", "0")
+		}
 	}
 
 	body, err := webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/paketo-buildpacks/php-dist/main/php-releases/php-%s.json", searchMajorVersion))
