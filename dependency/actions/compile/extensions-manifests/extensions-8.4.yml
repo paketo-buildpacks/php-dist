@@ -69,10 +69,6 @@ extensions:
   version: nil
   md5: nil
   klass: PdoOdbcRecipe
-- name: pdo_sqlsrv
-  version: 5.13.0beta1
-  md5: eb47e516be113034370e677871908bc8
-  klass: PeclRecipe
 - name: rdkafka
   version: 6.0.5
   md5: 54bfb467649738e53ef0fbb408cb8090

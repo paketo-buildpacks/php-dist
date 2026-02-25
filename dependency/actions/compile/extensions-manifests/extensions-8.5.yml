@@ -61,10 +61,6 @@ extensions:
   version: 2.0.10
   md5: 47eeb6adc46a72844f48ce7d2ad3f0da
   klass: PeclRecipe
-- name: pdo_sqlsrv
-  version: 5.13.0beta1
-  md5: eb47e516be113034370e677871908bc8
-  klass: PeclRecipe
 - name: rdkafka
   version: 6.0.5
   md5: 54bfb467649738e53ef0fbb408cb8090
