@@ -16,63 +16,7 @@ api = "0.7"
   include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml", "config/default.ini", "config/buildpack.ini"]
   pre-package = "./scripts/build.sh"
   [metadata.default-versions]
-    php = "8.1.*"
-
-  [[metadata.dependencies]]
-    checksum = "sha256:587f7605ef513b1ad6dd9f6623f33ecca0dcd420d7914965a92d692e339159a2"
-    cpe = "cpe:2.3:a:php:php:8.1.27:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-25T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.1.27?checksum=9aa5d7a29389d799885d90740932697006d5d0f55d1def67678e0c14f6ab7b2d&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.27.tar.gz"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.27.tar.gz"
-    source-checksum = "sha256:9aa5d7a29389d799885d90740932697006d5d0f55d1def67678e0c14f6ab7b2d"
-    stacks = ["io.buildpacks.stacks.jammy"]
-    uri = "https://artifacts.paketo.io/php/php_8.1.27_linux_x64_jammy_587f7605.tgz"
-    version = "8.1.27"
-
-  [[metadata.dependencies]]
-    checksum = "sha256:7bd3afb7856f4a1c863a870e2151b6cae3c2660e69e96d8185d47a1acbecad2e"
-    cpe = "cpe:2.3:a:php:php:8.1.28:*:*:*:*:*:*:*"
-    deprecation_date = "2024-11-25T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.1.28?checksum=a2a9d853f4a4c9ff8631da5dc3a6cec5ab083ef37a214877b0240dcfcdfdefea&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.1.28.tar.gz"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.1.28.tar.gz"
-    source-checksum = "sha256:a2a9d853f4a4c9ff8631da5dc3a6cec5ab083ef37a214877b0240dcfcdfdefea"
-    stacks = ["io.buildpacks.stacks.jammy"]
-    uri = "https://artifacts.paketo.io/php/php_8.1.28_linux_x64_jammy_7bd3afb7.tgz"
-    version = "8.1.28"
-
-  [[metadata.dependencies]]
-    checksum = "sha256:025c3f3dfbae69bead992153b7c17930aed10bda0065572e9062e823d1a8fae1"
-    cpe = "cpe:2.3:a:php:php:8.2.18:*:*:*:*:*:*:*"
-    deprecation_date = "2025-12-08T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.2.18?checksum=b934ca7e8c82945c5cbf0aa2a3f66727eb5b5098e551819e1b090572d6a51ead&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.2.18.tar.gz"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.2.18.tar.gz"
-    source-checksum = "sha256:b934ca7e8c82945c5cbf0aa2a3f66727eb5b5098e551819e1b090572d6a51ead"
-    stacks = ["io.buildpacks.stacks.jammy"]
-    uri = "https://artifacts.paketo.io/php/php_8.2.18_linux_x64_jammy_025c3f3d.tgz"
-    version = "8.2.18"
-
-  [[metadata.dependencies]]
-    checksum = "sha256:c06d524f79d63528c000c0f9c2536c30af3f1d2d9c84363a6f7c5a33530e63d3"
-    cpe = "cpe:2.3:a:php:php:8.2.19:*:*:*:*:*:*:*"
-    deprecation_date = "2025-12-08T00:00:00Z"
-    id = "php"
-    licenses = ["PHP-3.0", "PHP-3.01"]
-    name = "PHP"
-    purl = "pkg:generic/php@8.2.19?checksum=8bfdd20662b41a238a5acd84fab3e05c36a685fcb56e6d8ac18eeb87057ab2bc&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.2.19.tar.gz"
-    source = "https://github.com/php/web-php-distributions/raw/master/php-8.2.19.tar.gz"
-    source-checksum = "sha256:8bfdd20662b41a238a5acd84fab3e05c36a685fcb56e6d8ac18eeb87057ab2bc"
-    stacks = ["io.buildpacks.stacks.jammy"]
-    uri = "https://artifacts.paketo.io/php/php_8.2.19_linux_x64_jammy_c06d524f.tgz"
-    version = "8.2.19"
+    php = "8.3.*"
 
   [[metadata.dependencies]]
     checksum = "sha256:23311a3918036e4187bfc95144f3f6b958f93ae04eeda28885a294b03039cea2"
@@ -101,16 +45,6 @@ api = "0.7"
     stacks = ["io.buildpacks.stacks.jammy"]
     uri = "https://artifacts.paketo.io/php/php_8.3.7_linux_x64_jammy_fa9d48df.tgz"
     version = "8.3.7"
-
-  [[metadata.dependency-constraints]]
-    constraint = "8.1.*"
-    id = "php"
-    patches = 2
-
-  [[metadata.dependency-constraints]]
-    constraint = "8.2.*"
-    id = "php"
-    patches = 2
 
   [[metadata.dependency-constraints]]
     constraint = "8.3.*"

@@ -70,11 +70,7 @@ function main() {
   echo "Determining extensions file"
   local extensions_file
 
-  if [[ ${version} == "8.1"* ]]; then
-    extensions_file="extensions-8.1.yml"
-  elif [[ ${version} == "8.2"* ]]; then
-    extensions_file="extensions-8.2.yml"
-  elif [[ ${version} == "8.3"* ]]; then
+  if [[ ${version} == "8.3"* ]]; then
     extensions_file="extensions-8.3.yml"
   elif [[ ${version} == "8.4"* ]]; then
     extensions_file="extensions-8.4.yml"
