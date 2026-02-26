@@ -29,7 +29,6 @@ extensions:
   version: 5.1.24
   md5: 65494e2af7c92bdef075030b9d9e2da4
   klass: PeclRecipe
-- name: igbinary
   version: 3.2.16
   md5: a7d5f2ab91722e7f6a3454ba795e166d
   klass: PeclRecipe
@@ -37,7 +36,6 @@ extensions:
   version: nil
   md5: nil
   klass: FakePeclRecipe
-- name: gnupg
   version: 1.5.4
   md5: 23ae146131b9f4238bdd98a53c087fc5
   klass: PeclRecipe
@@ -133,7 +131,6 @@ extensions:
   version: 2.2.0
   md5: 6888bbca9ee741fa6096efa454d5b9b0
   klass: AmqpPeclRecipe
-- name: maxminddb
   version: 1.13.1
   md5: d8199e818e26992a183a8b9214c9a649
   klass: MaxMindRecipe
@@ -141,7 +138,6 @@ extensions:
   version: nil
   md5: nil
   klass: FakePeclRecipe
-- name: psr
   version: 1.2.0
   md5: '07695da8376002babbce528205decf07'
   klass: PeclRecipe

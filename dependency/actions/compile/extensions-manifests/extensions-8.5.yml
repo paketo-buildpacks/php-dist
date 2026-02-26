@@ -33,10 +33,6 @@ extensions:
   version: 3.2.17RC1
   md5: 84d49a68917b5ad5cf087ee7286e91ba
   klass: PeclRecipe
-- name: imap
-  version: nil
-  md5: nil
-  klass: FakePeclRecipe
 - name: gnupg
   version: 1.5.4
   md5: 23ae146131b9f4238bdd98a53c087fc5
@@ -129,10 +125,6 @@ extensions:
   version: 1.13.1
   md5: d8199e818e26992a183a8b9214c9a649
   klass: MaxMindRecipe
-- name: pspell
-  version: nil
-  md5: nil
-  klass: FakePeclRecipe
 - name: psr
   version: 1.2.0
   md5: '07695da8376002babbce528205decf07'
