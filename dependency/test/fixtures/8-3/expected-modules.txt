@@ -20,6 +20,7 @@ gmp
 hash
 iconv
 igbinary
+imap
 intl
 json
 ldap
@@ -47,6 +48,7 @@ pdo_sqlite
 Phar
 phpiredis
 posix
+pspell
 psr
 random
 readline
