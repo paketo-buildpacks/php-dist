@@ -147,8 +147,8 @@ extensions:
   klass: PHPIRedisRecipe
 - name: xhprof
   version: 2.3.10
-  md5: b4d8b4014d2b1629b92dc3ab19d4a296
-  klass: PeclRecipe
+  md5: 3be7b8b182ccd96e48989b4e57311193
+  klass: XhprofPeclRecipe
 - name: solr
   version: 2.9.1
   md5: 306c39515efd14362b945b55d1ffe939
