@@ -20,10 +20,10 @@ gmp
 hash
 iconv
 igbinary
-imap
 intl
 json
 ldap
+lexbor
 libxml
 lzf
 mailparse
@@ -35,7 +35,6 @@ msgpack
 mysqli
 mysqlnd
 OAuth
-odbc
 openssl
 opentelemetry
 pcntl
@@ -43,12 +42,10 @@ pcre
 PDO
 PDO_Firebird
 pdo_mysql
-PDO_ODBC
 pdo_sqlite
 Phar
 phpiredis
 posix
-pspell
 psr
 random
 readline
@@ -70,6 +67,7 @@ sysvsem
 sysvshm
 tidy
 tokenizer
+uri
 xdebug
 xml
 xmlreader
