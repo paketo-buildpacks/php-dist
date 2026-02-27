@@ -556,3 +556,10 @@ class XhprofPeclRecipe < PeclRecipe
     "#{super}/extension"
   end
 end
+
+class XhprofExtensionRecipe < PeclRecipe
+  # Downloads from PECL but works with extension/ subdirectory structure
+  def work_path
+    "#{super}/extension"
+  end
+end

@@ -141,10 +141,10 @@ extensions:
   version: 1.0.1
   md5: '09a9bdb347c70832d3e034655b604064'
   klass: PHPIRedisRecipe
-- name: tideways_xhprof
-  version: 5.0.4
-  md5: 68b68cd9410e62b8481445e0d89220c0
-  klass: TidewaysXhprofRecipe
+- name: xhprof
+  version: 2.3.10
+  md5: b4d8b4014d2b1629b92dc3ab19d4a296
+  klass: XhprofExtensionRecipe
 - name: solr
   version: 2.9.1
   md5: 306c39515efd14362b945b55d1ffe939
