@@ -61,10 +61,6 @@ extensions:
   version: 2.0.10
   md5: 47eeb6adc46a72844f48ce7d2ad3f0da
   klass: PeclRecipe
-- name: pdo_sqlsrv
-  version: 5.12.0
-  md5: 0c06402f30a7f6f0b758ad55277ad950
-  klass: PeclRecipe
 - name: rdkafka
   version: 6.0.5
   md5: 54bfb467649738e53ef0fbb408cb8090
@@ -133,18 +129,14 @@ extensions:
   version: 1.2.0
   md5: '07695da8376002babbce528205decf07'
   klass: PeclRecipe
-- name: phalcon
-  version: 5.10.0
-  md5: 706ec4a8dcde9a5741f1bc765689022a
-  klass: PeclRecipe
 - name: phpiredis
   version: 1.0.1
   md5: '09a9bdb347c70832d3e034655b604064'
   klass: PHPIRedisRecipe
-- name: tideways_xhprof
-  version: 5.0.4
-  md5: 68b68cd9410e62b8481445e0d89220c0
-  klass: TidewaysXhprofRecipe
+- name: xhprof
+  version: 2.3.10
+  md5: b4d8b4014d2b1629b92dc3ab19d4a296
+  klass: XhprofExtensionRecipe
 - name: solr
   version: 2.9.1
   md5: 306c39515efd14362b945b55d1ffe939
