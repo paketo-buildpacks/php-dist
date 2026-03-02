@@ -45,6 +45,45 @@ type PhpRawRelease struct {
 	Museum bool        `json:"museum"`
 }
 
+type StackAndTargetPair struct {
+	stacks []string
+	target string
+}
+
+type PlatformStackTarget struct {
+	stacks []string
+	target string
+	os     string
+	arch   string
+}
+
+var supportedStacks = []StackAndTargetPair{
+	{stacks: []string{"io.buildpacks.stacks.jammy"}, target: "jammy"},
+}
+
+var supportedPlatforms = map[string][]string{
+	"linux": {"amd64", "arm64"},
+}
+
+func getSupportedPlatformStackTargets() []PlatformStackTarget {
+	var platformStackTargets []PlatformStackTarget
+
+	for os, architectures := range supportedPlatforms {
+		for _, arch := range architectures {
+			for _, pair := range supportedStacks {
+				platformStackTargets = append(platformStackTargets, PlatformStackTarget{
+					stacks: pair.stacks,
+					target: pair.target,
+					os:     os,
+					arch:   arch,
+				})
+			}
+		}
+	}
+
+	return platformStackTargets
+}
+
 func main() {
 	retrieve.NewMetadata("php", getAllVersions, generateMetadata)
 }
@@ -98,25 +137,39 @@ func generateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 		return nil, fmt.Errorf("could not get version line deprecation date: %w", err)
 	}
 
-	dep := cargo.ConfigMetadataDependency{
-		Version:         version,
-		ID:              "php",
-		Name:            "PHP",
-		Source:          dependencyURL,
-		SourceChecksum:  fmt.Sprintf("sha256:%s", dependencySHA),
-		CPE:             fmt.Sprintf("cpe:2.3:a:php:php:%s:*:*:*:*:*:*:*", version),
-		PURL:            retrieve.GeneratePURL("php", version, dependencySHA, dependencyURL),
-		Licenses:        retrieve.LookupLicenses(dependencyURL, upstream.DefaultDecompress),
-		DeprecationDate: deprecationDate,
-		Stacks:          []string{"io.buildpacks.stacks.jammy"},
+	cpe := fmt.Sprintf("cpe:2.3:a:php:php:%s:*:*:*:*:*:*:*", version)
+	purl := retrieve.GeneratePURL("php", version, dependencySHA, dependencyURL)
+
+	platformStackTargets := getSupportedPlatformStackTargets()
+
+	var dependencies []versionology.Dependency
+
+	for _, platformTarget := range platformStackTargets {
+		fmt.Printf("Generating metadata for %s %s %s %s\n", platformTarget.os, platformTarget.arch, platformTarget.target, version)
+
+		dep := cargo.ConfigMetadataDependency{
+			Arch:            platformTarget.arch,
+			CPE:             cpe,
+			DeprecationDate: deprecationDate,
+			ID:              "php",
+			Licenses:        retrieve.LookupLicenses(dependencyURL, upstream.DefaultDecompress),
+			Name:            "PHP",
+			OS:              platformTarget.os,
+			PURL:            purl,
+			Source:          dependencyURL,
+			SourceChecksum:  fmt.Sprintf("sha256:%s", dependencySHA),
+			Stacks:          platformTarget.stacks,
+			Version:         version,
+		}
+
+		dependency, err := versionology.NewDependency(dep, platformTarget.target)
+		if err != nil {
+			return nil, fmt.Errorf("could not create %s dependency: %w", platformTarget.target, err)
+		}
+		dependencies = append(dependencies, dependency)
 	}
 
-	jammyDependency, err := versionology.NewDependency(dep, "jammy")
-	if err != nil {
-		return nil, fmt.Errorf("could get create jammy dependency: %w", err)
-	}
-
-	return []versionology.Dependency{jammyDependency}, nil
+	return dependencies, nil
 }
 
 func getPhpReleases() ([]PhpRelease, error) {

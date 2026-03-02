@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:jammy
 
 ENV DEBIAN_FRONTEND noninteractive
 

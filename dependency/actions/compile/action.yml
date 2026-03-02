@@ -12,6 +12,12 @@ inputs:
   target:
     description: 'dependency OS target variant'
     required: true
+  os:
+    description: 'platform OS (e.g., linux)'
+    required: true
+  arch:
+    description: 'platform architecture (e.g., amd64)'
+    required: true
 
 runs:
   using: 'composite'
@@ -20,12 +26,12 @@ runs:
   - name: build compilation
     id: build-compilation
     shell: bash
-    run: docker build -t compilation -f dependency/actions/compile/${{ inputs.target }}.Dockerfile dependency/actions/compile
+    run: docker build --platform ${{ inputs.os }}/${{ inputs.arch }} -t compilation -f dependency/actions/compile/${{ inputs.target }}.Dockerfile dependency/actions/compile
 
   - name: run compilation
     id: run-compilation
     shell: bash
-    run: docker run -v ${{ inputs.outputDir }}:/home compilation --version ${{ inputs.version }} --outputDir /home --target ${{ inputs.target }}
+    run: docker run --platform ${{ inputs.os }}/${{ inputs.arch }} -v ${{ inputs.outputDir }}:/home compilation --version ${{ inputs.version }} --outputDir /home --target ${{ inputs.target }}
 
   - name: print contents of output dir
     shell: bash
