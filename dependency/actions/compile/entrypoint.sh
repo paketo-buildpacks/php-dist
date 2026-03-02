@@ -7,7 +7,11 @@ shopt -s inherit_errexit
 readonly PROGDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 function main() {
-  local version output_dir target bundler_dir
+  local version output_dir target bundler_dir os arch
+
+  # default values
+  os="linux"
+  arch="x64"
 
   while [ "${#}" != 0 ]; do
     case "${1}" in
@@ -23,6 +27,16 @@ function main() {
 
       --target)
         target="${2}"
+        shift 2
+        ;;
+
+      --os)
+        os="${2}"
+        shift 2
+        ;;
+
+      --arch)
+        arch="${2}"
         shift 2
         ;;
 
@@ -50,6 +64,12 @@ function main() {
     echo "--target is required"
     exit 1
   fi
+
+  echo "version=${version}"
+  echo "output_dir=${output_dir}"
+  echo "target=${target}"
+  echo "os=${os}"
+  echo "arch=${arch}"
 
   echo "Validating PHP version + target combination"
   if [[ ${version} == "7.4"* || ${version} == "8.0"* ]]; then
@@ -106,8 +126,8 @@ function main() {
   SHA256=$(sha256sum "${archive}")
   SHA256="${SHA256:0:64}"
 
-  OUTPUT_TARBALL_NAME="php_${version}_linux_x64_${target}_${SHA256:0:8}.tgz"
-  OUTPUT_SHAFILE_NAME="php_${version}_linux_x64_${target}_${SHA256:0:8}.tgz.checksum"
+  OUTPUT_TARBALL_NAME="php_${version}_${os}_${arch}_${target}_${SHA256:0:8}.tgz"
+  OUTPUT_SHAFILE_NAME="php_${version}_${os}_${arch}_${target}_${SHA256:0:8}.tgz.checksum"
 
   echo "Building tarball ${OUTPUT_TARBALL_NAME}"
 
