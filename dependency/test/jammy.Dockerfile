@@ -1,6 +1,6 @@
 FROM ubuntu:jammy
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # See this list as the source for the apt packages installed
 # https://github.com/paketo-buildpacks/dep-server/blob/3eb4dacd4be8ccca16bdf804c7308054563d98ba/.github/workflows/php-test-upload-metadata.yml#L19
@@ -12,8 +12,8 @@ RUN apt-get update && \
     dh-python \
     dnsutils \
     file \
-    gir1.2-gdkpixbuf-2.0:amd64 \
-    gir1.2-rsvg-2.0:amd64 \
+    gir1.2-gdkpixbuf-2.0 \
+    gir1.2-rsvg-2.0 \
     gnupg \
     gnupg1 \
     graphviz \
@@ -34,7 +34,7 @@ RUN apt-get update && \
     libc6 \
     libcurl4 \
     libdjvulibre-text \
-    libdjvulibre21:amd64 \
+    libdjvulibre21 \
     libdw1 \
     liberror-perl \
     libestr0 \
@@ -52,10 +52,10 @@ RUN apt-get update && \
     libgraphviz-dev \
     libharfbuzz-icu0 \
     libidn12 \
-    libilmbase25:amd64 \
-    libisl23:amd64 \
+    libilmbase25 \
+    libisl23 \
     libjson-glib-1.0-0 \
-    libjsoncpp25:amd64 \
+    libjsoncpp25 \
     liblapack3 \
     libldap-2.5-0 \
     liblockfile-bin \
@@ -63,14 +63,14 @@ RUN apt-get update && \
     libmagic1 \
     libmariadb3 \
     libmodule-pluggable-perl \
-    libmpc3:amd64 \
-    libmpfr6:amd64 \
+    libmpc3 \
+    libmpfr6 \
     libncurses5 \
     libnih-dbus1 \
-    libnl-3-200:amd64 \
-    libnl-genl-3-200:amd64 \
+    libnl-3-200 \
+    libnl-genl-3-200 \
     libopenblas-base \
-    libopenexr25:amd64 \
+    libopenexr25 \
     liborc-0.4-0 \
     libp11-kit0 \
     libpam-cap \
@@ -80,15 +80,15 @@ RUN apt-get update && \
     libpcre32-3 \
     libpq5 \
     libproxy1v5 \
-    libpython3-stdlib:amd64 \
+    libpython3-stdlib \
     libpython3.10 \
     libreadline8 \
-    librhash0:amd64 \
+    librhash0 \
     libsasl2-2 \
     libsasl2-modules \
     libsasl2-modules-gssapi-mit \
     libselinux1 \
-    libsigc++-2.0-0v5:amd64 \
+    libsigc++-2.0-0v5 \
     libsigsegv2 \
     libsqlite0 \
     libsqlite3-0 \
@@ -96,13 +96,13 @@ RUN apt-get update && \
     libtasn1-6 \
     libterm-ui-perl \
     libtiffxx5 \
-    libtirpc-common:amd64 \
-    libunwind8:amd64 \
+    libtirpc-common \
+    libunwind8 \
     libustr-1.0-1 \
-    libuv1:amd64 \
-    libwmf0.2-7:amd64 \
-    libwrap0:amd64 \
-    libxapian30:amd64 \
+    libuv1 \
+    libwmf0.2-7 \
+    libwrap0 \
+    libxapian30 \
     libxdot4 \
     libxslt1.1 \
     libyaml-0-2 \

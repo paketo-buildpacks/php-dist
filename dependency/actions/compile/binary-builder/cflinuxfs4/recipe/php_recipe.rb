@@ -4,7 +4,55 @@ require_relative 'php_common_recipes'
 
 class PhpRecipe < BaseRecipe
   def configure_options
-    %w[--disable-static--enable-shared --enable-ftp=shared --enable-sockets=shared --enable-soap=shared --enable-fileinfo=shared --enable-bcmath --enable-calendar --enable-intl --with-kerberos --with-bz2=shared --with-curl=shared --enable-dba=shared --with-password-argon2=/usr/lib/x86_64-linux-gnu --with-cdb --with-gdbm --with-mysqli=shared --enable-pdo=shared --with-pdo-sqlite=shared,/usr --with-pdo-mysql=shared,mysqlnd --with-pdo-pgsql=shared --with-pgsql=shared --with-pspell=shared --with-gettext=shared --with-gmp=shared --with-imap=shared --with-imap-ssl=shared --with-ldap=shared --with-ldap-sasl --with-zlib=shared --with-libzip=/usr/local/lib --with-xsl=shared --with-snmp=shared --enable-mbstring=shared --enable-mbregex --enable-exif=shared --with-openssl=shared --enable-fpm --enable-pcntl=shared --enable-sysvsem=shared --enable-sysvshm=shared --enable-sysvmsg=shared --enable-shmop=shared]
+    [
+      '--disable-static',
+      '--enable-shared',
+      '--enable-ftp=shared',
+      '--enable-sockets=shared',
+      '--enable-soap=shared',
+      '--enable-fileinfo=shared',
+      '--enable-bcmath',
+      '--enable-calendar',
+      '--enable-intl',
+      '--with-kerberos',
+      '--with-bz2=shared',
+      '--with-curl=shared',
+      '--enable-dba=shared',
+      "--with-password-argon2=/usr/lib/#{multiarch_dir}",
+      '--with-cdb',
+      '--with-gdbm',
+      '--with-mysqli=shared',
+      '--enable-pdo=shared',
+      '--with-pdo-sqlite=shared,/usr',
+      '--with-pdo-mysql=shared,mysqlnd',
+      '--with-pdo-pgsql=shared',
+      '--with-pgsql=shared',
+      '--with-pspell=shared',
+      '--with-gettext=shared',
+      '--with-gmp=shared',
+      '--with-imap=shared',
+      '--with-imap-ssl=shared',
+      '--with-ldap=shared',
+      '--with-ldap-sasl',
+      '--with-zlib=shared',
+      '--with-libzip=/usr/local/lib',
+      '--with-xsl=shared',
+      '--with-snmp=shared',
+      '--enable-mbstring=shared',
+      '--enable-mbregex',
+      '--enable-exif=shared',
+      '--with-openssl=shared',
+      '--enable-fpm',
+      '--enable-pcntl=shared',
+      '--enable-sysvsem=shared',
+      '--enable-sysvshm=shared',
+      '--enable-sysvmsg=shared',
+      '--enable-shmop=shared'
+    ]
+  end
+
+  def multiarch_dir
+    @multiarch_dir ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
   end
 
   def url
@@ -39,35 +87,36 @@ class PhpRecipe < BaseRecipe
   end
 
   def setup_tar
-    lib_dir = '/usr/lib/x86_64-linux-gnu'
-    argon_dir = '/usr/lib/x86_64-linux-gnu'
+    lib_dir = "/usr/lib/#{multiarch_dir}"
+    argon_dir = "/usr/lib/#{multiarch_dir}"
+    local_lib_dir = "/usr/local/lib/#{multiarch_dir}"
 
     system <<-EOF
-      cp -a -v /usr/local/lib/x86_64-linux-gnu/librabbitmq.so* #{path}/lib/
+      cp -a -v #{local_lib_dir}/librabbitmq.so* #{path}/lib/
       cp -a -v #{@hiredis_path}/lib/libhiredis.so* #{path}/lib/
       cp -a -v /usr/lib/libc-client.so* #{path}/lib/
       cp -a -v /usr/lib/libmcrypt.so* #{path}/lib
-      cp -a -v /usr/lib/x86_64-linux-gnu/libmcrypt.so* #{path}/lib
+      cp -a -v #{lib_dir}/libmcrypt.so* #{path}/lib
       cp -a -v #{lib_dir}/libaspell.so* #{path}/lib
       cp -a -v #{lib_dir}/libpspell.so* #{path}/lib
-      cp -a -v /usr/lib/x86_64-linux-gnu/libmemcached.so* #{path}/lib/
-      cp -a -v /usr/local/lib/x86_64-linux-gnu/libcassandra.so* #{path}/lib
+      cp -a -v #{lib_dir}/libmemcached.so* #{path}/lib/
+      cp -a -v #{local_lib_dir}/libcassandra.so* #{path}/lib
       cp -a -v /usr/local/lib/libuv.so* #{path}/lib
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
       cp -a -v /usr/lib/librdkafka.so* #{path}/lib
-      cp -a -v /usr/lib/x86_64-linux-gnu/libzip.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libGeoIP.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libgpgme.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libassuan.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libgpg-error.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libzip.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libGeoIP.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libgpgme.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libassuan.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libgpg-error.so* #{path}/lib/
       cp -a -v /usr/lib/libtidy*.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libtidy*.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libenchant*.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libfbclient.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/librecode.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libtommath.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libmaxminddb.so* #{path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libssh2.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libtidy*.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libenchant*.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libfbclient.so* #{path}/lib/
+      cp -a -v #{lib_dir}/librecode.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libtommath.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libmaxminddb.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libssh2.so* #{path}/lib/
     EOF
 
     system "cp #{@ioncube_path}/ioncube/ioncube_loader_lin_#{major_version}.so #{zts_path}/ioncube.so" if IonCubeRecipe.build_ioncube?(version)

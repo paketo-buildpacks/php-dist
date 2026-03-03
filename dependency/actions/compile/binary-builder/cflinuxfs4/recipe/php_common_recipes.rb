@@ -289,8 +289,8 @@ class OdbcRecipe < FakePeclRecipe
 
   def setup_tar
     system <<-EOF
-      cp -a -v /usr/lib/x86_64-linux-gnu/libodbc.so* #{@php_path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libodbcinst.so* #{@php_path}/lib/
+      cp -a -v /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libodbc.so* #{@php_path}/lib/
+      cp -a -v /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libodbcinst.so* #{@php_path}/lib/
     EOF
   end
 end
@@ -322,8 +322,8 @@ class PdoOdbcRecipe < FakePeclRecipe
 
   def setup_tar
     system <<-EOF
-      cp -a -v /usr/lib/x86_64-linux-gnu/libodbc.so* #{@php_path}/lib/
-      cp -a -v /usr/lib/x86_64-linux-gnu/libodbcinst.so* #{@php_path}/lib/
+      cp -a -v /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libodbc.so* #{@php_path}/lib/
+      cp -a -v /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libodbcinst.so* #{@php_path}/lib/
     EOF
   end
 end
@@ -482,7 +482,7 @@ class SnmpRecipe
     system <<-EOF
       cd #{@php_path}
       mkdir -p mibs
-      cp -va /usr/lib/x86_64-linux-gnu/libnetsnmp*.so* lib/
+      cp -va /usr/lib/$(dpkg-architecture -qDEB_HOST_MULTIARCH)/libnetsnmp*.so* lib/
       # copy mibs that are packaged freely
       cp -rv /usr/share/snmp/mibs/* mibs
       # copy mibs downloader & smistrip, will download un-free mibs
