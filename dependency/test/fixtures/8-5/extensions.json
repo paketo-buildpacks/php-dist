@@ -12,7 +12,6 @@
     "gettext",
     "gmp",
     "igbinary",
-    "imap",
     "ldap",
     "lzf",
     "mailparse",
@@ -33,7 +32,6 @@
     "pdo_odbc",
     "pdo_sqlite",
     "phpiredis",
-    "pspell",
     "psr",
     "readline",
     "redis",
@@ -53,7 +51,6 @@
     "zlib"
   ],
   "zend_extensions": [
-    "opcache",
     "xdebug"
   ]
 }

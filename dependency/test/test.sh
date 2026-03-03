@@ -57,6 +57,8 @@ main() {
   local target
   if [[ $(basename "${tarball_path}") == *"jammy"* ]]; then
     target="jammy"
+  elif [[ $(basename "${tarball_path}") == *"noble"* ]]; then
+    target="noble"
   else
     echo "compatible tests not found; skipping tests"
     exit 0

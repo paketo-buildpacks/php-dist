@@ -113,6 +113,14 @@ extensions:
   version: nil
   md5: nil
   klass: FakePeclRecipe
+- name: odbc
+  version: nil
+  md5: nil
+  klass: OdbcRecipe
+- name: pdo_odbc
+  version: nil
+  md5: nil
+  klass: PdoOdbcRecipe
 - name: readline
   version: nil
   md5: nil
@@ -150,8 +158,8 @@ extensions:
   md5: 3a73bbe5a1c65052c868246664968a52
   klass: OraclePeclRecipe
 - name: pdo_oci
-  version: nil
-  md5: nil
+  version: 1.2.0
+  md5: 80d47c32853962f6ab868e6d595d86d0
   klass: OraclePdoRecipe
 - name: gd
   version: nil
