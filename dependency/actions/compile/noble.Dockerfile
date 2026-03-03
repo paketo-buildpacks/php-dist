@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y \
       libmcrypt-dev \
       libmemcached-dev \
       libonig-dev \
+      libpcre3-dev \
       libpng-dev \
       libpq-dev \
       libpspell-dev \
