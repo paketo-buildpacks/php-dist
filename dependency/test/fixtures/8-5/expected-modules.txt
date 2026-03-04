@@ -35,6 +35,7 @@ msgpack
 mysqli
 mysqlnd
 OAuth
+odbc
 openssl
 opentelemetry
 pcntl
@@ -42,6 +43,7 @@ pcre
 PDO
 PDO_Firebird
 pdo_mysql
+PDO_ODBC
 pdo_sqlite
 Phar
 phpiredis

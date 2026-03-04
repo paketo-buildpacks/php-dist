@@ -183,11 +183,10 @@ class PhpMeal
   end
 
   def symlink_commands
-     ['arch="$(dpkg-architecture -qDEB_HOST_MULTIARCH)"',
-      'sudo ln -s /usr/include/$arch/curl /usr/local/include/curl',
-      'sudo ln -fs /usr/include/$arch/gmp.h /usr/include/gmp.h',
-      'sudo ln -fs /usr/lib/$arch/libldap.so /usr/lib/libldap.so',
-      'sudo ln -fs /usr/lib/$arch/libldap_r.so /usr/lib/libldap_r.so'].join("\n")
+    ['sudo ln -s /usr/include/x86_64-linux-gnu/curl /usr/local/include/curl',
+     'sudo ln -fs /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h',
+     'sudo ln -fs /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so',
+     'sudo ln -fs /usr/lib/x86_64-linux-gnu/libldap_r.so /usr/lib/libldap_r.so'].join("\n")
   end
 
   def should_cook?(recipe)
