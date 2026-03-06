@@ -44,11 +44,6 @@ function main() {
 
   run::build
   cmd::build
-
-  ## For backwards compatibility with amd64 wokflows
-  if [[ ${#targets[@]} -eq 1 && "${targets[0]}" == "linux/amd64" ]]; then
-    cp -r "${BUILDPACKDIR}/linux/amd64/bin/" "${BUILDPACKDIR}/"
-  fi
 }
 
 function usage() {
