@@ -44,6 +44,7 @@ function main() {
 
   run::build
   cmd::build
+  config::build
 
   ## For backwards compatibility with amd64 workflows
   if [[ ${#targets[@]} -eq 1 && "${targets[0]}" == "linux/amd64" ]]; then
@@ -130,6 +131,22 @@ function cmd::build() {
           printf "%s" "Skipping ${name}... "
         fi
       done
+    done
+  fi
+}
+
+function config::build() {
+  if [[ -d "${BUILDPACKDIR}/config" ]]; then
+    for target in "${targets[@]}"; do
+      platform=$(echo "${target}" | cut -d '/' -f1)
+      arch=$(echo "${target}" | cut -d'/' -f2)
+
+      util::print::title "Placing config files... for platform: ${platform} and arch: ${arch}"
+
+      mkdir -p "${BUILDPACKDIR}/${platform}/${arch}/config"
+      cp -r "${BUILDPACKDIR}"/config/* "${BUILDPACKDIR}/${platform}/${arch}/config/" 2>/dev/null || true
+
+      echo "Success!"
     done
   fi
 }
