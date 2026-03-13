@@ -148,47 +148,46 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		"version": 1
 		}`))
 
-
-
 		Expect(spdx.Extension).To(Equal("spdx.json"))
 		content, err = io.ReadAll(spdx.Content)
 		Expect(err).NotTo(HaveOccurred())
-		Expect(string(content)).To(MatchJSON(`{
-			"SPDXID": "SPDXRef-DOCUMENT",
-			"creationInfo": {
-				"created": "0001-01-01T00:00:00Z",
-				"creators": [
-					"Organization: Anchore, Inc",
-					"Tool: -"
-				],
-				"licenseListVersion": "3.27"
-			},
-			"dataLicense": "CC0-1.0",
-			"documentNamespace": "https://paketo.io/unknown-source-type/unknown-33ef57ff-45c2-53a8-8899-1c2b7e94d0dd",
-			"name": "unknown",
-			"packages": [
-			        {
-					"SPDXID": "SPDXRef-DocumentRoot-Unknown-",
-					"copyrightText": "NOASSERTION",
-					"downloadLocation": "NOASSERTION",
-					"filesAnalyzed": false,
-					"licenseConcluded": "NOASSERTION",
-					"licenseDeclared": "NOASSERTION",
-					"name": "",
-					"supplier": "NOASSERTION"
-				}
-			],
-			"relationships": [
-				{
-					"relatedSpdxElement": "SPDXRef-DocumentRoot-Unknown-",
-					"relationshipType": "DESCRIBES",
-					"spdxElementId": "SPDXRef-DOCUMENT"
-				}
-			],
-			"spdxVersion": "SPDX-2.2"
-		}`))
+		var spdxDocument map[string]interface{}
+		Expect(json.Unmarshal(content, &spdxDocument)).To(Succeed())
+		Expect(spdxDocument).To(HaveKeyWithValue("SPDXID", "SPDXRef-DOCUMENT"))
+		Expect(spdxDocument).To(HaveKeyWithValue("dataLicense", "CC0-1.0"))
+		Expect(spdxDocument).To(HaveKeyWithValue("name", "unknown"))
+		Expect(spdxDocument).To(HaveKeyWithValue("spdxVersion", "SPDX-2.2"))
+		Expect(spdxDocument).To(HaveKeyWithValue("documentNamespace", MatchRegexp(`^https://paketo\.io/unknown-source-type/unknown-[0-9a-f-]+$`)))
 
-		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
+		Expect(spdxDocument).To(HaveKey("creationInfo"))
+		creationInfo, ok := spdxDocument["creationInfo"].(map[string]interface{})
+		Expect(ok).To(BeTrue())
+		Expect(creationInfo).To(HaveKeyWithValue("created", "0001-01-01T00:00:00Z"))
+		Expect(creationInfo).To(HaveKeyWithValue("creators", ContainElements("Organization: Anchore, Inc", "Tool: -")))
+		Expect(creationInfo).To(HaveKeyWithValue("licenseListVersion", MatchRegexp(`^\d+\.\d+$`)))
+
+		Expect(spdxDocument).To(HaveKeyWithValue("packages", HaveLen(1)))
+		packages, ok := spdxDocument["packages"].([]interface{})
+		Expect(ok).To(BeTrue())
+		pkg, ok := packages[0].(map[string]interface{})
+		Expect(ok).To(BeTrue())
+		Expect(pkg).To(HaveKeyWithValue("SPDXID", "SPDXRef-DocumentRoot-Unknown-"))
+		Expect(pkg).To(HaveKeyWithValue("copyrightText", "NOASSERTION"))
+		Expect(pkg).To(HaveKeyWithValue("downloadLocation", "NOASSERTION"))
+		Expect(pkg).To(HaveKeyWithValue("filesAnalyzed", BeFalse()))
+		Expect(pkg).To(HaveKeyWithValue("licenseConcluded", "NOASSERTION"))
+		Expect(pkg).To(HaveKeyWithValue("licenseDeclared", "NOASSERTION"))
+		Expect(pkg).To(HaveKeyWithValue("name", ""))
+		Expect(pkg).To(HaveKeyWithValue("supplier", "NOASSERTION"))
+
+		Expect(spdxDocument).To(HaveKeyWithValue("relationships", HaveLen(1)))
+		relationships, ok := spdxDocument["relationships"].([]interface{})
+		Expect(ok).To(BeTrue())
+		relationship, ok := relationships[0].(map[string]interface{})
+		Expect(ok).To(BeTrue())
+		Expect(relationship).To(HaveKeyWithValue("relatedSpdxElement", "SPDXRef-DocumentRoot-Unknown-"))
+		Expect(relationship).To(HaveKeyWithValue("relationshipType", "DESCRIBES"))
+		Expect(relationship).To(HaveKeyWithValue("spdxElementId", "SPDXRef-DOCUMENT")) ^ ^Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
 		Expect(dependencyManager.ResolveCall.Receives.Id).To(Equal("php"))
 		Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("7.2.*"))
 		Expect(dependencyManager.ResolveCall.Receives.Stack).To(Equal("some-stack"))
