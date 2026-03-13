@@ -2,6 +2,7 @@ package phpdist_test
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"io"
 	"os"
@@ -187,7 +188,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(ok).To(BeTrue())
 		Expect(relationship).To(HaveKeyWithValue("relatedSpdxElement", "SPDXRef-DocumentRoot-Unknown-"))
 		Expect(relationship).To(HaveKeyWithValue("relationshipType", "DESCRIBES"))
-		Expect(relationship).To(HaveKeyWithValue("spdxElementId", "SPDXRef-DOCUMENT")) ^ ^Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
+		Expect(relationship).To(HaveKeyWithValue("spdxElementId", "SPDXRef-DOCUMENT"))
+
+		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
 		Expect(dependencyManager.ResolveCall.Receives.Id).To(Equal("php"))
 		Expect(dependencyManager.ResolveCall.Receives.Version).To(Equal("7.2.*"))
 		Expect(dependencyManager.ResolveCall.Receives.Stack).To(Equal("some-stack"))
