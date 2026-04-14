@@ -47,6 +47,8 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(layer.SharedEnv).To(Equal(packit.Environment{
+				"LD_LIBRARY_PATH.delim":     ":",
+				"LD_LIBRARY_PATH.prepend":   filepath.Join(layer.Path, "lib") + ":" + filepath.Join(layer.Path, "lib64"),
 				"MIBDIRS.default":           filepath.Join(layer.Path, "mibs"),
 				"PATH.delim":                ":",
 				"PATH.prepend":              filepath.Join(layer.Path, "sbin"),
@@ -72,6 +74,8 @@ func testEnvironment(t *testing.T, context spec.G, it spec.S) {
 				Expect(err).NotTo(HaveOccurred())
 
 				Expect(layer.SharedEnv).To(Equal(packit.Environment{
+					"LD_LIBRARY_PATH.delim":     ":",
+					"LD_LIBRARY_PATH.prepend":   filepath.Join(layer.Path, "lib") + ":" + filepath.Join(layer.Path, "lib64"),
 					"MIBDIRS.default":           filepath.Join(layer.Path, "mibs"),
 					"PATH.delim":                ":",
 					"PATH.prepend":              filepath.Join(layer.Path, "sbin"),
