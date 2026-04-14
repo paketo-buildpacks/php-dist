@@ -13,7 +13,7 @@ api = "0.7"
     uri = "https://github.com/paketo-buildpacks/php-dist/blob/main/LICENSE"
 
 [metadata]
-  include-files = ["bin/build", "bin/detect", "bin/run", "buildpack.toml", "config/default.ini", "config/buildpack.ini"]
+  include-files = ["linux/arm64/bin/build", "linux/arm64/bin/detect", "linux/arm64/bin/run", "buildpack.toml", "linux/arm64/config/default.ini", "linux/arm64/config/buildpack.ini","linux/amd64/bin/build", "linux/arm64/bin/detect", "linux/arm64/bin/run", "linux/arm64/config/default.ini", "linux/arm64/config/buildpack.ini"]
   pre-package = "./scripts/build.sh"
   [metadata.default-versions]
     php = "8.3.*"
