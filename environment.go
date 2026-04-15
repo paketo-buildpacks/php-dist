@@ -22,7 +22,12 @@ func NewEnvironment() Environment {
 // by the layer path, and the other paths provided as inputs. See PHP documentation
 // for an explanation of the environment variables' significance.
 func (e Environment) Configure(layer packit.Layer, extensionsDir string, defaultIniPath string, iniScanDirs []string) error {
-	layer.SharedEnv.Prepend("PATH", filepath.Join(layer.Path, "sbin"), string(os.PathListSeparator))
+	layer.SharedEnv.Prepend("PATH", strings.Join([]string{filepath.Join(layer.Path, "sbin"), filepath.Join(layer.Path, "bin")}, string(os.PathListSeparator)), string(os.PathListSeparator))
+	layer.SharedEnv.Prepend(
+		"LD_LIBRARY_PATH",
+		strings.Join([]string{filepath.Join(layer.Path, "lib"), filepath.Join(layer.Path, "lib64")}, string(os.PathListSeparator)),
+		string(os.PathListSeparator),
+	)
 	layer.SharedEnv.Default("MIBDIRS", filepath.Join(layer.Path, "mibs"))
 
 	layer.SharedEnv.Default("PHP_HOME", layer.Path)

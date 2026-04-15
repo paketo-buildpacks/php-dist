@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install -y \
       libtidy-dev \
       libtool \
       libwebp-dev \
-      libxml2-dev \
+      libxml2 \
       libxml2-dev \
       libxslt1-dev \
       libyaml-dev \
