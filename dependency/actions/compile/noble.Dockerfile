@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
       firebird-dev \
       gcc \
       git \
+      libargon2-1 \
       libargon2-dev \
       libaspell-dev \
       libbz2-dev \
@@ -25,6 +26,8 @@ RUN apt-get update && apt-get install -y \
       libgeoip-dev \
       libgmp-dev \
       libgpgme11-dev \
+      libicu-dev \
+      libicu74 \
       libjpeg-dev \
       libkrb5-dev \
       libldap2-dev \
@@ -41,6 +44,7 @@ RUN apt-get update && apt-get install -y \
       librecode-dev \
       libsasl2-dev \
       libsnmp-dev \
+      libsqlite3-0 \
       libsqlite3-dev \
       libsqlite3-dev \
       libssh2-1-dev \

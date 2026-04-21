@@ -105,6 +105,9 @@ class PhpRecipe < BaseRecipe
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
       cp -a -v /usr/lib/librdkafka.so* #{path}/lib
       cp -a -v #{lib_dir}/libzip.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libsqlite3.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libicu*.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libxml2.so* #{path}/lib/
       cp -a -v #{lib_dir}/libGeoIP.so* #{path}/lib/
       cp -a -v #{lib_dir}/libgpgme.so* #{path}/lib/
       cp -a -v #{lib_dir}/libassuan.so* #{path}/lib/
