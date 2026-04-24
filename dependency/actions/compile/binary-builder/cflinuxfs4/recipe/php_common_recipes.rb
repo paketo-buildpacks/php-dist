@@ -268,6 +268,32 @@ class Gd74FakePeclRecipe < FakePeclRecipe
       '--with-external-gd'
     ]
   end
+
+  def setup_tar
+    lib_dir = `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
+
+    system <<-EOF
+      cp -a -v /usr/lib/#{lib_dir}/libgd.so* #{@php_path}/lib/
+      cp -a -v /usr/lib/#{lib_dir}/libpng*.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libfreetype.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libjpeg.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libwebp.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libtiff.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libfontconfig.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libXpm.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libexpat.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libbrotlidec.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libbrotlicommon.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libX11.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libxcb.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libXau.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libXdmcp.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libjbig.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libdeflate.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libbsd.so* #{@php_path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/#{lib_dir}/libmd.so* #{@php_path}/lib/ 2>/dev/null || true
+    EOF
+  end
 end
 
 class OdbcRecipe < FakePeclRecipe
