@@ -77,6 +77,7 @@ class PhpMeal
       @extensions.detect{|r| r.name=='oci8'}.setup_tar
       @extensions.detect{|r| r.name=='pdo_oci'}.setup_tar
     end
+    @extensions.detect{|r| r.name=='gd'}&.setup_tar
     @extensions.detect{|r| r.name=='odbc'}&.setup_tar
     @extensions.detect{|r| r.name=='pdo_odbc'}&.setup_tar
     @extensions.detect{|r| r.name=='sodium'}&.setup_tar
