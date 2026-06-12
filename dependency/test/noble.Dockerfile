@@ -26,6 +26,7 @@ RUN apt-get update && \
     libpng16-16 \
     libpq5 \
     libreadline8 \
+    libsasl2-2 \
     libsnmp40 \
     libsqlite3-0 \
     libssl3 \
