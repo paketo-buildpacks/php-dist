@@ -9,6 +9,8 @@ test:
 
 retrieve:
 	@cd retrieval; \
+	PHP_RELEASES_DIR="$(abspath ../php-releases)" \
+	PHP_RELEASES_REFRESH=true \
 	go run . \
 		--buildpack_toml_path=$(buildpackTomlPath) \
 		--output=$(output)
