@@ -113,6 +113,7 @@ class PhpRecipe < BaseRecipe
       cp -a -v /usr/lib/libmcrypt.so* #{path}/lib
       cp -a -v ${lib_dir}/libmcrypt.so* #{path}/lib
       cp -a -v ${lib_dir}/libmemcached.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libsasl2.so* #{path}/lib/
       cp -a -v ${local_lib_dir}/libcassandra.so* #{path}/lib
       cp -a -v /usr/local/lib/libuv.so* #{path}/lib
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
