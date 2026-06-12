@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"path/filepath"
 	"sort"
@@ -66,6 +67,9 @@ var supportedPlatforms = map[string][]string{
 	"linux": {"amd64", "arm64"},
 }
 
+const phpReleasesBaseURL = "https://raw.githubusercontent.com/paketo-buildpacks/php-dist/main/php-releases"
+const phpNetReleasesURL = "https://www.php.net/releases/index.php?json"
+
 func getSupportedPlatformStackTargets() []PlatformStackTarget {
 	var platformStackTargets []PlatformStackTarget
 
@@ -86,7 +90,57 @@ func getSupportedPlatformStackTargets() []PlatformStackTarget {
 }
 
 func main() {
+	if err := maybeRefreshLocalPHPReleases(); err != nil {
+		fmt.Fprintf(os.Stderr, "could not refresh local php releases metadata: %s\n", err)
+		os.Exit(1)
+	}
+
 	retrieve.NewMetadata("php", getAllVersions, generateMetadata)
+}
+
+func maybeRefreshLocalPHPReleases() error {
+	if !strings.EqualFold(os.Getenv("PHP_RELEASES_REFRESH"), "true") {
+		return nil
+	}
+
+	localDir := os.Getenv("PHP_RELEASES_DIR")
+	if localDir == "" {
+		localDir = filepath.FromSlash("../../php-releases")
+	}
+
+	if err := os.MkdirAll(localDir, os.ModePerm); err != nil {
+		return fmt.Errorf("could not create php releases directory %s: %w", localDir, err)
+	}
+
+	webClient := NewWebClient()
+	body, err := webClient.Get(phpNetReleasesURL)
+	if err != nil {
+		return fmt.Errorf("could not fetch %s: %w", phpNetReleasesURL, err)
+	}
+
+	if err := os.WriteFile(filepath.Join(localDir, "releases.json"), body, 0644); err != nil {
+		return fmt.Errorf("could not write releases.json: %w", err)
+	}
+
+	var phpLines map[string]interface{}
+	if err := json.Unmarshal(body, &phpLines); err != nil {
+		return fmt.Errorf("could not unmarshal releases.json: %w", err)
+	}
+
+	for line := range phpLines {
+		lineURL := fmt.Sprintf("%s&version=%s&max=1000", phpNetReleasesURL, url.QueryEscape(line))
+		lineBody, err := webClient.Get(lineURL)
+		if err != nil {
+			return fmt.Errorf("could not fetch %s: %w", lineURL, err)
+		}
+
+		fileName := filepath.Join(localDir, fmt.Sprintf("php-%s.json", line))
+		if err := os.WriteFile(fileName, lineBody, 0644); err != nil {
+			return fmt.Errorf("could not write %s: %w", fileName, err)
+		}
+	}
+
+	return nil
 }
 
 func getAllVersions() (versionology.VersionFetcherArray, error) {
@@ -174,8 +228,10 @@ func generateMetadata(versionFetcher versionology.VersionFetcher) ([]versionolog
 }
 
 func getPhpReleases() ([]PhpRelease, error) {
-	webClient := NewWebClient()
-	body, err := webClient.Get("https://raw.githubusercontent.com/paketo-buildpacks/php-dist/main/php-releases/releases.json")
+	body, err := getPHPReleasesJSON(
+		"releases.json",
+		fmt.Sprintf("%s/releases.json", phpReleasesBaseURL),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("could not hit php.net: %w", err)
 	}
@@ -199,7 +255,10 @@ func getPhpReleases() ([]PhpRelease, error) {
 	var allPhpReleases []PhpRelease
 
 	for _, line := range versionLines {
-		body, err = webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/paketo-buildpacks/php-dist/main/php-releases/php-%s.json", line))
+		body, err = getPHPReleasesJSON(
+			fmt.Sprintf("php-%s.json", line),
+			fmt.Sprintf("%s/php-%s.json", phpReleasesBaseURL, line),
+		)
 		if err != nil {
 			return nil, fmt.Errorf("could not hit php.net: %w", err)
 		}
@@ -248,7 +307,6 @@ func parseReleaseDate(date string) (*time.Time, error) {
 }
 
 func getRelease(version string) (PhpRawRelease, error) {
-	webClient := NewWebClient()
 	semverSplit := strings.Split(version, ".")
 
 	searchMajorVersion := semverSplit[0]
@@ -266,9 +324,11 @@ func getRelease(version string) (PhpRawRelease, error) {
 		}
 	}
 
-	body, err := webClient.Get(fmt.Sprintf("https://raw.githubusercontent.com/paketo-buildpacks/php-dist/main/php-releases/php-%s.json", searchMajorVersion))
+	body, err := getPHPReleasesJSON(
+		fmt.Sprintf("php-%s.json", searchMajorVersion),
+		fmt.Sprintf("%s/php-%s.json", phpReleasesBaseURL, searchMajorVersion),
+	)
 	if err != nil {
-		fmt.Println(string(body))
 		return PhpRawRelease{}, fmt.Errorf("could not hit php.net: %w", err)
 	}
 
@@ -285,6 +345,39 @@ func getRelease(version string) (PhpRawRelease, error) {
 	}
 
 	return PhpRawRelease{}, nil
+}
+
+func getPHPReleasesJSON(fileName, remoteURL string) ([]byte, error) {
+	localPath := phpReleasesLocalPath(fileName)
+	if localPath != "" {
+		body, err := os.ReadFile(localPath)
+		if err == nil {
+			return body, nil
+		}
+		if !os.IsNotExist(err) {
+			return nil, fmt.Errorf("could not read local php releases file %s: %w", localPath, err)
+		}
+	}
+
+	webClient := NewWebClient()
+	body, err := webClient.Get(remoteURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func phpReleasesLocalPath(fileName string) string {
+	if dir := os.Getenv("PHP_RELEASES_DIR"); dir != "" {
+		return filepath.Join(dir, fileName)
+	}
+
+	if _, err := os.Stat(filepath.FromSlash("../../php-releases")); err == nil {
+		return filepath.Join(filepath.FromSlash("../../php-releases"), fileName)
+	}
+
+	return ""
 }
 
 func dependencyURL(release PhpRawRelease, version string) string {
