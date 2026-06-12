@@ -20,6 +20,7 @@ RUN apt-get update && \
     libgmp10 \
     libicu74 \
     libjpeg-turbo8 \
+    libhashkit2t64 \
     libmaxminddb0 \
     libmemcached11 \
     libonig5 \
