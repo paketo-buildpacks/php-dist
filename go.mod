@@ -4,7 +4,7 @@ go 1.26.4
 
 require (
 	github.com/BurntSushi/toml v1.6.0
-	github.com/onsi/gomega v1.41.0
+	github.com/onsi/gomega v1.42.0
 	github.com/paketo-buildpacks/occam v0.31.3
 	github.com/paketo-buildpacks/packit/v2 v2.25.5
 	github.com/sclevine/spec v1.4.0
@@ -67,7 +67,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.22 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.29 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.29 // indirect
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.103.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.104.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.31.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.6 // indirect
@@ -106,7 +106,7 @@ require (
 	github.com/containerd/ttrpc v1.2.8 // indirect
 	github.com/containerd/typeurl/v2 v2.3.0 // indirect
 	github.com/cpuguy83/dockercfg v0.3.2 // indirect
-	github.com/cyphar/filepath-securejoin v0.6.1 // indirect
+	github.com/cyphar/filepath-securejoin v0.7.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/deitch/magic v0.0.0-20240306090643-c67ab88f10cb // indirect
 	github.com/diskfs/go-diskfs v1.9.3 // indirect
@@ -143,7 +143,7 @@ require (
 	github.com/gohugoio/hashstructure v0.6.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/go-containerregistry v0.21.6 // indirect
+	github.com/google/go-containerregistry v0.21.7 // indirect
 	github.com/google/licensecheck v0.3.1 // indirect
 	github.com/google/pprof v0.0.0-20260202012954-cb029daf43ef // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
@@ -203,7 +203,7 @@ require (
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/nix-community/go-nix v0.0.0-20250101154619-4bdde671e0a1 // indirect
-	github.com/nwaples/rardecode/v2 v2.2.3 // indirect
+	github.com/nwaples/rardecode/v2 v2.2.5 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.1 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
@@ -216,7 +216,7 @@ require (
 	github.com/paketo-buildpacks/freezer v0.2.3 // indirect
 	github.com/pborman/indent v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
-	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
+	github.com/pelletier/go-toml/v2 v2.4.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.27 // indirect
 	github.com/pjbgf/sha1cd v0.6.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -246,7 +246,7 @@ require (
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/spf13/viper v1.21.0 // indirect
-	github.com/spiffe/go-spiffe/v2 v2.7.0 // indirect
+	github.com/spiffe/go-spiffe/v2 v2.8.0 // indirect
 	github.com/stangelandcl/ppmd v0.1.1 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
@@ -291,15 +291,15 @@ require (
 	golang.org/x/tools v0.46.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
-	google.golang.org/api v0.284.0 // indirect
+	google.golang.org/api v0.285.0 // indirect
 	google.golang.org/genproto v0.0.0-20260519071638-aa98bba5eb94 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260519071638-aa98bba5eb94 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260610212136-7ab31c22f7ad // indirect
 	google.golang.org/grpc v1.81.1 // indirect
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	modernc.org/libc v1.73.1 // indirect
+	modernc.org/libc v1.73.4 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
 	modernc.org/sqlite v1.52.0 // indirect
