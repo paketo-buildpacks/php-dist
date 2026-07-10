@@ -100,6 +100,7 @@ class PhpRecipe < BaseRecipe
       cp -a -v #{lib_dir}/libaspell.so* #{path}/lib
       cp -a -v #{lib_dir}/libpspell.so* #{path}/lib
       cp -a -v #{lib_dir}/libmemcached.so* #{path}/lib/
+      cp -a -v #{lib_dir}/libhashkit.so* #{path}/lib/
       cp -a -v #{local_lib_dir}/libcassandra.so* #{path}/lib
       cp -a -v /usr/local/lib/libuv.so* #{path}/lib
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
