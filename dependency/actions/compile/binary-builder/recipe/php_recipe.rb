@@ -98,6 +98,19 @@ class PhpRecipe < BaseRecipe
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
       cp -a -v /usr/lib/librdkafka.so* #{path}/lib
       cp -a -v /usr/lib/x86_64-linux-gnu/libzip.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libonig.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libcurl.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libnghttp2.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/librtmp.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libssh.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libpsl.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libkrb5.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libk5crypto.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libkrb5support.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libkeyutils.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libldap.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/liblber.so* #{path}/lib/
       cp -a -v /usr/lib/x86_64-linux-gnu/libGeoIP.so* #{path}/lib/
       cp -a -v /usr/lib/x86_64-linux-gnu/libgpgme.so* #{path}/lib/
       cp -a -v /usr/lib/x86_64-linux-gnu/libassuan.so* #{path}/lib/

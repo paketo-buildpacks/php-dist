@@ -120,6 +120,19 @@ class PhpRecipe < BaseRecipe
       cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
       cp -a -v /usr/lib/librdkafka.so* #{path}/lib
       cp -a -v ${lib_dir}/libzip.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libonig.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libcurl.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libnghttp2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/librtmp.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libssh.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libpsl.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgssapi_krb5.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkrb5.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libk5crypto.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkrb5support.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkeyutils.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libldap.so* #{path}/lib/
+      cp -a -v ${lib_dir}/liblber.so* #{path}/lib/
       cp -a -v ${lib_dir}/libsqlite3.so* #{path}/lib/
       cp -a -v ${lib_dir}/libicu*.so* #{path}/lib/
       cp -a -v ${lib_dir}/libxml2.so* #{path}/lib/
