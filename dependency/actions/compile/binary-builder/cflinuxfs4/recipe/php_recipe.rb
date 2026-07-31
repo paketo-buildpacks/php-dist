@@ -36,6 +36,7 @@ class PhpRecipe < BaseRecipe
       '--with-ldap-sasl',
       '--with-zlib=shared',
       '--with-libzip=/usr/local/lib',
+      '--with-zip=shared',
       '--with-xsl=shared',
       '--with-snmp=shared',
       '--enable-mbstring=shared',
