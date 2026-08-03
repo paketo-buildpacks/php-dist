@@ -123,6 +123,12 @@ class PhpRecipe < BaseRecipe
       cp -a -v /usr/lib/x86_64-linux-gnu/libtommath.so* #{path}/lib/
       cp -a -v /usr/lib/x86_64-linux-gnu/libmaxminddb.so* #{path}/lib/
       cp -a -v /usr/lib/x86_64-linux-gnu/libssh2.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libheif.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libsharpyuv.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libLerc.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libzstd.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libjbig.so* #{path}/lib/
+      cp -a -v /usr/lib/x86_64-linux-gnu/libdeflate.so* #{path}/lib/
     eof
 
     if IonCubeRecipe.build_ioncube?(version)

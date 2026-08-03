@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
       libicu70 \
       libjpeg-dev \
       libkrb5-dev \
+      liblerc-dev \
       libldap2-dev \
       libmagickcore-dev \
       libmagickwand-dev \
@@ -54,6 +55,7 @@ RUN apt-get update && apt-get install -y \
       libxml2-dev \
       libxml2-dev \
       libxslt1-dev \
+      libzstd-dev \
       libyaml-dev \
       libzip-dev \
       libzookeeper-mt-dev \
