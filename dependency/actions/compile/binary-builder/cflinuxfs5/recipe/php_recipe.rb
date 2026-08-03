@@ -149,6 +149,12 @@ class PhpRecipe < BaseRecipe
       cp -a -v ${lib_dir}/libtommath.so* #{path}/lib/
       cp -a -v ${lib_dir}/libmaxminddb.so* #{path}/lib/
       cp -a -v ${lib_dir}/libssh2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libheif.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libsharpyuv.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libLerc.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libzstd.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libjbig.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libdeflate.so* #{path}/lib/
     EOF
 
     # Copy imap/pspell libraries only for PHP < 8.4 (moved to PECL in 8.4+)
