@@ -2,9 +2,6 @@ module github.com/paketo-buildpacks/php-dist/retrieval
 
 go 1.26.5
 
-// This is required because of a breaking change in a newer version
-replace github.com/ekzhu/minhash-lsh => github.com/ekzhu/minhash-lsh v0.0.0-20171225071031-5c06ee8586a1
-
 require (
 	github.com/Masterminds/semver/v3 v3.5.0
 	github.com/joshuatcasey/libdependency v0.25.0
