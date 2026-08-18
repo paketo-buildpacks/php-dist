@@ -59,6 +59,8 @@ main() {
     target="jammy"
   elif [[ $(basename "${tarball_path}") == *"noble"* ]]; then
     target="noble"
+  elif [[ $(basename "${tarball_path}") == *"resolute"* ]]; then
+    target="resolute"
   else
     echo "compatible tests not found; skipping tests"
     exit 0

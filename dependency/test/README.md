@@ -24,6 +24,8 @@ expectedVersion=999.999.999
 Version 8.1.12 does not match expected version 999.999.999
 ```
 
+Tarballs with `_resolute_` in the filename automatically use `resolute.Dockerfile`.
+
 
 ## Note
 You may see a large output block that looks like the following.
