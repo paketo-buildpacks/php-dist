@@ -212,6 +212,198 @@ api = "0.7"
 
   [[metadata.dependencies]]
     arch = "amd64"
+    checksum = "sha256:0f563f25565cc86c1426ff07ebd4dad3067d25aefb4457a8674be6556a5e133d"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.jammy"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_amd64_jammy_0f563f25.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:92ab1bf93e3a86713236c44284c9e1854630a07f7ac6e96204238cb836b87f55"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.jammy"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_arm64_jammy_92ab1bf9.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
+    checksum = "sha256:a1ff20099326e0fd6faba3528e19e628b1ab32e9968cf611944120bb7fa1e81e"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.noble"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_amd64_noble_a1ff2009.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:c5d2f846d81b9d80ed7f3ad1cbd1bfc400678a9d734f71f6bf47af7b3ddbf102"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.noble"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_arm64_noble_c5d2f846.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
+    checksum = "sha256:f55ed5dde7f1f99d2240dc43734db4d3db04ed77483f5a239659c41c211949a9"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.resolute"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_amd64_resolute_f55ed5dd.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:2106ae736d956da016bf91f64866ba4bebd1b4459c0a098a3b76a65972b7972d"
+    cpe = "cpe:2.3:a:php:php:8.4.23:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.23?checksum=f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.23.tar.gz"
+    source-checksum = "sha256:f43b69572cabfb91c023356f3ce197c782d8a255bc084c1a6af58c0e86cf7573"
+    stacks = ["io.buildpacks.stacks.resolute"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.23_linux_arm64_resolute_2106ae73.tgz"
+    version = "8.4.23"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
+    checksum = "sha256:7d028ddf8f0c48bb9d76f2f1e1cfef02d21c07f3ed1dee0f212abcf8b9587b12"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.jammy"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_amd64_jammy_7d028ddf.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:8614e17fec44535f6dadd4323d5e78214868eccef81fc497a07b82e061febb01"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.jammy"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_arm64_jammy_8614e17f.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
+    checksum = "sha256:4aa931942add103fc102c231b33d4e0d176b7456e8b7f32b362330cf930a3054"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.noble"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_amd64_noble_4aa93194.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:4eef8c470d2c06b9c40bb11e5e3bc7b0622bb74e7ca811ef6c17ac2c076db2be"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.noble"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_arm64_noble_4eef8c47.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
+    checksum = "sha256:2a75fbe43b191e75604c0357d55a4e95b1a8b355bcb9dc59751dcdb88e702dae"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.resolute"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_amd64_resolute_2a75fbe4.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "arm64"
+    checksum = "sha256:98b842ffb20813e81712c09ea18f55427e0f8a0e9bd15e563ac3778b76c0d538"
+    cpe = "cpe:2.3:a:php:php:8.4.24:*:*:*:*:*:*:*"
+    deprecation_date = "2027-11-21T00:00:00Z"
+    id = "php"
+    licenses = ["PHP-3.0", "PHP-3.01"]
+    name = "PHP"
+    os = "linux"
+    purl = "pkg:generic/php@8.4.24?checksum=d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db&download_url=https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source = "https://github.com/php/web-php-distributions/raw/master/php-8.4.24.tar.gz"
+    source-checksum = "sha256:d5fe6a1d7633e70645dc757461eeb7b764ff6a04d0487f076dd56f1f9d8059db"
+    stacks = ["io.buildpacks.stacks.resolute"]
+    uri = "https://artifacts.paketo.io/php/php_8.4.24_linux_arm64_resolute_98b842ff.tgz"
+    version = "8.4.24"
+
+  [[metadata.dependencies]]
+    arch = "amd64"
     checksum = "sha256:2212bf554a09d2fb9cddf93ddc427f573d7e39df224a020e0d16303d49712d30"
     cpe = "cpe:2.3:a:php:php:8.5.8:*:*:*:*:*:*:*"
     deprecation_date = "2028-11-20T00:00:00Z"
