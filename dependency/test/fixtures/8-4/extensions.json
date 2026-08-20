@@ -31,7 +31,6 @@
     "pdo_mysql",
     "pdo_odbc",
     "pdo_sqlite",
-    "phpiredis",
     "psr",
     "readline",
     "redis",
