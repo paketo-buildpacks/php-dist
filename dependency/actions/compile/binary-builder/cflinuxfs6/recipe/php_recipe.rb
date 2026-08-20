@@ -1,0 +1,210 @@
+# frozen_string_literal: true
+
+require_relative 'php_common_recipes'
+
+class PhpRecipe < BaseRecipe
+  def configure_options
+    opts = [
+      '--disable-static',
+      '--enable-shared',
+      '--enable-ftp=shared',
+      '--enable-sockets=shared',
+      '--enable-soap=shared',
+      '--enable-fileinfo=shared',
+      '--enable-bcmath',
+      '--enable-calendar',
+      '--enable-intl',
+      '--with-kerberos',
+      '--with-bz2=shared',
+      '--with-curl=shared',
+      '--enable-dba=shared',
+      "--with-password-argon2=/usr/lib/#{multiarch_dir}",
+      '--with-cdb',
+      '--with-gdbm',
+      '--with-mysqli=shared',
+      '--enable-pdo=shared',
+      '--with-pdo-sqlite=shared,/usr',
+      '--with-pdo-mysql=shared,mysqlnd',
+      '--with-pdo-pgsql=shared',
+      '--with-pgsql=shared',
+      '--with-gettext=shared',
+      '--with-gmp=shared',
+      '--with-ldap=shared',
+      '--with-ldap-sasl',
+      '--with-zlib=shared',
+      '--with-libzip=/usr/local/lib',
+      '--with-zip=shared',
+      '--with-xsl=shared',
+      '--with-snmp=shared',
+      '--enable-mbstring=shared',
+      '--enable-mbregex',
+      '--enable-exif=shared',
+      '--with-openssl=shared',
+      '--enable-fpm',
+      '--enable-pcntl=shared',
+      '--enable-sysvsem=shared',
+      '--enable-sysvshm=shared',
+      '--enable-sysvmsg=shared',
+      '--enable-shmop=shared',
+    ]
+    
+    # imap and pspell only supported in PHP < 8.4 (moved to PECL in 8.4+)
+    if supports_imap?
+      opts.push('--with-imap=shared')
+      opts.push('--with-imap-ssl=shared')
+      opts.push('--with-pspell=shared')
+    end
+    
+    opts
+  end
+
+  def multiarch_dir
+    @multiarch_dir ||= `dpkg-architecture -qDEB_HOST_MULTIARCH`.strip
+  end
+
+  def supports_imap?
+    # imap and pspell were removed in PHP 8.4 (moved to PECL)
+    parts = version.split('.')
+    major = parts[0].to_i
+    minor = parts[1].to_i
+    (major < 8) || (major == 8 && minor < 4)
+  end
+
+  def url
+    "https://github.com/php/web-php-distributions/raw/master/php-#{version}.tar.gz"
+  end
+
+  def archive_files
+    ["#{port_path}/*"]
+  end
+
+  def archive_path_name
+    'php'
+  end
+
+  def configure
+    return if configured?
+
+    md5_file = File.join(tmp_path, 'configure.md5')
+    digest = Digest::MD5.hexdigest(computed_options.to_s)
+    File.open(md5_file, 'w') { |f| f.write digest }
+
+    # LIBS=-lz enables using zlib when configuring
+    execute('configure', ['bash', '-c', "LIBS=-lz ./configure #{computed_options.join ' '}"])
+  end
+
+  def major_version
+    @major_version ||= version.match(/^(\d+\.\d+)/)[1]
+  end
+
+  def zts_path
+    Dir["#{path}/lib/php/extensions/no-debug-non-zts-*"].first
+  end
+
+  def setup_tar
+    lib_dir = "/usr/lib/#{multiarch_dir}"
+    argon_dir = "/usr/lib/#{multiarch_dir}"
+    local_lib_dir = "/usr/local/lib/#{multiarch_dir}"
+
+    system <<-EOF
+      lib_dir="#{lib_dir}"
+      local_lib_dir="#{local_lib_dir}"
+      cp -a -v ${local_lib_dir}/librabbitmq.so* #{path}/lib/
+      cp -a -v #{@hiredis_path}/lib/libhiredis.so* #{path}/lib/
+      cp -a -v /usr/lib/libmcrypt.so* #{path}/lib
+      cp -a -v ${lib_dir}/libmcrypt.so* #{path}/lib
+      cp -a -v ${lib_dir}/libmemcached.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libhashkit.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libsasl2.so* #{path}/lib/
+      cp -a -v ${local_lib_dir}/libcassandra.so* #{path}/lib
+      cp -a -v /usr/local/lib/libuv.so* #{path}/lib
+      cp -a -v #{argon_dir}/libargon2.so* #{path}/lib
+      cp -a -v /usr/lib/librdkafka.so* #{path}/lib
+      cp -a -v ${lib_dir}/libzip.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libonig.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libcurl.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libnghttp2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libidn2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgnutls.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libhogweed.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libnettle.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libunistring.so* #{path}/lib/
+      cp -a -v ${lib_dir}/librtmp.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libssh.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libpsl.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgssapi_krb5.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkrb5.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libk5crypto.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkrb5support.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libkeyutils.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libldap.so* #{path}/lib/
+      cp -a -v ${lib_dir}/liblber.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libsqlite3.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libicu*.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libxml2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libGeoIP.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgpgme.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libassuan.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgpg-error.so* #{path}/lib/
+      cp -a -v /usr/lib/libtidy*.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libtidy*.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libenchant*.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libfbclient.so* #{path}/lib/
+      cp -a -v ${lib_dir}/librecode.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libtommath.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libmaxminddb.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libssh2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libheif.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libsharpyuv.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libLerc.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libzstd.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libjbig.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libdeflate.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgdbm.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgmodule-2.0.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgobject-2.0.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libglib-2.0.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libimagequant.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libbrotlienc.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libgomp.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libMagickWand-7.Q16.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libMagickCore-7.Q16.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libltdl.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libpq.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libedit.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libnetsnmp.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libyaml-0.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libxslt.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libexslt.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libp11-kit.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libtasn1.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libffi.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libfftw3.so* #{path}/lib/
+      cp -a -v ${lib_dir}/liblcms2.so* #{path}/lib/
+      cp -a -v ${lib_dir}/liblqr-1.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libXext.so* #{path}/lib/
+      cp -a -v ${lib_dir}/libatomic.so* #{path}/lib/ 2>/dev/null || true
+      cp -a -v /usr/lib/gcc/*/*/libatomic.so* #{path}/lib/ 2>/dev/null || true
+    EOF
+
+    # Copy imap/pspell libraries only for PHP < 8.4 (moved to PECL in 8.4+)
+    if supports_imap?
+      system <<-EOF
+        lib_dir=$(dpkg-architecture -qDEB_HOST_MULTIARCH)
+        cp -a -v /usr/lib/libc-client.so* #{path}/lib/
+      EOF
+    end
+
+    if IonCubeRecipe.build_ioncube?(version)
+      ioncube_loader = "#{@ioncube_path}/ioncube/ioncube_loader_lin_#{major_version}.so"
+      system "cp #{ioncube_loader} #{zts_path}/ioncube.so" if File.exist?(ioncube_loader)
+    end
+
+    system <<-EOF
+      # Remove unused files
+      rm "#{path}/etc/php-fpm.conf.default"
+      rm "#{path}/bin/php-cgi"
+      find "#{path}/lib/php/extensions" -name "*.a" -type f -delete
+    EOF
+  end
+end

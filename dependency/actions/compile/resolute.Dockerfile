@@ -72,7 +72,7 @@ RUN apt-get update && apt-get install -y \
 ADD ./extensions-manifests /tmp/extensions-manifests
 
 ADD ./binary-builder /binary-builder
-WORKDIR /binary-builder/cflinuxfs5
+WORKDIR /binary-builder/cflinuxfs6
 RUN bundle install
 
 ADD ./entrypoint.sh /entrypoint.sh

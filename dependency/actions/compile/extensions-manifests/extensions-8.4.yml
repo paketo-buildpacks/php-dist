@@ -142,13 +142,9 @@ extensions:
   md5: '07695da8376002babbce528205decf07'
   klass: PeclRecipe
 - name: phalcon
-  version: 5.10.0
-  md5: 706ec4a8dcde9a5741f1bc765689022a
+  version: 5.18.0
+  md5: 29a06740d6a5bd5bbe63c6ada6002cb8
   klass: PeclRecipe
-- name: phpiredis
-  version: 1.0.1
-  md5: '09a9bdb347c70832d3e034655b604064'
-  klass: PHPIRedisRecipe
 - name: xhprof
   version: 2.3.10
   md5: b4d8b4014d2b1629b92dc3ab19d4a296
