@@ -81,10 +81,6 @@ extensions:
   version: 5.12.0
   md5: e62485cbbcb564f4a55ab8eae40df6a6
   klass: PeclRecipe
-- name: stomp
-  version: 2.0.3
-  md5: 30de4089ae5c17f32617cef35dbe53e5
-  klass: PeclRecipe
 - name: xdebug
   version: 3.5.0
   md5: 0f57f348e1d4b9d443a69d1076d2b56f
@@ -141,10 +137,10 @@ extensions:
   version: 1.2.0
   md5: '07695da8376002babbce528205decf07'
   klass: PeclRecipe
-- name: phpiredis
-  version: 1.0.1
-  md5: '09a9bdb347c70832d3e034655b604064'
-  klass: PHPIRedisRecipe
+- name: phalcon
+  version: 5.18.0
+  md5: 29a06740d6a5bd5bbe63c6ada6002cb8
+  klass: PeclRecipe
 - name: xhprof
   version: 2.3.10
   md5: b4d8b4014d2b1629b92dc3ab19d4a296

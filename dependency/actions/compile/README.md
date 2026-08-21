@@ -16,7 +16,7 @@ docker run --platform <os>/<arch> -v <output dir>:$PWD --rm compilation --versio
 ```
 
 Notes:
-- <target> can be: jammy or noble
+- <target> can be: jammy, noble, or resolute
 - <os>: linux
 - <arch>: amd64 or arm64
 - If you omit --platform/--os/--arch, defaults are linux/x64.
@@ -25,6 +25,12 @@ Example for PHP 8.5.2 on noble/arm64:
 ```
 docker build --platform linux/arm64 -t compilation -f noble.Dockerfile dependency/actions/compile
 docker run --platform linux/arm64 -v ~/php-build:/home --rm compilation --version 8.5.2 --outputDir /home --target noble --os linux --arch arm64
+```
+
+Example for PHP 8.5.2 on resolute/amd64:
+```
+docker build --platform linux/amd64 -t compilation -f resolute.Dockerfile dependency/actions/compile
+docker run --platform linux/amd64 -v ~/php-build:/home --rm compilation --version 8.5.2 --outputDir /home --target resolute --os linux --arch amd64
 ```
 
 Example for PHP 8.5.2 on jammy/amd64:

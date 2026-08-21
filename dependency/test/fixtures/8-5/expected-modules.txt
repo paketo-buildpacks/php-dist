@@ -46,7 +46,6 @@ pdo_mysql
 PDO_ODBC
 pdo_sqlite
 Phar
-phpiredis
 posix
 psr
 random
