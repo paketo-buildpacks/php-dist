@@ -47,14 +47,14 @@ class PhpRecipe < BaseRecipe
       '--enable-sysvmsg=shared',
       '--enable-shmop=shared',
     ]
-    
+
     # imap and pspell only supported in PHP < 8.4 (moved to PECL in 8.4+)
     if supports_imap?
       opts.push('--with-imap=shared')
       opts.push('--with-imap-ssl=shared')
       opts.push('--with-pspell=shared')
     end
-    
+
     opts
   end
 

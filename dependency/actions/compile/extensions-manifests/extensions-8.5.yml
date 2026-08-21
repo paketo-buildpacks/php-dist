@@ -81,10 +81,6 @@ extensions:
   version: 5.12.0
   md5: e62485cbbcb564f4a55ab8eae40df6a6
   klass: PeclRecipe
-- name: stomp
-  version: 2.0.3
-  md5: 30de4089ae5c17f32617cef35dbe53e5
-  klass: PeclRecipe
 - name: xdebug
   version: 3.5.0
   md5: 0f57f348e1d4b9d443a69d1076d2b56f
