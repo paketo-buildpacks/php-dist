@@ -34,8 +34,8 @@ extensions:
   md5: de81e2f54bfbe741a7f2453bccf970e9
   klass: PeclRecipe
 - name: gnupg
-  version: 1.5.1
-  md5: c48f5de2f96ffebe2e18eaefff4917f9
+  version: 1.5.4
+  md5: 23ae146131b9f4238bdd98a53c087fc5
   klass: PeclRecipe
 - name: imagick
   version: 3.7.0
@@ -58,8 +58,8 @@ extensions:
   md5: 703fb4e08deac7ba68e53ee1e52bbc64
   klass: PeclRecipe
 - name: oauth
-  version: 2.0.7
-  md5: 8ea6eb5ac6de8a4ed399980848c04c0c
+  version: 2.0.10
+  md5: 47eeb6adc46a72844f48ce7d2ad3f0da
   klass: PeclRecipe
 - name: odbc
   version: nil
@@ -94,12 +94,12 @@ extensions:
   md5: 30de4089ae5c17f32617cef35dbe53e5
   klass: PeclRecipe
 - name: xdebug
-  version: 3.3.1
-  md5: e279224d363bb95eab0d3775fae0a08f
+  version: 3.5.0
+  md5: 0f57f348e1d4b9d443a69d1076d2b56f
   klass: PeclRecipe
 - name: yaml
-  version: 2.2.3
-  md5: 8d8d18bc1d033966083ec4d6e993d61a
+  version: 2.3.0
+  md5: 1cd70efbdc86c12c30aee95eeb75cc7f
   klass: PeclRecipe
 - name: memcached
   version: 3.2.0
@@ -142,13 +142,9 @@ extensions:
   md5: '07695da8376002babbce528205decf07'
   klass: PeclRecipe
 - name: phalcon
-  version: 5.6.1
-  md5: 9e4a07943ab33d05ff20f809539f7d88
+  version: 5.18.0
+  md5: 29a06740d6a5bd5bbe63c6ada6002cb8
   klass: PeclRecipe
-- name: phpiredis
-  version: 1.0.1
-  md5: '09a9bdb347c70832d3e034655b604064'
-  klass: PHPIRedisRecipe
 - name: tideways_xhprof
   version: 5.0.4
   md5: 68b68cd9410e62b8481445e0d89220c0
