@@ -94,6 +94,11 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 	})
 
 	it("returns a result that builds correctly", func() {
+		fixtureDependency := postal.Dependency{Name: "sbom-fixture-php", Version: "1.2.3"}
+		fixtureSBOM, err := sbom.GenerateFromDependency(fixtureDependency, filepath.Join(layersDir, "php"))
+		Expect(err).NotTo(HaveOccurred())
+		sbomGenerator.GenerateFromDependencyCall.Returns.SBOM = fixtureSBOM
+
 		result, err := build(packit.BuildContext{
 			WorkingDir: workingDir,
 			CNBPath:    cnbDir,
@@ -127,68 +132,28 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(filepath.Join(layersDir, "php")).To(BeADirectory())
 
 		layer := result.Layers[0]
-		Expect(layer.SBOM.Formats()).To(HaveLen(2))
-		cdx := layer.SBOM.Formats()[0]
-		spdx := layer.SBOM.Formats()[1]
+		var extensions []string
+		for _, format := range layer.SBOM.Formats() {
+			extensions = append(extensions, format.Extension)
+			content, err := io.ReadAll(format.Content)
+			Expect(err).NotTo(HaveOccurred())
+			var document map[string]interface{}
+			Expect(json.Unmarshal(content, &document)).To(Succeed())
 
-		Expect(cdx.Extension).To(Equal("cdx.json"))
-		content, err := io.ReadAll(cdx.Content)
-		Expect(err).NotTo(HaveOccurred())
-		Expect(string(content)).To(MatchJSON(`{
-		"$schema": "http://cyclonedx.org/schema/bom-1.3.schema.json",
-		"bomFormat": "CycloneDX",
-		"metadata": {
-			"tools": [
-				{
-					"name": "",
-					"vendor": "anchore"
-				}
-			]
-		},
-		"specVersion": "1.3",
-		"version": 1
-		}`))
-
-		Expect(spdx.Extension).To(Equal("spdx.json"))
-		content, err = io.ReadAll(spdx.Content)
-		Expect(err).NotTo(HaveOccurred())
-		var spdxDocument map[string]interface{}
-		Expect(json.Unmarshal(content, &spdxDocument)).To(Succeed())
-		Expect(spdxDocument).To(HaveKeyWithValue("SPDXID", "SPDXRef-DOCUMENT"))
-		Expect(spdxDocument).To(HaveKeyWithValue("dataLicense", "CC0-1.0"))
-		Expect(spdxDocument).To(HaveKeyWithValue("name", "unknown"))
-		Expect(spdxDocument).To(HaveKeyWithValue("spdxVersion", "SPDX-2.2"))
-		Expect(spdxDocument).To(HaveKeyWithValue("documentNamespace", MatchRegexp(`^https://paketo\.io/unknown-source-type/unknown-[0-9a-f-]+$`)))
-
-		Expect(spdxDocument).To(HaveKey("creationInfo"))
-		creationInfo, ok := spdxDocument["creationInfo"].(map[string]interface{})
-		Expect(ok).To(BeTrue())
-		Expect(creationInfo).To(HaveKeyWithValue("created", "0001-01-01T00:00:00Z"))
-		Expect(creationInfo).To(HaveKeyWithValue("creators", ContainElements("Organization: Anchore, Inc", "Tool: -")))
-		Expect(creationInfo).To(HaveKeyWithValue("licenseListVersion", MatchRegexp(`^\d+\.\d+$`)))
-
-		Expect(spdxDocument).To(HaveKeyWithValue("packages", HaveLen(1)))
-		packages, ok := spdxDocument["packages"].([]interface{})
-		Expect(ok).To(BeTrue())
-		pkg, ok := packages[0].(map[string]interface{})
-		Expect(ok).To(BeTrue())
-		Expect(pkg).To(HaveKeyWithValue("SPDXID", "SPDXRef-DocumentRoot-Unknown-"))
-		Expect(pkg).To(HaveKeyWithValue("copyrightText", "NOASSERTION"))
-		Expect(pkg).To(HaveKeyWithValue("downloadLocation", "NOASSERTION"))
-		Expect(pkg).To(HaveKeyWithValue("filesAnalyzed", BeFalse()))
-		Expect(pkg).To(HaveKeyWithValue("licenseConcluded", "NOASSERTION"))
-		Expect(pkg).To(HaveKeyWithValue("licenseDeclared", "NOASSERTION"))
-		Expect(pkg).To(HaveKeyWithValue("name", ""))
-		Expect(pkg).To(HaveKeyWithValue("supplier", "NOASSERTION"))
-
-		Expect(spdxDocument).To(HaveKeyWithValue("relationships", HaveLen(1)))
-		relationships, ok := spdxDocument["relationships"].([]interface{})
-		Expect(ok).To(BeTrue())
-		relationship, ok := relationships[0].(map[string]interface{})
-		Expect(ok).To(BeTrue())
-		Expect(relationship).To(HaveKeyWithValue("relatedSpdxElement", "SPDXRef-DocumentRoot-Unknown-"))
-		Expect(relationship).To(HaveKeyWithValue("relationshipType", "DESCRIBES"))
-		Expect(relationship).To(HaveKeyWithValue("spdxElementId", "SPDXRef-DOCUMENT"))
+			switch format.Extension {
+			case "cdx.json":
+				Expect(document).To(HaveKeyWithValue("components", ContainElement(And(
+					HaveKeyWithValue("name", fixtureDependency.Name),
+					HaveKeyWithValue("version", fixtureDependency.Version),
+				))))
+			case "spdx.json":
+				Expect(document).To(HaveKeyWithValue("packages", ContainElement(And(
+					HaveKeyWithValue("name", fixtureDependency.Name),
+					HaveKeyWithValue("versionInfo", fixtureDependency.Version),
+				))))
+			}
+		}
+		Expect(extensions).To(ConsistOf("cdx.json", "spdx.json"))
 
 		Expect(dependencyManager.ResolveCall.Receives.Path).To(Equal(filepath.Join(cnbDir, "buildpack.toml")))
 		Expect(dependencyManager.ResolveCall.Receives.Id).To(Equal("php"))
