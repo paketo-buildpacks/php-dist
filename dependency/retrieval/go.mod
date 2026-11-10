@@ -5,7 +5,7 @@ go 1.27.3
 require (
 	github.com/Masterminds/semver/v3 v3.5.0
 	github.com/joshuatcasey/libdependency v0.25.0
-	github.com/paketo-buildpacks/packit/v2 v2.25.8
+	github.com/paketo-buildpacks/packit/v2 v2.26.0
 )
 
 require (
